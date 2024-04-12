@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import jwt from 'jsonwebtoken';
 import { connectDB } from "./config/db.js";
-import courseRoutes from "./routes/course.js";
+// import courseRoutes from "./routes/course.js";
 // import login from "./routes/login.js";
 // import signUp from "./routes/sign-up.js";
 // import signUploadRoutes from "./routes/sign-upload.js";
@@ -28,14 +28,6 @@ app.use(express.json());
 
 // multer for handling file uploads
 const upload = multer({ dest: 'uploads/' });
-
-// Routes
-app.use("/api/addcourse", courseRoutes);
-// app.use("/api/login", login);
-// app.use("/api/signup", signUp);
-// app.use("/api/sign-upload", signUploadRoutes);
-
-
 
 // Schema Creation for User model
 const User = mongoose.model('User', {
@@ -69,6 +61,124 @@ const User = mongoose.model('User', {
     default: Date.now,
   }
 })
+
+// Schema Creation for Course model
+const Course = mongoose.model('Course', 
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    small_description: {
+      type: String,
+      required: true,
+    },
+    creator: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    chapters: [{
+      title: {
+        type: String,
+        required: true
+      },
+      videoUrl: {
+        type: String,
+        required: true
+      }
+    }],
+    date: {
+      type: Date,
+      default: Date.now,
+    },
+    isPublish: {
+      type: Boolean,
+      default: false,
+    },
+  }
+)
+
+// Creating middlewara to fetch user
+const fetchUser = async (req, res, next) => {
+  const token = req.header('auth-token')
+  if (!token) {
+    res.status(401).send({ errors: 'Please authenticate using valid token' })
+  } else {
+    try {
+      const data = jwt.verify(token, 'secret_ecom');
+      req.user = data.user;
+      next();
+    } catch (error) {
+      res.status(401).send({ errors: 'please authenticate using valid token' })
+    }
+  }
+}
+
+
+// endpoint for get the value of isTeacher
+app.post('/api/addcourse', fetchUser, async (req, res) => {
+  
+  const { title, description, small_description, image, category, price, chapter} = req.body;
+
+  if (!req.user.id) {
+    res.status(400);
+    return next(new Error("please login first"));
+  }
+
+  try {
+    const course = await Course.create({
+      title,
+      description,
+      small_description,
+      creator: req.user.id,
+      image,
+      category,
+      price,
+      chapter
+    });
+
+    res.status(200).json({
+      success: true,
+      course,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, errors: "error: " + error });
+  }
+})
+
+app.post('/api/getCoursebyId', async (req, res) => {
+  // console.log(req.body.courseId);
+  const course = await Course.findById(req.body.courseId);
+  if(course){
+    // res.send(course);
+    res.status(200).send({ success: true, course: course });
+  }else{
+    res.status(400).send({ success: false, errors: "not found course" });
+  }
+})
+
+// app.use("/api/login", login);
+// app.use("/api/signup", signUp);
+// app.use("/api/sign-upload", signUploadRoutes);
+
+
+
 
 // endpoint for sign Up
 app.post('/api/signup', async (req, res) => {
@@ -128,32 +238,17 @@ app.post('/api/login', async (req, res) => {
 })
 
 
-// Creating middlewara to fetch user
-const fetchUser = async(req,res,next)=>{
-  const token = req.header('auth-token')
-  if(!token){
-      res.status(401).send({errors:'Please authenticate using valid token'})
-  }else{
-      try {
-          const data = jwt.verify(token,'secret_ecom');
-          req.user = data.user;
-          next();
-      } catch (error) {
-          res.status(401).send({errors:'please authenticate using valid token'})
-      }
-  }
-}
 
 // endpoint for get the value of isTeacher
-app.post('/api/isTeacher',fetchUser,async(req,res)=>{
+app.post('/api/isTeacher', fetchUser, async (req, res) => {
   let user = await User.findById(req.user.id);
   res.json(user.isTeacher)
 })
 
 // endpoint for set the value of isTeacher
-app.post('/api/setTeacher',fetchUser,async(req,res)=>{
+app.post('/api/setTeacher', fetchUser, async (req, res) => {
   // let user = await User.findById(req.user.id);
-  await User.findByIdAndUpdate(req.user.id,{isTeacher:true})
+  await User.findByIdAndUpdate(req.user.id, { isTeacher: true })
   res.send('you are now teacher post courses for free')
 })
 
