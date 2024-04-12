@@ -1,0 +1,59 @@
+.Bigintro{
+    background: #04016C;
+    width: 100%;
+    position: relative;
+}
+
+.Intro{
+    width: 100%;
+    height: 500px;
+    display: flex;
+    background: linear-gradient(to bottom left, #04016C, #4A16BD);
+
+}
+
+.mistperson{
+    display: flex;
+    align-items: center;
+}
+
+.mistcircle {
+    position: absolute;
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(circle at center,#005FFF 0%, rgba(19, 102, 157, 0.36) 50%, rgba(255, 255, 255, 0) , 100%,rgba(255, 255, 255, 0) 100%);
+    right:2%;
+
+  }
+
+  .person{
+    position: absolute;
+    height: 500px;
+    right: 10%;
+}
+
+.door{
+    position: absolute;
+    transform: rotate(-90deg);
+    right: 0.36%;
+    top: 150px;
+    width: 200px;
+}
+
+  
+.mistcircle2 {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle at center,#ff0606fb 5%, rgba(255, 255, 255, 0) 0% ,rgba(255, 255, 255, 0) 0%);
+    right:90%;
+    transform: rotate(180deg);
+
+  }
+
+  .door2{
+    position: absolute;
+    left: 30%;
+    bottom:-5%;
+    width: 200px;
+}

@@ -1,0 +1,161 @@
+
+.navmenu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0px;
+    z-index: 999;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pages{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.login{
+    display: flex;
+    gap: 25px;   
+    align-items: center;
+    
+}
+
+.add-course{
+    margin-top: 10px;
+    /* width: 20px; */
+}
+
+.primarybtn{
+    background: var(--gradiant);
+    padding: 7px 20px;
+    border: none;
+    color: #fff;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 20px;
+    font-family: "Saira", sans-serif;
+    cursor: pointer;
+}
+
+.cart{
+    position: relative;
+    margin-top: 7px;
+}
+
+.circle{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2AAA94;
+    top: -7px;
+    right: -10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.ghostbtn{
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-weight: 500;
+    font-size: 20px;
+    font-family: "Saira", sans-serif;
+    cursor: pointer;
+}
+
+.pages,button{
+    background: none;
+    border: none;
+    color: #1B2336;
+    font-weight: 500;
+    font-size: 20px;
+    font-family: "Saira", sans-serif;
+    cursor: pointer;
+}
+
+.navLinks{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    
+}
+
+.dropdown{
+    z-index: 999;
+    position: absolute;
+    color: #3b4661c6;
+    margin-left: -15px;
+    /* width: 120; */
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /* border-top: 0; */
+    border-radius:0 0 10px 10px;
+    padding: 15px;
+    padding-right: 20px;
+}
+
+.dropdownCategory{
+    font-size: 17px;
+    /* width: 100%; */
+}
+.dropdownCategory:hover{
+    color: var(--green);
+
+}
+
+.hidden{
+    display: none;
+}
+
+.shooo{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.search{
+    display: flex;
+    justify-content: space-between;
+    border-radius: 15px;
+    border: 1px solid #C2C2C2;
+    width: 300px;
+    height: 49px;
+    padding: 14px 22px;
+    color: #1B1B1B ;
+}
+
+.search-input{
+    border: none;
+    outline: none;
+}
+
+.relative{
+    position: relative;
+}
+
+.category{
+    margin-top: 20px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.navLink{
+    z-index: 999;
+}

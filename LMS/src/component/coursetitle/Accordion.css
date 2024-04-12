@@ -1,0 +1,39 @@
+.accordion {
+    border: 1px solid var(--green); /* Add border to the accordion */
+    border-radius: 5px;
+    width: 100%;
+}
+
+.panel {
+  color: var(--green);
+}
+
+.panel-heading, .panel-content {
+    padding: 20px 20px;
+    
+}
+
+.panel-heading {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    cursor: auto;
+    display: flex;
+    align-items: center;
+    /* border-bottom:  1px solid var(--green); */
+    border-radius: 5px;
+}
+.panel-heading .arrow{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 95%; 
+    border: 1px solid var(--green);
+    border-radius: 40px;
+}
+
+.panel-content {
+    border-top: 3px solid var(--green);
+   
+}
+
+

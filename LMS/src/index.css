@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+:root {
+  --green: #2AAA94;
+  --title-color: #0C0531;
+  --text-color: #4E596B;
+  --text-color-light: rgb(143, 149, 158);
+  --gradiant: linear-gradient(0.25turn, #083F9B, #7F56D9);
+  --fontsaira: "Saira", sans-serif;
+  --fontrowdies: "Rowdies", sans-serif;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body,
+button,
+input,
+textarea,
+h4 {
+  font-weight: 400;
+  font-family: var(--fontsaira);
+  color: var(--text-color);
+}
+
+
+h1,
+h2,
+h3 {
+  font-family: var(--fontrowdies);
+  color: var(--title-color);
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.ml{
+  margin-left: 10px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/*=============== REUSABLE CSS CLASSES ===============*/
+.section {
+  padding: 6rem 0 2rem;
+}
+
+.section_title {
+  color: var(--title-color);
+}
+
+.section_subtitle {
+  display: block;
+  font-size: var(--small-font-size);
+  margin-top: 20px;
+  margin-bottom: 4rem;
+}
+
+.section_title,
+.section_subtitle {
+  text-align: center;
+}
+
+/*=============== LAYOUT ===============*/
+.container {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.green {
+  color: var(--green);
+}
+
+.btn-disable {
+  background-color: rgba(252, 252, 252, 0.3);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+}
+
+.btn-disable-div {
+  position: relative;
+}

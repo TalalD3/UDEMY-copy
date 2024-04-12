@@ -1,0 +1,78 @@
+.container-title{
+    background: linear-gradient(#0575E6 , #02298A ,#021B79);
+    width : 100%;
+    margin-bottom: 20px;
+}
+
+.shadow {
+    background: linear-gradient(to right, #00000087 50%, #ffffff27);
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+.shadow .graduate {
+    position: relative;
+   width: 50%;
+   left: 50%;
+   overflow: hidden;
+   display: block;
+}
+
+.graduate img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.infos{
+    display: grid;
+    position: absolute;
+    gap: 60px;
+    padding-top: 50px;
+    padding-left: 50px;
+    color: #fff;
+}
+
+.infos .theme h2{
+    color: #fff;
+}
+
+.rate-stats{
+   display: flex;
+   align-items: center;
+   gap: 30px;
+}
+
+.students{
+    display: flex;
+    align-items: center;
+    gap:5px;
+
+}
+
+.teacher{
+    display: flex;
+    align-items: center;
+    gap:5px;
+}
+
+.tech-stud{
+    display: flex;
+    gap: 50px;
+}
+
+.teach-rate{
+    display: grid;
+    gap: 30px;
+}
+
+.stats {
+    display: flex;
+    gap: 30px;
+}
+
+.rating{
+    gap: 5px;
+    font-size: 20px;
+}

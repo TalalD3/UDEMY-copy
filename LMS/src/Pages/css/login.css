@@ -1,0 +1,151 @@
+.login-container {
+    display: flex;
+    height: 100vh;
+    background: var(--gradiant);
+}
+
+.left-side {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../../assets/images/Login.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    
+}
+
+.right-side {
+    
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+    gap: 30px;
+    
+    
+}
+
+
+.h2{
+    font-size: 30px;
+    display: grid;
+    gap: 40px;
+}
+
+
+form {
+    display: grid;
+    justify-content: center;
+    gap: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.input input{
+width: 100%;
+margin: 0;
+border-radius: 5px;
+height: 50px;
+padding-left: 25px;
+border: none;
+outline: none;
+}
+
+.input{
+    border: 1px solid ;
+    border-color: #8c00ff;
+    border-radius: 5px;
+}
+
+.others{
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    align-items: center;
+}
+
+.others button{
+    border: 1px solid;
+    border-color: #8c00ff;
+    border-radius: 30px;
+    padding-left: 60px;
+    padding-right: 60px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+
+.submit button{
+    background: var(--gradiant);
+    color: #fff;
+    width: 100%;
+    border-radius: 5px;
+    height: 50px;
+}
+
+.submit{
+    display: grid;
+    gap: 30px;
+    width: 100%;
+}
+
+.button {
+    border: 2px;
+    border-radius: 40px;
+}
+
+.button img {
+    height: auto; 
+    margin: 5px;
+}
+
+.sign{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px ;
+    gap:2%;
+}
+
+.signup{
+    color: #7d009d;
+    font-size: 18px ;
+    text-decoration: underline;
+}
+
+.OR .hr{
+ width: 30%;
+}
+
+.OR{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    
+}
+
+.topleft{
+    position: absolute;
+    color: #fff;
+    font-size: 20px;
+    text-align: left;
+    right: 30%;
+    bottom: 80%;
+}
+
+.topleft h2{
+    color:  #fff;
+    font-size: 40px;
+}
+
+label{
+    color: var(--title-color);
+}

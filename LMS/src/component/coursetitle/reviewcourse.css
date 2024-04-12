@@ -1,0 +1,32 @@
+.commentaire{
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px rgb(0, 0, 0);  
+    margin: 10px;
+}
+
+.commentator{
+    display: flex;
+    align-items: center;
+    gap:50px;
+}
+
+.hisrating{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.hisname{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.hisname img{
+    margin: 10px;
+}
+
+.hiscomment{
+    color: var(--title-color);
+    padding: 15px;
+}

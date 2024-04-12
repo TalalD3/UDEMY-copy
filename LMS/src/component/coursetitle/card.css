@@ -1,0 +1,56 @@
+.Card {
+    background: var(--gradiant);
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0px 5px 10px rgb(0, 0, 0);  
+    position: sticky;
+    left: 78%;
+    top: 20%;
+
+}
+
+.content{
+    display: grid;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    text-align: left;
+    font-weight: lighter;
+}
+
+.courseimage{
+    display: grid;
+    justify-content: center;
+}
+.courseimage img{
+    border-radius: 8px;
+}
+
+.buy{
+    display: grid;
+}
+
+.buy button{
+    font-family: var(--fontsaira);
+    color: azure;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: rgb(255, 255, 255);
+    width: 100%;
+    background: transparent;
+}
+.buy button:hover {
+    background: #ffffff; 
+    color: #bb00ff;
+}
+
+.price h3{
+    color: #fff;
+    font-family: var(--fontsaira);
+    font-size: 20px;
+}
+
+.coursetitle h3{
+    color: #fff;
+    font-family: var(--fontsaira)
+}

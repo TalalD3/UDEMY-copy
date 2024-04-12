@@ -1,0 +1,53 @@
+.review-container{
+    width: 450px;
+    height: 350px;
+    background: #fff;
+    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    display: grid;
+    gap: 40px;
+}
+
+.reviews{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.reviewsection .titre{
+    text-align: center;
+    font-size: 50px;
+    color: var(--green);
+}
+
+.reviewsection .these{
+    text-align: center;
+}
+
+.reviewsection{
+    display: grid;
+    gap: 80px;
+    padding-top: 20px;
+    padding-bottom: 80px;
+    background: linear-gradient(#b7dbff00,#a9d4ff);
+}
+
+.review-container .Profile{
+    padding-top: 40px;
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+    gap: 30px;
+
+}
+
+.review-container .comment{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.review-container .stars{
+    display: flex;
+    padding-left: 20px;
+    padding-bottom: 40px;
+}

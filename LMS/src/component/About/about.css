@@ -1,0 +1,35 @@
+.about{
+    height: 500px;
+    background: linear-gradient(to right, #084FC7, #7F56D9);
+    display: grid;
+    justify-content: center;
+    text-align: center;
+    
+}
+
+.question{
+    margin-top: 100px;
+    justify-content: space-between;
+}
+
+.question h1{
+    display: flex;
+    justify-content: center;
+    color:#fff;
+}
+.question span{
+    color:var(--green);
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.question p{
+    color:#fff;
+    display: flex;
+    justify-content: center;
+}
+
+.aboutimg{
+    padding-top: 50px;
+    width: 1000px;
+}
+

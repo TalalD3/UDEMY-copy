@@ -1,0 +1,23 @@
+.cartabout{
+    display: flex;
+    flex-direction:row-reverse ;
+    width: 100%;
+}
+
+.cart{
+    width: 20%;
+    right: 2%;
+    margin-bottom: 20px;
+    margin-top: -190px;
+}
+
+.infomation{
+text-align: left;
+width: 60%;
+right:18%;
+position: relative;
+}
+
+.foot{
+    margin-top: 20px;
+}
