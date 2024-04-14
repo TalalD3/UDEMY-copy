@@ -2,17 +2,19 @@ import React from 'react'
 import { Reorder } from "framer-motion";
 import ChaptreFormDisplay from './ChaptreFormDisplay';
 
-const ChaptresFormDisplay = ({ courseChaptres, setCourseChaptres, deleteChapter }) => {
+const ChaptresFormDisplay = ({ lessons, setLessons, deleteLesson }) => {
 
     return (
         <div className='dispaly-chaptres'>
-            <Reorder.Group axis="y" values={courseChaptres} onReorder={setCourseChaptres}>
-                {
-                    courseChaptres.map((courseChaptre, index) => (
-                        <ChaptreFormDisplay courseChaptre={courseChaptre} deleteChapter={deleteChapter} index={index} key={courseChaptre.title} />
-                    )) 
-                }
-            </Reorder.Group>
+            {lessons && (
+                <Reorder.Group axis="y" values={lessons} onReorder={setLessons}>
+                    {
+                        lessons.map((lesson, index) => (
+                            <ChaptreFormDisplay lesson={lesson} deleteLesson={deleteLesson} index={index} key={lesson.title} />
+                        ))
+                    }
+                </Reorder.Group>
+            )}
         </div>
     )
 }

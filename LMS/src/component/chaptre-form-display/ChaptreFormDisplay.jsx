@@ -6,17 +6,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 // import { useRaisedShadow } from "./use-raised-shadow";
 
-const ChaptreFormDisplay = ({ courseChaptre, index, deleteChapter }) => {
+const ChaptreFormDisplay = ({ lesson, index, deleteLesson }) => {
     const y = useMotionValue(0);
     // const boxShadow = useRaisedShadow(y);
 
     return (
-        <Reorder.Item value={courseChaptre} style={{ y }}>
+        <Reorder.Item value={lesson} style={{ y }}>
             <div className='dispaly-chaptre'>
                 <div className='flex'>
-                    <p className='chaptre-title'> {index + 1} -  {courseChaptre.title}</p>
+                    <p className='chaptre-title'> {index + 1} -  {lesson.title}</p>
                     {/* <DeleteOutlineIcon /> */}
-                    <div className="delet-chapter" onClick={()=>deleteChapter(index)}>
+                    <div className="delet-chapter" onClick={()=>deleteLesson(index)}>
                         <IconButton aria-label="delete" size="medium" color='inherit'>
                             <DeleteIcon fontSize="inherit"  />
                         </IconButton>
@@ -25,7 +25,7 @@ const ChaptreFormDisplay = ({ courseChaptre, index, deleteChapter }) => {
                 <video
                     className='videoChaptre'
                     controls
-                    src={courseChaptre.videoUrl}
+                    src={lesson.videoUrl}
                     height={'275px'}
                     width={'100%'}
                 ></video>

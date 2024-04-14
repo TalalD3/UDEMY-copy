@@ -10,15 +10,13 @@ import UploadImage1 from './UploadImageForm';
 import UploadImageForm from './UploadImageForm';
 
 
-const CourseForm = ({ form, imageUrl, setImageUrl }) => {
+const CourseForm = ({ form, imageUrl, setImageUrl ,course }) => {
 
     // const handleFormChange = (changedValues) => {
     //     console.log('Form values:', changedValues);
     // };
 
     const { Option } = Select;
-
-
 
     const handleChange = (info) => {
         if (info.file.status === 'done') {
@@ -43,6 +41,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl }) => {
         <>
             <Form
                 // ref={formRef}
+                initialValues={course}
                 layout="inline"
                 style={{ justifyContent: "start" }}
                 // initialValues={formValues}
@@ -114,6 +113,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl }) => {
                 >
                     <Upload
                         name="logo"
+                        // fileList={fileList}
                         action="http://localhost:5000/upload/video"
                         listType="picture"
                         maxCount={1}

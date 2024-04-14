@@ -1,4 +1,5 @@
 import { message } from "antd";
+import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 // import all_course from "../Components/Assets/all_course";
 // import { set } from "mongoose";
@@ -19,31 +20,28 @@ const ShopContextProvider = (props) => {
 
 
     useEffect(() => {
-        // fetch('http://localhost:5000/allcourses')
-        //     .then(resp => resp.json())
-        //     .then(data => setAll_course(data))
+        fetch('http://localhost:5000/api/allcourses')
+            .then(resp => resp.json())
+            .then(data => setAll_course(data))
 
-        if (localStorage.getItem('auth-token')) {
-            // fetch('http://localhost:5000/getcart', {
-            //     method: 'POST',
-            //     headers: {
-            //         Accept: 'application/form-data',
-            //         'auth-token': `${localStorage.getItem('auth-token')}`,
-            //         'Content-Type': 'application.json'
-            //     },
-            //     body: ""
-            // }).then(resp => resp.json()).then(data => setCartItems(data));
+        const isTeacher = async() => {
+            if (localStorage.getItem('auth-token')) {
 
-            fetch('http://localhost:5000/api/isTeacher', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/form-data',
-                    'auth-token': `${localStorage.getItem('auth-token')}`,
-                    'Content-Type': 'application.json'
-                },
-                body: ""
-            }).then(resp => resp.json()).then(data => setIsTeacher(data))
+                await fetch('http://localhost:5000/api/isTeacher', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/form-data',
+                        'auth-token': `${localStorage.getItem('auth-token')}`,
+                        'Content-Type': 'application.json'
+                    },
+                    body: ""
+                }).then(resp => resp.json()).then(data => setIsTeacher(data.isTeacher))
+            }
         }
+
+        isTeacher();
+
+
     }, [])
 
     const addToCart = (itemId) => {
@@ -74,8 +72,26 @@ const ShopContextProvider = (props) => {
                     'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
                 },
-                body:''
+                body: ''
             }).then(resp => resp.json()).then(data => message.info(data.JSON))
+        }
+    }
+
+    const getCreator = async (userId) => {
+        // console.log(userId);
+        try {
+            const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
+                console.log(response.data);
+                return response.data;
+            // if (response.status === 200) {
+            //     console.log(response.data.user);
+            //     return response.data.user;
+            // } else {
+            //     return null;
+            // }
+        } catch (error) {
+            console.log('[get creator]', error);
+            return null;
         }
     }
 
@@ -107,6 +123,7 @@ const ShopContextProvider = (props) => {
         }
         return totalAmount;
     }
+    
     const getTotlaCartItem = () => {
         let totalItem = 0;
         for (const item in cartItems) {
@@ -117,7 +134,7 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
-    const contextValue = { all_course, cartItems, isTeacher, setTeacher, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
+    const contextValue = { all_course, cartItems, isTeacher, setTeacher,getCreator, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
 
 
     return (

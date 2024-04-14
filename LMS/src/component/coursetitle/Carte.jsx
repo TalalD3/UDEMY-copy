@@ -12,7 +12,7 @@ function Carte(props) {
         </div>
         <div className='price'>
           <img src={money} alt="Money Icon" />
-          <h3>Price: {props.price}</h3>
+          <h3>Price: {props.price} DA</h3>
         </div>
         <hr />
         <div className='buy'>

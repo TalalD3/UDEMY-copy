@@ -128,7 +128,7 @@ function Header() {
               <>
                 {
                   isTeacher ?
-                    <Link to="/addCourse" ><button className=''>Add course</button></Link>:
+                    <Link to="/teacher/addCourse" ><button className=''>Add course</button></Link>:
                     // <Link to="/addCourse" ><button className='add-course' ><AddCircleOutlineIcon fontSize="large" /></button></Link>:
                     <button className='' onClick={()=>setTeacher()}>Teach mode</button>
                     // <Link to="/" ><button className=''>Teach mode</button></Link>

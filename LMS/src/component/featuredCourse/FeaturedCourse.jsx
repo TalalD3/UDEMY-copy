@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Item from '../item/Item'
 import itemImg1 from '../../assets/images/itemImg1.png'
 import './featuredCourse.css'
+import { ShopContext } from '../../Context/ShopContext'
 
 const items = [
     {
@@ -67,14 +68,19 @@ const items = [
 ]
 
 function FeaturedCourse() {
+
+    const { all_course } = useContext(ShopContext);
+    const courses = all_course.slice(0, 6)
+
+
     return (
         <section className='section'>
             <h1 className="section_title">Featured <span className='green'>Course</span></h1>
             <p className="section_subtitle">Unlock the pinnacle of learning in our courses.</p>
             <div className="container featuredCourse">
                 {
-                    items.map((item) => (
-                        <Item item={item} key={item.id}/>
+                    courses.map((course) => (
+                        <Item course={course} key={course.id} />
                     ))
                 }
             </div>

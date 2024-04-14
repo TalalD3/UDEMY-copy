@@ -14,7 +14,7 @@
     background-color: #f5f3f35d;
 }
 
-.uploadImge{
+.uploadImge {
     display: block;
     /* margin: 0 ; */
     width: 100%;
@@ -155,18 +155,20 @@
 .mt {
     margin-top: 15px;
 }
-.mr{
+
+.mr {
     margin-right: 10px;
 }
 
-.mt-20{
+.mt-20 {
     margin-bottom: -15px;
 }
 
 .dispaly-chaptres {
     margin-top: 10px;
 }
-.dispaly-chaptre{
+
+.dispaly-chaptre {
     background-color: rgba(230, 241, 254, 0.371);
     padding: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -181,7 +183,7 @@
     /* margin: 20px 0 10px 0; */
 }
 
-.add-chapitre-btn{
+.add-chapitre-btn {
     /* background-color: var(--green); */
     background: #1677ff;
     color: white;
@@ -194,7 +196,8 @@
     /* font-size: 14px; */
     /* border-radius: 10px; */
 }
-.add-chapitre-btn:hover{
+
+.add-chapitre-btn:hover {
     background-color: #408fff;
 }
 
@@ -202,11 +205,62 @@ input::file-selector-button {
     font-weight: bold;
     color: rgb(54, 54, 54);
     padding: 7px 12px;
-    
+
     border: thin solid rgb(213, 213, 213);
     border-radius: 3px;
     margin-bottom: 15px;
-  }
+}
+
+.add-chapter-input {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.chapter-card {
+    border-radius: 6px;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 13px 18px;
+    /* position: relative; */
+    background: rgb(220, 250, 255);
+    /* border-radius: 5px; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* flex-shrink: 0; */
+}
+
+.notfree{
+    background: rgb(233, 232, 232);
+}
+
+.borderError{
+    border: 1px solid red;
+}
+
+.switch {
+    transform: scale(0.9, 1.3);
+}
+
+.info-card{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: rgb(13, 138, 160);
+}
+
+li svg {
+    width: 25px;
+    height: 25px;
+    cursor: grab;
+    /* background-color: #1677ff; */
+    color: #1B1B1B;
+}
+
+.cursor{
+    cursor: pointer;
+}
 
 @media(max-width:800px) {
     .addCourse {

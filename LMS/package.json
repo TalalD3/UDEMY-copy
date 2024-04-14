@@ -18,6 +18,7 @@
     "antd-img-crop": "^4.21.0",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
+    "events": "^3.3.0",
     "express": "^4.19.2",
     "firebase": "^10.10.0",
     "framer-motion": "^11.0.25",
