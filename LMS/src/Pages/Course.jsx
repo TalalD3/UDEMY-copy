@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Titre from '../component/coursetitle/Titre.jsx'
 import imagecourse from "../assets/images/itemImg1.png"
 import Foot from '../component/footer/Foot.jsx';
@@ -8,13 +8,20 @@ import Courseinfos from '../component/coursetitle/Courseinfos.jsx';
 import Carousel from '../component/coursetitle/Carousel.jsx';
 import { useParams } from 'react-router-dom';
 import { Alert, message } from 'antd';
+import { ShopContext } from '../Context/ShopContext.jsx';
 
 
 function Course() {
   const { courseId } = useParams();
   const [course, setCourse] = useState({});
 
-  useEffect( () => {
+  const { getCreator } = useContext(ShopContext);
+  const [username, setUsername] = useState('')
+
+
+  
+
+  useEffect(() => {
     async function fetchData() {
       let responceData;
       console.log(courseId);
@@ -43,6 +50,13 @@ function Course() {
     fetchData();
 
   }, [courseId]);
+
+  const fetchUserData = async () => {
+    const user = await getCreator(course.creator);
+    setUsername(user.username);
+  };
+
+  fetchUserData();
 
 
   // const course =
@@ -100,7 +114,7 @@ function Course() {
       <Titre
         key={course._id}
         title={course.title}
-        creator={course.creator}
+        creator={username}
         littleDescription={course.small_description}
         rating={course.rating}
       />

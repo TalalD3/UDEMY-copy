@@ -1,5 +1,5 @@
 import { Button, Form, Input, InputNumber, Radio, Select, Space, Upload } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import { UploadOutlined } from '@ant-design/icons';
 
@@ -8,9 +8,14 @@ import upload_area from "../../assets/icons/cloud-upload-regular-240.png"
 import ImgCrop from 'antd-img-crop';
 import UploadImage1 from './UploadImageForm';
 import UploadImageForm from './UploadImageForm';
+import { ShopContext } from '../../Context/ShopContext';
 
 
 const CourseForm = ({ form, imageUrl, setImageUrl ,course }) => {
+
+    const { getCategories } = useContext(ShopContext);
+  
+    const category = getCategories();
 
     // const handleFormChange = (changedValues) => {
     //     console.log('Form values:', changedValues);
@@ -31,10 +36,6 @@ const CourseForm = ({ form, imageUrl, setImageUrl ,course }) => {
         // console.log('Received values:', values);
         // Handle form submission, e.g., send data to server
     };
-
-    // const onFinishFailed = (errorInfo) => {
-    //     console.log('Failed:', errorInfo);
-    // };
 
 
     return (
@@ -58,7 +59,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl ,course }) => {
                     style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
                     name='title'
                     rules={[{ required: true, message: 'Please input the title course' }]} >
-                    <Input placeholder="input placeholder" />
+                    <Input placeholder="e.g 'web developer'" />
                 </Form.Item>
 
                 <span className='filed-title'>Course price</span><br />
@@ -66,7 +67,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl ,course }) => {
                     style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
                     name='price'
                     rules={[{ required: true, message: 'Please input the price course' }]} >
-                    <InputNumber style={{ width: '100%' }} addonAfter="DA" />
+                    <InputNumber placeholder="e.g '599'" style={{ width: '100%' }} addonAfter="DA" />
                 </Form.Item>
 
                 <span className='filed-title'>Course small description</span>
@@ -96,8 +97,10 @@ const CourseForm = ({ form, imageUrl, setImageUrl ,course }) => {
                     rules={[{ required: true, message: 'Please select the course category ' }]}
                 >
                     <Select placeholder="Please select a category">
-                        <Option value="china">China</Option>
-                        <Option value="usa">U.S.A</Option>
+                        {category.map(category => (
+                            <Option key={category.name} value={category.name}>{category.name}</Option>
+                        ))}
+                        {/* <Option value="usa">U.S.A</Option> */}
                     </Select>
                 </Form.Item>
 

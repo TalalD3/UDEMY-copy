@@ -47,7 +47,7 @@ const TitleForme = ({ course, what }) => {
     // const formRef = useRef(null); // Ref to the form
     // const chapters = course.chapters;
 
-    const [courseChaptres, setCourseChaptres] = useState(chapters);
+    // const [courseChaptres, setCourseChaptres] = useState(chapters);
     // console.log(courseChaptres);
     const [form] = Form.useForm();
     // const [image, setImage] = useState(null);
@@ -64,31 +64,6 @@ const TitleForme = ({ course, what }) => {
     const handleFinishFailed = (errorInfo) => {
         console.error('Form submission failed:', errorInfo);
         // You can handle form submission failure here
-    };
-
-    const handleButtonClick1 = async () => {
-        form.validateFields().then(() => {
-            form.submit(); // Submit the form when the button is clicked
-            if (courseChaptres.length < 1) {
-                message.error('At least one chapter must be saved');
-                return;
-            }
-            const values = form.getFieldsValue();
-            values.image = imageUrl
-            const course = { ...values, courseChaptres }
-            console.log('course values:', course);
-
-            // try {
-            //     await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcourse`, course);
-            // } catch (error) {
-            //     console.error(error);
-            // }
-
-            // console.log('Chapter:', courseChaptres);
-            message.success('Course added successfully');
-        }).catch((error) => {
-            console.error('Form validation error:', error);
-        });
     };
 
     const handleButtonClick = async () => {

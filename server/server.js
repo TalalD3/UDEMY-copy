@@ -70,7 +70,7 @@ const Chapter = mongoose.model('Chapter',
     },
     isFree: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     lessons: [{
       title: {
@@ -94,7 +94,7 @@ const Course = mongoose.model('Course',
   {
     title: {
       type: String,
-      required: true,
+      // required: true,
     },
     description: {
       type: String,
@@ -143,7 +143,7 @@ const Course = mongoose.model('Course',
 // Creating API for getting all courses 
 app.get("/api/allcourses", async (req, res) => {
   let courses = await Course.find({});
-  console.log("All Courses Fetched ++");
+  // console.log("All Courses Fetched ++");
   res.send(courses);
 })
 
@@ -173,10 +173,9 @@ app.post('/api/addcourse', fetchUser, async (req, res) => {
   // console.log( req.body.title,req.user.id);
   try {
     const course = await Course.create({
-      title: req.body.title,
       creator: req.user.id,
     });
-    console.log(course);
+    // console.log(course);
 
     res.json({
       success: true,
@@ -186,6 +185,29 @@ app.post('/api/addcourse', fetchUser, async (req, res) => {
     res.status(500).json({ success: false, errors: "error: " + error });
   }
 })
+
+// endpoint for add Course
+// app.post('/api/addcourse', fetchUser, async (req, res) => {
+
+//   if (!req.user.id) {
+//     res.status(400).json({ success: false, errors: "error: " + error });
+//   }
+//   // console.log( req.body.title,req.user.id);
+//   try {
+//     const course = await Course.create({
+//       title: req.body.title,
+//       creator: req.user.id,
+//     });
+//     console.log(course);
+
+//     res.json({
+//       success: true,
+//       course,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ success: false, errors: "error: " + error });
+//   }
+// })
 
 // endpoint for add Course details
 app.post('/api/addcoursedetails/:courseId', async (req, res) => {
@@ -313,7 +335,7 @@ app.get('/api/chapters/:courseId', async (req, res) => {
   try {
     // Fetch chapters by courseId from the database
     const chapters = await Chapter.find({ courseId: req.params.courseId });
-    console.log(chapters);
+    // console.log(chapters);
 
     res.json({ success: true, chapters });
   } catch (error) {

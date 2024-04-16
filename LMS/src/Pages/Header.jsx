@@ -10,7 +10,7 @@ import searchicon from "./../assets/icons/searchicon.svg"
 import AddIcon from '@mui/icons-material/Add';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import "./css/header.css"
 import Dashbord from '../component/Dashbord'
 import { message } from 'antd'
@@ -18,52 +18,42 @@ import axios from 'axios'
 
 import { ShopContext } from '../Context/ShopContext'
 
-const category = [
-  {
-    id: 1,
-    name: "English"
-  },
-  {
-    id: 2,
-    name: "Maths"
-  },
-  {
-    id: 3,
-    name: "Science"
-  },
-  {
-    id: 4,
-    name: "History"
-  },
-  {
-    id: 5,
-    name: "Geography"
-  },
-  {
-    id: 6,
-    name: "Art"
-  },
-  {
-    id: 7,
-    name: "Biology"
-  },
-  {
-    id: 8,
-    name: "Proramming"
-  },
-  {
-    id: 9,
-    name: "Design"
-  },
-]
 
 function Header() {
-  const { isTeacher, setTeacher } = useContext(ShopContext);
+  const { isTeacher, setTeacher,getCategories } = useContext(ShopContext);
+  
+  const category = getCategories();
+  
+  const navigate = useNavigate();
   // const { all_product, cartItems, addToCart, removeFromCart, getTotlaCartAmount } = useContext(ShopContext);
 
 
   const [openCategory, setOpenCategory] = useState(false);
 
+  const addCourse = async () => {
+    // console.log('Received values:', values.title);
+    if (!localStorage.getItem('auth-token')) {
+      message.info("please login first");
+      navigate('/login')
+    }
+    try {
+      fetch('http://localhost:5000/api/addcourse', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/form-data',
+          'auth-token': `${localStorage.getItem('auth-token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: ''
+      }).then(resp => resp.json()).then(data => data.course).then((course) => {
+        navigate(`/teacher/addCourse/${course._id}`);
+      });
+      message.info("Complete all entry fields");
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong");
+    }
+  };
 
   return (
     <nav className='fixed'>
@@ -128,15 +118,15 @@ function Header() {
               <>
                 {
                   isTeacher ?
-                    <Link to="/teacher/addCourse" ><button className=''>Add course</button></Link>:
+                    <button className='' onClick={addCourse}>Add course</button> :
                     // <Link to="/addCourse" ><button className='add-course' ><AddCircleOutlineIcon fontSize="large" /></button></Link>:
-                    <button className='' onClick={()=>setTeacher()}>Teach mode</button>
-                    // <Link to="/" ><button className=''>Teach mode</button></Link>
+                    <button className='' onClick={() => setTeacher()}>Teach mode</button>
+                  // <Link to="/" ><button className=''>Teach mode</button></Link>
                 }
                 <Dashbord />
               </> :
               <>
-                <Link to="/login" ><button className='ghostbtn' onClick={()=>message.warning('please login first')}>Teach mode</button></Link>
+                <Link to="/login" ><button className='ghostbtn' onClick={() => message.warning('please login first')}>Teach mode</button></Link>
                 <Link to="/login" ><button className='primarybtn'>Login</button></Link>
               </>
           }

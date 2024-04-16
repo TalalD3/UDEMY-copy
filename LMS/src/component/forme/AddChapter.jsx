@@ -196,37 +196,6 @@ const AddChapter = () => {
 
     };
 
-    const info = () => {
-        Modal.info({
-            title: 'are you sure you want to delete this chapter',
-            content: (
-                <div>
-                    {/* <p>some messages...some messages...</p>
-              <p>some messages...some messages...</p> */}
-                </div>
-            ),
-            onOk() { },
-        });
-    };
-
-
-    const showDeleteConfirm = () => {
-        confirm({
-            title: 'Are you sure delete this task?',
-            icon: <ExclamationCircleOutlined />,
-            // content: 'Some descriptions',
-            // okText: 'Yes',
-            okType: 'link',
-            cancelText: 'Nooooo',
-            onOk() {
-                console.log('OK');
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
-    };
-
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
@@ -332,7 +301,7 @@ const AddChapter = () => {
                             style={{ justifyContent: "start", gap: '5%' }}
                             initialValues={{
                                 title: courseChaptres.title,
-                                isFree: true,
+                                isFree: false,
                             }}
                         >
                             <p className='filed-title mt'>Chapter title</p>

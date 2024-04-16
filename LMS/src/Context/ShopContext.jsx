@@ -24,7 +24,7 @@ const ShopContextProvider = (props) => {
             .then(resp => resp.json())
             .then(data => setAll_course(data))
 
-        const isTeacher = async() => {
+        const isTeacher = async () => {
             if (localStorage.getItem('auth-token')) {
 
                 await fetch('http://localhost:5000/api/isTeacher', {
@@ -81,8 +81,8 @@ const ShopContextProvider = (props) => {
         // console.log(userId);
         try {
             const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
-                console.log(response.data);
-                return response.data;
+            console.log(response.data);
+            return response.data;
             // if (response.status === 200) {
             //     console.log(response.data.user);
             //     return response.data.user;
@@ -93,6 +93,22 @@ const ShopContextProvider = (props) => {
             console.log('[get creator]', error);
             return null;
         }
+    }
+    const getCategories = () => {
+        return (
+            [
+                { "id": 1, "name": "Technology" },
+                { "id": 2, "name": "Science" },
+                { "id": 3, "name": "Programming" },
+                { "id": 4, "name": "Cooking" },
+                { "id": 5, "name": "Business" },
+                { "id": 6, "name": "History" },
+                { "id": 7, "name": "Mathematics" },
+                { "id": 8, "name": "Health & Fitness" },
+                { "id": 9, "name": "Sport" }
+            ]
+
+        )
     }
 
     const removeFromCart = (itemId) => {
@@ -123,7 +139,7 @@ const ShopContextProvider = (props) => {
         }
         return totalAmount;
     }
-    
+
     const getTotlaCartItem = () => {
         let totalItem = 0;
         for (const item in cartItems) {
@@ -134,7 +150,7 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
-    const contextValue = { all_course, cartItems, isTeacher, setTeacher,getCreator, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
+    const contextValue = { all_course, cartItems, isTeacher, setTeacher, getCreator, getCategories, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
 
 
     return (
