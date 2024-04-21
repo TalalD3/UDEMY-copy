@@ -1,0 +1,119 @@
+.watchCourse{
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    gap: 50px;
+}
+
+.watchCourse-sidebar{
+    width: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-top: 0;
+    /* padding: 10px 15px; */
+    /* border-radius:  0 10px; */
+    height: 100vh;
+}
+
+
+
+.course-title{
+    margin-left: 10px;
+    font-size: 24px;
+    color: var(--title-color);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.chapter{
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    /* background-color: #dfdfdf; */
+    width: 100%;
+    /* padding: 15px; */
+    /* margin-bottom: 10px; */
+}
+
+.chapter-title-info {
+    display: flex;
+    align-items: center;
+    padding: 15px 0 5px 15px;
+    cursor: pointer;
+
+    gap: 7px;
+    color: var(--text-color-dark);
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: capitalize
+}
+
+
+.play-icon{
+    font-size: 30px;
+}
+
+.chapter-lessons{
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    /* padding-left: 57px; */
+}
+
+.chapter-lesson{
+    padding: 5px;
+    /* margin-bottom: 5px; */
+    padding-left: 57px;
+    cursor: pointer;
+}
+.chapter-playLesson{
+    background-color: #2aaa9530;
+    border-right: 4px solid var(--green); 
+    color: var(--green);
+
+}
+
+.hoho{
+    width: 100%;
+}
+
+.watchCourse-info{
+    display: flex;
+    gap: 15px;
+    align-items: baseline;
+}
+
+.watchCourse-info-btn{
+    max-width: 800px;
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.chapter-title{
+    font-size: 22px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: var(--title-color);
+}
+
+.lesson-title{
+    font-size: 18px;
+    color: var(--text-color-dark);
+}
+
+.next-lesson-btn{
+    background-color: #2aaa9530;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: var(--green);
+    cursor: pointer;
+}
+
+.watch-koko{
+    margin-top: 30px;
+}

@@ -33,7 +33,12 @@
 
 .panel-content {
     border-top: 3px solid var(--green);
-   
+    color: var(--text-color);
 }
+
+.cursor{
+    cursor: pointer;
+}
+
 
 

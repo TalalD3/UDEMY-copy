@@ -9,6 +9,10 @@ import AddCourse from './Pages/AddCourse'
 import AddCourseForm from './component/addCourse/AddCourseForm'
 import AddChapterForm from './component/addCourse/AddChapterForm'
 import AddChapter from './component/forme/AddChapter'
+import Sidebar from './component/sidebar/Sidebar'
+import Dashboard from './component/dashboard/Dashboard'
+import WatchCourse from './Pages/WatchCourse'
+import Search from './Pages/Search'
 
 
 function App() {
@@ -18,15 +22,19 @@ function App() {
     <div>
       <BrowserRouter>
         <Header />
+        {/* <Sidebar /> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<Login />} />
           <Route path="/courses" element={<Courses />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
           {/* <Route path="/teacher/addCourse" element={<AddCourse />}/> */}
           <Route path="/teacher/addCourse/:courseId" element={<AddCourseForm />}/>
           <Route path="/teacher/addCourse/:courseId/chapters/:chapterId" element={<AddChapter />}/>
           <Route path="/course/:courseId" element={<Course />} />
+          <Route path="/watchCourse/:courseId" element={<WatchCourse />} />
         </Routes>
         {/* <Routes>
           <Route path='/' element={<Home />} />

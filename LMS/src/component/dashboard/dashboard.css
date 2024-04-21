@@ -1,0 +1,60 @@
+
+
+
+
+
+
+.cards{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+}
+
+.dashboard-card{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 18px 20px;
+}
+
+.total-card{
+    font-size: 18px;
+}
+
+.number-card{
+    color: var(--title-color);
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.extra-card{
+    font-style: 12px;
+}
+.extra-card span{
+    color: #1677ff;
+}
+
+.analytics{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px 30px;
+    margin-top: 30px;
+}
+
+.last{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.analytics-title{
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--title-color);
+}
+
+.teble{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

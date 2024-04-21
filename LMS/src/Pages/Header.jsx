@@ -20,10 +20,10 @@ import { ShopContext } from '../Context/ShopContext'
 
 
 function Header() {
-  const { isTeacher, setTeacher,getCategories } = useContext(ShopContext);
-  
+  const { role, setTeacher, getCategories } = useContext(ShopContext);
+
   const category = getCategories();
-  
+
   const navigate = useNavigate();
   // const { all_product, cartItems, addToCart, removeFromCart, getTotlaCartAmount } = useContext(ShopContext);
 
@@ -55,6 +55,15 @@ function Header() {
     }
   };
 
+
+  const [searchInput, setSearchInput] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const encodedSearchInput = encodeURIComponent(searchInput);
+    navigate(`/search?data=${encodedSearchInput}`); // Use navigate instead of history.push
+  };
+
   return (
     <nav className='fixed'>
       <div className='navmenu container'>
@@ -72,43 +81,33 @@ function Header() {
         <div className="pages">
           <ul className='navLinks'>
             <li className='navLink'><Link to="/courses" ><button>Courses</button></Link></li>
-            <li className='navLink' onClick={() => setOpenCategory(!openCategory)} onWheel={() => setOpenCategory(false)} >
-              <button >Category</button>
-              {/* <Link to="/Category" ><button>Category</button></Link> */}
-              <div className={!openCategory ? '' : 'shooo'} onClick={() => setOpenCategory(false)} />
-              <ul className={!openCategory ? 'hidden' : 'dropdown'} >
-
-                {
-                  category.map((item) => {
-                    return (
-                      <li key={item.id}>
-                        <Link to={`/category/${item.name}`} onClick={() => setOpenCategory(false)}>
-                          <button className='dropdownCategory'>{item.name}</button>
-                        </Link>
-                      </li>
-                    )
-                  })
-                }
-              </ul>
-            </li>
+            {/* <li className='navLink'><Link to="/mycourse" ><button>My Courses</button></Link></li> */}
           </ul>
         </div>
 
 
-        <div className="search">
-          <input className='search-input' type="text" placeholder='search for course' />
-          <img src={searchicon} />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="search">
+            <input
+              className='search-input'
+              type="text"
+              placeholder='search for course'
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+            <img src={searchicon} />
+          </div>
+        </form>
 
 
-        <div>
+        {/* <div>
           <Link to="/cart" >
             <div className='cart'>
               <img src={cart} className='imgcart' />
               <div className='circle'>0</div>
             </div>
           </Link>
-        </div>
+        </div> */}
 
 
         <div className='login'>
@@ -117,7 +116,7 @@ function Header() {
             localStorage.getItem('auth-token') ?
               <>
                 {
-                  isTeacher ?
+                  (role === 'admin' || role === 'teacher') ?
                     <button className='' onClick={addCourse}>Add course</button> :
                     // <Link to="/addCourse" ><button className='add-course' ><AddCircleOutlineIcon fontSize="large" /></button></Link>:
                     <button className='' onClick={() => setTeacher()}>Teach mode</button>

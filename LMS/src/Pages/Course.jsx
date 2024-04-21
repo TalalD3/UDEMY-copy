@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Titre from '../component/coursetitle/Titre.jsx'
 import imagecourse from "../assets/images/itemImg1.png"
 import Foot from '../component/footer/Foot.jsx';
@@ -7,71 +7,69 @@ import './css/course.css';
 import Courseinfos from '../component/coursetitle/Courseinfos.jsx';
 import Carousel from '../component/coursetitle/Carousel.jsx';
 import { useParams } from 'react-router-dom';
-import { Alert, message } from 'antd';
+import { Alert, Button, message, Modal } from 'antd';
 import { ShopContext } from '../Context/ShopContext.jsx';
 
 
 function Course() {
   const { courseId } = useParams();
+
   const [course, setCourse] = useState({});
+  const [playVideoUrl, setPlayVideoUrl] = useState('');
+  const videoRef = useRef(null);
+  const [username, setUsername] = useState('');
+  const [isUserEnroll, setIsUserEnroll] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { getCreator } = useContext(ShopContext);
-  const [username, setUsername] = useState('')
+  const { getCreator, userEnrollCourse } = useContext(ShopContext);
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
 
-  
+  const handleOk = () => {
+    setIsModalOpen(false);
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+    };
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+    };
+  };
+
 
   useEffect(() => {
     async function fetchData() {
       let responceData;
-      console.log(courseId);
+      // console.log(courseId);
       if (courseId) {
-        await fetch('http://localhost:5000/api/getCoursebyId', {
-          method: 'POST',
-          headers: {
-            Access: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ courseId: courseId })
-        }).then(resp => resp.json()).then(data => responceData = data)
+        await fetch(`http://localhost:5000/api/courses/${courseId}`)
+          .then(resp => resp.json()).then(data => responceData = data)
         if (responceData.success) {
+          // console.log(responceData.course);
           setCourse(responceData.course);
         }
         else {
-          // <Alert message="Error Text" type="error" />
           window.location.replace('/');
-          alert('course not found');
+          // alert('course not found');
           // navigate("/");
-          // message.error('course not found');
+          message.error('course not found');
           // <Alert message="Course not found" type="error" />
         }
       }
     }
+
+
+
     fetchData();
 
-  }, [courseId]);
-
-  const fetchUserData = async () => {
-    const user = await getCreator(course.creator);
-    setUsername(user.username);
-  };
-
-  fetchUserData();
-
-
-  // const course =
-  // {
-  //   id: 1,
-  //   title: 'Data Entry basic to advance',
-  //   littleDescription: 'Covers pretty much everything you need to know about UX Covers pretty much everything you need to know about UX Covers pretty much everything you need to know about UX Covers pretty much everything you need to know about UX',
-  //   creator: 'Dr. Abdesselam Mohamed',
-  //   bigdescription: 'This course will teach you everything you need to know about UX, including design, content, and coding. And you ll learn from the ground up, so it doesnt matter how much experience you have when you start.This course will teach you everything you need to know about UX, including design, content, and coding. And you ll learn from the ground up, so it doesnt matter how much experience you have when you start.This course will teach you everything you need to know about UX, including design, content, and coding. And you ll learn from the ground up, so it doesnt matter how much experience you have when you start.This course will teach you everything you need to know about UX, including design, content, and coding. And you ll learn from the ground up, so it doesnt matter how much experience you have when you start.',
-  //   new_props: 350,
-  //   old_props: 420,
-  //   img: imagecourse,
-  //   rating: 4.5,
-  //   price: '1000$',
-  // }
+  }, [courseId, username, isUserEnroll]);
 
 
   const formatDescription = (description) => {
@@ -103,38 +101,115 @@ function Course() {
     return description;
   };
 
+  const fetchUserData = async () => {
+    if (course.creator) {
+      const user = await getCreator(course.creator);
+      setUsername(user.username);
+    }
+    if (localStorage.getItem('auth-token')) {
+      try {
+        const data = await userEnrollCourse(courseId);
+        setIsUserEnroll(data.success);
+        console.log(data.success);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    }
+  };
 
+  fetchUserData();
+
+
+  const enrollCourse = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/enroll-course', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/form-data',
+          'auth-token': `${localStorage.getItem('auth-token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'courseId': courseId })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to enroll in course');
+      }
+
+      const data = await response.json();
+
+      message.success(data.message); ؤي  // Output success message
+      window.location.reload();
+
+    } catch (error) {
+      message.error('Error enrolling in course:', error);
+    }
+  };
 
 
   return (
 
 
-    <div>
 
-      <Titre
-        key={course._id}
-        title={course.title}
-        creator={username}
-        littleDescription={course.small_description}
-        rating={course.rating}
-      />
+    <div className='fullheight'>
 
-      <div className='cartabout'>
+      <Modal
+        open={isModalOpen}
+        title="Watch Lesson"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            Ok
+          </Button>
+        ]}>
+        <div className='PlayVideoContainer'>
+          <div className='PlayVideo'>
+            <video
+              className='freeVideo'
+              controls
+              ref={videoRef}
+              src={playVideoUrl}
+              width={'470px'}
+              height={'350px'}
+            ></video>
+          </div>
+        </div>
+      </Modal>
+
+      <div>
+
+        <Titre
+          key={course._id}
+          title={course.title}
+          creator={username}
+          littleDescription={course.small_description}
+          rating={course.rating}
+        />
+
+        <div className='container cartabout'>
         <div className='cart'>
-          <Carte img={course.image}
-            title={course.title}
-            price={course.price}
-          />
+            <Carte
+              img={course.image}
+              title={course.title}
+              price={course.price}
+              enrollCourse={enrollCourse}
+              isUserEnroll={isUserEnroll}
+              courseId={courseId}
+            />
+          </div>
+
+          <div className='infomation'>
+            <Courseinfos bigdescription={course.description} chapters={course.chapters} setPlayVideoUrl={setPlayVideoUrl} showModal={showModal} />
+            <Carousel />
+          </div>
+
         </div>
 
-        <div className='infomation'>
-          <Courseinfos bigdescription={course.description} />
-          <Carousel />
-        </div>
+        <Foot />
 
       </div>
 
-      <Foot />
 
     </div>
   )

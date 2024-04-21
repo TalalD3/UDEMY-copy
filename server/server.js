@@ -44,9 +44,9 @@ const User = mongoose.model('User', {
     type: String,
     required: true
   },
-  isTeacher: {
-    type: Boolean,
-    default: false
+  role:{
+    type: String,
+    default:'user'
   },
   coursesCreated: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -140,9 +140,25 @@ const Course = mongoose.model('Course',
   }
 );
 
+// Schema Creation for User model
+const Order = mongoose.model('Order', {
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course'
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  }
+})
+
 // Creating API for getting all courses 
 app.get("/api/allcourses", async (req, res) => {
-  let courses = await Course.find({});
+  let courses = await Course.find({}).populate('creator');
   // console.log("All Courses Fetched ++");
   res.send(courses);
 })
@@ -163,6 +179,45 @@ const fetchUser = async (req, res, next) => {
     }
   }
 }
+
+// Endpoint to enroll in a course
+app.post('/api/enroll-course',fetchUser, async (req, res) => {
+  try {
+    // Extract user ID and course ID from request body
+    const { courseId } = req.body;
+    
+    const userId = req.user.id;
+
+    // Check if the user and course exist
+    const user = await User.findById(userId);
+    const course = await Course.findById(courseId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (!course) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+
+    // Add the course to the user's enrolled courses
+    user.coursesEnrolled.push(courseId);
+    await user.save();
+
+    // Create a new order for the enrolled course
+    const order = new Order({
+      user: userId,
+      course: courseId,
+    });
+    await order.save();
+
+    // Return success response
+    res.status(200).json({ message: 'Enrolled in course successfully' });
+  } catch (error) {
+    console.error("Error enrolling in course:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 // endpoint for add Course
 app.post('/api/addcourse', fetchUser, async (req, res) => {
@@ -480,10 +535,6 @@ app.post('/api/getMyCourseById', fetchUser, async (req, res) => {
   }
 })
 
-// app.use("/api/login", login);
-// app.use("/api/signup", signUp);
-// app.use("/api/sign-upload", signUploadRoutes);
-
 
 
 
@@ -562,22 +613,278 @@ app.get('/api/users/:userId', async (req, res) => {
   }
 });
 
+// endpoint for getting total order numbers
+app.get('/api/countorders', async (req, res) => {
+  try {
+    const totalOrders = await Order.countDocuments();
+    res.json({ totalOrders });
+  } catch (error) {
+    console.error("Error counting total orders:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
-// endpoint for get the value of isTeacher
-app.post('/api/isTeacher', fetchUser, async (req, res) => {
+// Endpoint to count total users
+app.get('/api/countusers', async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    res.json({ totalUsers });
+  } catch (error) {
+    console.error("Error counting total users:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to count total courses
+app.get('/api/countcourses', async (req, res) => {
+  try {
+    const totalCourses = await Course.countDocuments();
+    res.json({ totalCourses });
+  } catch (error) {
+    console.error("Error counting total courses:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to get total users per month
+app.get('/api/countusers-per-month', async (req, res) => {
+  try {
+    const usersPerMonth = await User.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: '$date' },
+            year: { $year: '$date' }
+          },
+          totalUsers: { $sum: 1 }
+        }
+      }
+    ]);
+    res.json(usersPerMonth);
+  } catch (error) {
+    console.error("Error fetching total users per month:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to get total users per month
+// app.get('/api/countusers-per-month', async (req, res) => {
+//   try {
+//     const usersPerMonth = await User.aggregate([
+//       {
+//         $group: {
+//           _id: {
+//             month: { $month: '$createdAt' },
+//             year: { $year: '$createdAt' }
+//           },
+//           totalUsers: { $sum: 1 }
+//         }
+//       }
+//     ]);
+//     res.json(usersPerMonth);
+//   } catch (error) {
+//     console.error("Error fetching total users per month:", error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+
+// Endpoint to get total courses per month
+app.get('/api/countcourses-per-month', async (req, res) => {
+  try {
+    const coursesPerMonth = await Course.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: '$date' },
+            year: { $year: '$date' }
+          },
+          totalCourses: { $sum: 1 }
+        }
+      }
+    ]);
+    res.json(coursesPerMonth);
+  } catch (error) {
+    console.error("Error fetching total courses per month:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to get total orders per month
+app.get('/api/countorders-per-month', async (req, res) => {
+  try {
+    const ordersPerMonth = await Order.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: '$date' },
+            year: { $year: '$date' }
+          },
+          totalOrders: { $sum: 1 }
+        }
+      }
+    ]);
+    res.json(ordersPerMonth);
+  } catch (error) {
+    console.error("Error fetching total orders per month:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to get the number of orders for each category
+app.get('/api/orders-per-category', async (req, res) => {
+  try {
+    const ordersPerCategory = await Order.aggregate([
+      {
+        $lookup: {
+          from: 'courses',
+          localField: 'course',
+          foreignField: '_id',
+          as: 'courseInfo'
+        }
+      },
+      {
+        $unwind: '$courseInfo'
+      },
+      {
+        $group: {
+          _id: '$courseInfo.category',
+          totalOrders: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          category: '$_id',
+          totalOrders: 1,
+          _id: 0
+        }
+      }
+    ]);
+    
+    // Send the orders per category in the response
+    res.json(ordersPerCategory);
+  } catch (error) {
+    console.error("Error fetching orders per category:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/api/orders-per-course', async (req, res) => {
+  try {
+    const ordersPerCourse = await Order.aggregate([
+      {
+        $group: {
+          _id: '$course',
+          totalOrders: { $sum: 1 }
+        }
+      },
+      {
+        $lookup: {
+          from: 'courses', // Assuming your course collection is named 'courses'
+          localField: '_id',
+          foreignField: '_id',
+          as: 'courseDetails'
+        }
+      },
+      {
+        $lookup: {
+          from: 'users', // Assuming your user collection is named 'users'
+          localField: 'courseDetails.creator',
+          foreignField: '_id',
+          as: 'creatorDetails'
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          courseId: '$_id',
+          courseName: { $arrayElemAt: ['$courseDetails.title', 0] },
+          totalOrders: 1,
+          creatorName: { $arrayElemAt: ['$creatorDetails.username', 0] } // Get the username of the creator
+        }
+      }
+    ]);
+
+    res.json(ordersPerCourse);
+  } catch (error) {
+    console.error('Error fetching number of orders per course:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to get number of orders per course
+// app.get('/api/orders-per-course', async (req, res) => {
+//   try {
+//     const ordersPerCourse = await Order.aggregate([
+//       {
+//         $group: {
+//           _id: '$course',
+//           totalOrders: { $sum: 1 }
+//         }
+//       },
+//       {
+//         $lookup: {
+//           from: 'courses', // Assuming your course collection is named 'courses'
+//           localField: '_id',
+//           foreignField: '_id',
+//           as: 'courseDetails'
+//         }
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           courseId: '$_id',
+//           courseName: { $arrayElemAt: ['$courseDetails.title', 0] },
+//           totalOrders: 1
+//         }
+//       }
+//     ]);
+
+//     res.json(ordersPerCourse);
+//   } catch (error) {
+//     console.error('Error fetching number of orders per course:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+
+// endpoint for get the value of role
+app.post('/api/getrole', fetchUser, async (req, res) => {
   let user = await User.findById(req.user.id);
   if (user) {
-    res.status(200).send({ success: true, isTeacher: user.isTeacher });
+    res.status(200).send({ success: true, role: user.role });
   } else {
-    res.status(400).send({ success: false, isTeacher: false });
+    res.status(400).send({ success: false, role: 'user' });
   }
 })
+
+// endpoint for get the user
+app.post('/api/userEnrollCourse/:courseId', fetchUser, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.user.id, coursesEnrolled: { $in: [req.params.courseId] } });
+    if (user) {
+      res.status(200).send({ success: true, user });
+    } else {
+      res.status(404).send({ success: false, message: 'User not enrolled in the course' });
+    }
+  } catch (error) {
+    console.error('Error checking user enrollment:', error);
+    res.status(500).send({ success: false, error: 'Internal Server Error' });
+  }
+});
 
 // endpoint for set the value of isTeacher
 app.post('/api/setTeacher', fetchUser, async (req, res) => {
   // let user = await User.findById(req.user.id);
-  await User.findByIdAndUpdate(req.user.id, { isTeacher: true })
-  res.send('you are now teacher post courses for free')
+  await User.findByIdAndUpdate(req.user.id, { role: 'teacher' })
+  res.send('you are now teacher, post courses for free')
+})
+
+// endpoint for set the value of isTeacher
+app.post('/api/setAdmin', fetchUser, async (req, res) => {
+  // let user = await User.findById(req.user.id);
+  await User.findByIdAndUpdate(req.user.id, { role: 'admin' })
+  res.send('you are now teacher, post courses for free')
 })
 
 

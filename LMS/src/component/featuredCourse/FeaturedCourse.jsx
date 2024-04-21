@@ -80,7 +80,7 @@ function FeaturedCourse() {
             <div className="container featuredCourse">
                 {
                     courses.map((course) => (
-                        <Item course={course} key={course.id} />
+                        <Item course={course} key={course._id} />
                     ))
                 }
             </div>

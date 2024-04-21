@@ -16,7 +16,7 @@ const getDefaultCart = () => {
 const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_course, setAll_course] = useState([]);
-    const [isTeacher, setIsTeacher] = useState(false);
+    const [role, setRole] = useState('user');
 
 
     useEffect(() => {
@@ -24,10 +24,10 @@ const ShopContextProvider = (props) => {
             .then(resp => resp.json())
             .then(data => setAll_course(data))
 
-        const isTeacher = async () => {
+        const fetchRole = async () => {
             if (localStorage.getItem('auth-token')) {
 
-                await fetch('http://localhost:5000/api/isTeacher', {
+                await fetch('http://localhost:5000/api/getrole', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/form-data',
@@ -35,11 +35,12 @@ const ShopContextProvider = (props) => {
                         'Content-Type': 'application.json'
                     },
                     body: ""
-                }).then(resp => resp.json()).then(data => setIsTeacher(data.isTeacher))
+                }).then(resp => resp.json()).then(data => setRole(data.role))
+
             }
         }
 
-        isTeacher();
+        fetchRole();
 
 
     }, [])
@@ -63,9 +64,43 @@ const ShopContextProvider = (props) => {
     }
 
     const setTeacher = () => {
-        setIsTeacher(true);
+        setRole('teacher');
         if (localStorage.getItem('auth-token')) {
             fetch('http://localhost:5000/api/setTeacher', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/form-data',
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: ''
+            }).then(resp => resp.json()).then(data => message.info('congratulations, you are now a teacher'))
+        }
+    }
+
+    const userEnrollCourse = async (courseId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/userEnrollCourse/${courseId}`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'auth-token': localStorage.getItem('auth-token'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error enrolling course:', error);
+            throw error; // Rethrow the error for handling in the calling function
+        }
+    };
+
+    const setAdmin = () => {
+        setRole(true);
+        if (localStorage.getItem('auth-token')) {
+            fetch('http://localhost:5000/api/setAdmin', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -81,19 +116,20 @@ const ShopContextProvider = (props) => {
         // console.log(userId);
         try {
             const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
-            console.log(response.data);
-            return response.data;
-            // if (response.status === 200) {
-            //     console.log(response.data.user);
-            //     return response.data.user;
-            // } else {
-            //     return null;
-            // }
+            // console.log(response.data);
+            // return response.data;
+            if (response.status === 200) {
+                // console.log(response.data.user);
+                return response.data;
+            } else {
+                return null;
+            }
         } catch (error) {
             console.log('[get creator]', error);
             return null;
         }
     }
+
     const getCategories = () => {
         return (
             [
@@ -107,9 +143,22 @@ const ShopContextProvider = (props) => {
                 { "id": 8, "name": "Health & Fitness" },
                 { "id": 9, "name": "Sport" }
             ]
-
         )
     }
+
+    const fetchOrdersPerCategory = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/orders-per-category');
+            if (!response.ok) {
+                throw new Error('Failed to fetch orders per category');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error fetching orders per category:", error);
+            throw error;
+        }
+    };
 
     const removeFromCart = (itemId) => {
         setCartItems(prev => ({
@@ -140,6 +189,89 @@ const ShopContextProvider = (props) => {
         return totalAmount;
     }
 
+    const getTotlaUsers = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/countusers');
+            if (!response.ok) {
+                throw new Error('Failed to fetch total users');
+            }
+
+            const data = await response.json();
+            return data.totalUsers;
+        } catch (error) {
+            console.log("Error fetching total users:", error);
+            throw error;
+        }
+    }
+
+    const getTotlaOrder = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/countorders');
+            if (!response.ok) {
+                throw new Error('Failed to fetch total orders');
+            }
+            const data = await response.json();
+            return data.totalOrders;
+        } catch (error) {
+            console.error("Error fetching total orders:", error);
+            throw error;
+        }
+    }
+
+    const getTotlaCourses = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/countcourses');
+            if (!response.ok) {
+                throw new Error('Failed to fetch total courses');
+            }
+
+            const data = await response.json();
+            return data.totalCourses;
+        } catch (error) {
+            console.error("Error fetching total courses:", error);
+            throw error;
+        }
+    }
+
+    const fetchUsersPerMonth = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/countusers-per-month');
+            if (!response.ok) {
+                throw new Error('Failed to fetch total users per month');
+            }
+            const data = await response.json();
+            return (data);
+        } catch (error) {
+            console.error("Error fetching total users per month:", error);
+        }
+    };
+
+    const fetchCoursesPerMonth = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/countcourses-per-month');
+            if (!response.ok) {
+                throw new Error('Failed to fetch total courses per month');
+            }
+            const data = await response.json();
+            return (data);
+        } catch (error) {
+            console.error("Error fetching total courses per month:", error);
+        }
+    };
+
+    const fetchOrdersPerMonth = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/countorders-per-month');
+            if (!response.ok) {
+                throw new Error('Failed to fetch total orders per month');
+            }
+            const data = await response.json();
+            return (data);
+        } catch (error) {
+            console.error("Error fetching total orders per month:", error);
+        }
+    };
+
     const getTotlaCartItem = () => {
         let totalItem = 0;
         for (const item in cartItems) {
@@ -150,7 +282,21 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
-    const contextValue = { all_course, cartItems, isTeacher, setTeacher, getCreator, getCategories, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
+    const fetchOrdersPerCourse = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/orders-per-course');
+            if (!response.ok) {
+                throw new Error('Failed to fetch orders per course');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching orders per course:', error);
+            throw error;
+        }
+    };
+
+    const contextValue = { all_course, cartItems, role, userEnrollCourse, setTeacher, setAdmin, getCreator, getCategories, fetchOrdersPerCourse, fetchOrdersPerCategory, fetchOrdersPerMonth, fetchUsersPerMonth, fetchCoursesPerMonth, getTotlaCourses, getTotlaOrder, getTotlaUsers, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
 
 
     return (

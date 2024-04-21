@@ -1,7 +1,8 @@
 .text{
     position: relative;
-    left: 50px;
-    top: 50px;
+    /* left: 50px; */
+    margin-top: 50px;
+    /* top: 50px; */
     text-align: left;
 }
 

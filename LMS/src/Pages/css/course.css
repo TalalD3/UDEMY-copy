@@ -1,26 +1,28 @@
 .cartabout{
     display: flex;
     flex-direction:row-reverse ;
-    width: 100%;
+    justify-content: space-between;
+    /* gap: 60px; */
+    /* width: 100%; */
 }
 
 .cart{
-    width: 20%;
-    right: 2%;
+    /* position: absolute; */
+    width: 300px;
+    /* right: 2%; */
+    /* margin-right: 20px; */
     margin-bottom: 20px;
     margin-top: -190px;
 }
 
 .infomation{
-text-align: left;
-width: 60%;
-right:18%;
+/* text-align: left; */
+width: 68%;
+/* background: #000; */
+/* right:18%; */
 position: relative;
 }
 
-.foot{
-    margin-top: 20px;
-}
 
 .flex{
     /* display: flex; */
@@ -60,3 +62,8 @@ position: relative;
     color: var(--title-color);
 
 }
+
+.fullheight{
+    height: 100%;
+}
+

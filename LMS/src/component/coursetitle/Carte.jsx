@@ -1,6 +1,7 @@
 import React from 'react';
 import money from '../../assets/icons/moneys.svg';
 import './card.css';
+import { Link } from 'react-router-dom';
 
 function Carte(props) {
   return (
@@ -16,7 +17,15 @@ function Carte(props) {
         </div>
         <hr />
         <div className='buy'>
-          <button>Enroll</button>
+          {
+            props.isUserEnroll ? (
+              <Link to={`/watchCourse/${props.courseId}`}>
+                <button >Watch the course</button>
+              </Link>
+            ) : (
+              <button onClick={props.enrollCourse}>Enroll</button>
+            )
+          }
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@
 :root {
   --green: #2AAA94;
   --title-color: #0C0531;
+  --text-color-dark: #242931;
   --text-color: #4E596B;
   --text-color-light: rgb(143, 149, 158);
   --gradiant: linear-gradient(0.25turn, #083F9B, #7F56D9);

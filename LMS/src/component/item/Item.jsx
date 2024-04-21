@@ -1,25 +1,23 @@
 import React, { useContext, useState } from 'react'
 import './item.css'
 
-import star from './../../assets/icons/star.svg'
-import halfstar from './../../assets/icons/halfStar.svg'
-import blankstar from './../../assets/icons/blankStar.svg'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
+import Stars from './Stars'
 
 const Item = (props) => {
     // console.log(props.course);
 
     const { getCreator } = useContext(ShopContext);
-    const [username, setUsername] = useState('')
+    // const [username, setUsername] = useState('')
 
 
-    const fetchUserData = async () => {
-        const user = await getCreator(props.course.creator);
-        setUsername(user.username);
-    };
+    // const fetchUserData = async () => {
+    //     const user = await getCreator(props.course.creator._id);
+    //     setUsername(user?.username);
+    // };
 
-    fetchUserData();
+    // fetchUserData();
 
     return (
         <Link to={'/course/' + props.course._id}>
@@ -30,7 +28,7 @@ const Item = (props) => {
                 <div className="down">
                     <h3 className='course-title'>{props.course.title}</h3>
                     <h4 className='course-description'>{props.course.small_description}</h4>
-                    <h5 className='course-creator'>Dr. {username}</h5>
+                    <h5 className='course-creator'>Dr. {props.course.creator.username}</h5>
                     <div className="line" />
                     <div className="info">
                         <div className="price">
@@ -40,20 +38,7 @@ const Item = (props) => {
                             }
                         </div>
                         <div className="rating">
-                            <div className="stars">
-                                {
-                                    props.course.rating === 1 ? <><img src={star} /> <img src={blankstar} /> <img src={blankstar} /> <img src={blankstar} /> <img src={blankstar} /></> :
-                                        props.course.rating === 1.5 ? <><img src={star} /> <img src={halfstar} /> <img src={blankstar} /> <img src={blankstar} /> <img src={blankstar} /></> :
-                                            props.course.rating === 2 ? <><img src={star} /> <img src={star} /> <img src={blankstar} /> <img src={blankstar} /> <img src={blankstar} /></> :
-                                                props.course.rating === 2.5 ? <><img src={star} /> <img src={star} /> <img src={halfstar} /> <img src={blankstar} /> <img src={blankstar} /></> :
-                                                    props.course.rating === 3 ? <><img src={star} /> <img src={star} /> <img src={star} /> <img src={blankstar} /> <img src={blankstar} /></> :
-                                                        props.course.rating === 3.5 ? <><img src={star} /> <img src={star} /> <img src={star} /> <img src={halfstar} /> <img src={blankstar} /></> :
-                                                            props.course.rating === 4 ? <><img src={star} /> <img src={star} /> <img src={star} /> <img src={star} /> <img src={blankstar} /></> :
-                                                                props.course.rating === 4.5 ? <><img src={star} /> <img src={star} /> <img src={star} /> <img src={star} /> <img src={halfstar} /></> :
-                                                                    <><img src={star} /> <img src={star} /> <img src={star} /> <img src={star} /> <img src={star} /></>
-
-                                }
-                            </div>
+                            <Stars rating={props.course.rating} />
                             <p>{props.course.rating}</p>
                         </div>
                     </div>
