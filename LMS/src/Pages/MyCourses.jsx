@@ -10,7 +10,6 @@ const MyCourses = () => {
         const fetchUserData = async () => {
             try {
                 const user = await getUserData();
-                console.log(user);
                 setUserData(user);
             } catch (error) {
                 console.log('Failed to fetch user data', error);

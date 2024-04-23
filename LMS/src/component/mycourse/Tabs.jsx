@@ -5,6 +5,7 @@ import { PlusCircleOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import Item from '../item/Item';
 
 import './tabs.css'
+import TableCourses from '../dashboard/TableCourses';
 
 const MyTabs = ({ userData }) => {
 
@@ -39,19 +40,15 @@ const MyTabs = ({ userData }) => {
             label: 'Created Courses',
             disabled: userData.role === 'user',
             children:
-                <div className='tabs-container'>
+                <div style={{marginTop:'50px'}}>
                     {
                         userData.coursesCreated?.length ?
                             (
-                                userData.coursesCreated.map((course, index) => {
-                                    return (
-                                        <Item key={index} course={course} />
-                                    )
-                                })
+                                <TableCourses rows={userData.coursesCreated} edit={true} />
                             ) : (
                                 userData?.role === 'user' ?
                                     <div>
-                                        you must be teacher to see this courses
+                                        you must be teacher to see this partie
                                     </div> :
                                     <div>
                                         You did not create any course.

@@ -12,8 +12,8 @@
     height: 300px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 200px;
+    justify-content: space-between;
+    /* gap: 150px; */
     position: relative;
 }
 
@@ -104,4 +104,8 @@
 .social{
     display: flex;
     gap: 15px;
+}
+
+.social img {
+    width: 50px;
 }

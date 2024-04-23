@@ -16,9 +16,10 @@ import ManageCourses from './component/dashboard/ManageCourses';
 import ManageUsers from './component/dashboard/ManageUsers';
 
 import { ShopContext } from './Context/ShopContext';
-import AddCourse from './Pages/AddCourse';
 import { Profile } from './Pages/Profile';
 import MyCourses from './Pages/MyCourses';
+import About from './Pages/About';
+import AdminRoute from './AdminRoute';
 
 function App({ location }) {
   const { role } = useContext(ShopContext);
@@ -43,18 +44,19 @@ function App({ location }) {
         {role === 'admin' && <AdminSidebar />}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart" element={<Cart />} /> role={role}
           <Route path="/login" element={<Login />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/about" element={<About />} />
           <Route path="/myCourses" element={<MyCourses />} />
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/managecourses" element={<ManageCourses />} />
-          <Route path="/admin/manageusers" element={<ManageUsers />} />
+          <Route path="/admin/dashboard" element={<Dashboard role={role} />} />
+          <Route path="/admin/managecourses" element={<ManageCourses role={role} />} />
+          <Route path="/admin/manageusers" element={<ManageUsers role={role} />} />
           {/* <Route path="/teacher/addCourse" element={<AddCourse />} /> */}
-          <Route path="/teacher/addCourse/:courseId" element={<AddCourseForm />} />
-          <Route path="/teacher/addCourse/:courseId/chapters/:chapterId" element={<AddChapter />} />
+          <Route path="/teacher/addCourse/:courseId" element={<AddCourseForm role={role} />} />
+          <Route path="/teacher/addCourse/:courseId/chapters/:chapterId" element={<AddChapter role={role} />} />
           <Route path="/course/:courseId" element={<Course />} />
           <Route path="/watchCourse/:courseId" element={<WatchCourse />} />
         </Routes>

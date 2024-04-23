@@ -7,8 +7,18 @@ import StackedAreaChart from './StackedAreaChart'
 import SimpleBarChart from './SimpleBarChart'
 import EnhancedTable from './Table'
 import { ShopContext } from '../../Context/ShopContext'
+import { useNavigate } from 'react-router-dom'
+import { message } from 'antd'
 
-const Dashboard = () => {
+const Dashboard = ({ role }) => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (role !== 'admin') {
+            navigate('/');
+            message.config('you are not allowed to see this page');
+        }
+    }, [role, navigate]);
 
     const { fetchOrdersPerCourse, getTotlaCourses, getTotlaOrder, getTotlaUsers, fetchOrdersPerMonth, fetchUsersPerMonth, fetchCoursesPerMonth, fetchOrdersPerCategory } = useContext(ShopContext);
     const [totalCourses, setTotalCourses] = useState(0);

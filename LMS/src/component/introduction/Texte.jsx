@@ -11,10 +11,10 @@ function text() {
 
       <Link className='getcourse' to='/courses'><h2 className='ggg'>View courses</h2></Link>
 
-      <div className='SRC' >
+      {/* <div className='SRC' >
         <input placeholder='Search for courses' />
         <img className='imgsrch' src={srchimg} />
-      </div>
+      </div> */}
 
 
     </div>

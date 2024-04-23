@@ -24,7 +24,7 @@ function Introduction() {
             <img className='door2' src={door} />
           </div>
 
-          <div>
+          <div className='home-leftside'>
             <Text className='Text' />
           </div>
 

@@ -216,7 +216,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function TableCourses({ rows }) {
+export default function TableCourses({ rows,edit }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -365,7 +365,7 @@ export default function TableCourses({ rows }) {
                     <TableCell align="left">{row.rating}</TableCell>
                     <TableCell align="left">{row.isPublish ? 'publish' : 'inpublish'}</TableCell>
                     <TableCell align="left">{row.price}</TableCell>
-                    <TableCell align="right"><CustomizedMenusCourses isPublish={row.isPublish} id={row._id} setIsPublish={setIsPublish} deleteCourse={deleteCourse} /></TableCell>
+                    <TableCell align="right"><CustomizedMenusCourses isPublish={row.isPublish} id={row._id} setIsPublish={setIsPublish} deleteCourse={deleteCourse} edit={edit} /></TableCell>
                     {/* <TableCell align="left">
                         <div>
                           <i class='bx bx-dots-horizontal-rounded'></i>

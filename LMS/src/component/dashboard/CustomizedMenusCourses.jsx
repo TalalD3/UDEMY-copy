@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useNavigate } from 'react-router-dom';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -52,9 +53,11 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function CustomizedMenusCourses({isPublish,setIsPublish,id,deleteCourse}) {
+export default function CustomizedMenusCourses({ isPublish, setIsPublish, id, deleteCourse, edit }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -86,27 +89,28 @@ export default function CustomizedMenusCourses({isPublish,setIsPublish,id,delete
         onClose={handleClose}
       >
         {
-          isPublish !== true &&
-          <MenuItem onClick={()=>{setAnchorEl(null);setIsPublish(true,id)}} disableRipple>
-          Publish
-        </MenuItem>
-        }
-        {
-          isPublish !== false &&
-          <MenuItem onClick={()=>{setAnchorEl(null);setIsPublish(false,id)}} disableRipple>
-          inPublish
-        </MenuItem>
+          !edit ? (
+            isPublish !== true ?
+              <MenuItem onClick={() => { setAnchorEl(null); setIsPublish(true, id) }} disableRipple>
+                Publish
+              </MenuItem>
+              :
+              <MenuItem onClick={() => { setAnchorEl(null); setIsPublish(false, id) }} disableRipple>
+                inPublish
+              </MenuItem>
+          ) : (
+            <MenuItem onClick={() => { setAnchorEl(null); navigate(`/teacher/addCourse/${id}`);}} disableRipple>
+              <EditIcon />
+              Edit
+            </MenuItem>
+          )
         }
         {/* <MenuItem onClick={handleClose} disableRipple>
-          <EditIcon />
-          Edit
-        </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
           <FileCopyIcon />
           Duplicate
         </MenuItem> */}
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={()=>{setAnchorEl(null);deleteCourse(id)}} disableRipple>
+        <MenuItem onClick={() => { setAnchorEl(null); deleteCourse(id) }} disableRipple>
           <DeleteIcon />
           Delete
         </MenuItem>

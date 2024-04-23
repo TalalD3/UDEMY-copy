@@ -10,24 +10,21 @@ import Stars from './Stars'
 
 const Item = (props) => {
 
-    const { userEnrollCourse } = useContext(ShopContext);
-    const [isUserEnroll, setIsUserEnroll] = useState({});
+    const { userEnrollCourse,getCreator } = useContext(ShopContext);
+    const [isUserEnroll, setIsUserEnroll] = useState(false);
+    const [username, setUsername] = useState('')
+
 
 
     // console.log(props.course);
 
-    // const { getCreator } = useContext(ShopContext);
-    // const [username, setUsername] = useState('')
 
-
-    // const fetchUserData = async () => {
-    //     const user = await getCreator(props.course.creator._id);
-    //     setUsername(user?.username);
-    // };
-
-    // fetchUserData();
 
     const fetchUserData = async () => {
+        if (!props.course.creator.username) {
+            const user = await getCreator(props.course.creator);
+            setUsername(user?.username);
+        }
         if (localStorage.getItem('auth-token')) {
             try {
                 const data = await userEnrollCourse(props.course._id);
@@ -50,7 +47,7 @@ const Item = (props) => {
                 <div className="down">
                     <h3 className='course-title'>{props.course.title}</h3>
                     <h4 className='course-description'>{props.course.small_description}</h4>
-                    <h5 className='course-creator'>Dr. {props.course.creator.username}</h5>
+                    <h5 className='course-creator'>Dr. {props.course.creator.username ? props.course.creator.username : username}</h5>
                     <div className="line" />
                     {
                         isUserEnroll ?

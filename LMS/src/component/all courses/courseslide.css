@@ -1,0 +1,13 @@
+.custom-slider {
+    margin: 0px -10px; /* Adjust horizontal spacing between slides */
+}
+
+.slide-item {
+    padding: 0 10px; /* Adjust horizontal spacing around each slide */
+}
+
+.course-card-wrapper {
+    margin-right: 0px; /* Adjust the right margin to decrease spacing */
+    margin-left: -10px; /* Adjust the left margin to decrease spacing */
+  }
+  

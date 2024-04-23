@@ -7,8 +7,17 @@ import StackedAreaChart from './StackedAreaChart'
 import { ShopContext } from '../../Context/ShopContext'
 import TableUsers from './TableUsers'
 import TableCourses from './TableCourses'
+import { useNavigate } from 'react-router-dom'
 
-const ManageCourses = () => {
+const ManageCourses = ({role}) => {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (role !== 'admin') {
+            navigate('/');
+        }
+    }, [role, navigate]);
 
     const { getAllUsers, all_course, published_course } = useContext(ShopContext);
 

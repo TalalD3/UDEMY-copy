@@ -76,3 +76,8 @@
     bottom:-5%;
     width: 200px;
 }
+
+.home-leftside{
+    display: flex;
+    align-items: center;
+}

@@ -1036,7 +1036,7 @@ app.post('/api/userEnrollCourse/:courseId', fetchUser, async (req, res) => {
     if (user) {
       res.status(200).send({ success: true, user });
     } else {
-      res.status(404).send({ success: false, message: 'User not enrolled in the course' });
+      res.send({ success: false, message: 'User not enrolled in the course' });
     }
   } catch (error) {
     console.error('Error checking user enrollment:', error);

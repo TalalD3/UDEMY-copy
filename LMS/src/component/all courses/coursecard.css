@@ -1,0 +1,51 @@
+.coursecard{
+    background: #fff;
+    width:70%;
+    border-radius: 7px;
+    border: 1px solid #70707093;
+    padding: 5px;
+    margin: 20px;
+    box-shadow: 1px 1px 7px #000000;
+    
+}
+
+/* .coursecard:hover{
+    background: #fff;
+    width:80%;
+    border-radius: 7px;
+    border: 1px solid #70707093;
+    padding: 5px;
+    margin: 5px;
+} */
+
+.courseimg{
+width: 100%;
+border-top-left-radius: 7px;
+border-top-right-radius: 7px;
+border-bottom-left-radius: 0px;
+border-bottom-right-radius: 0px;
+}
+
+
+.rat{
+    display: flex;
+    gap: 5px;
+}
+.o-price{
+    text-decoration: line-through;
+}
+
+.prix{
+    color: var(--title-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.prix .o-price{
+    font-size: 13px;
+}
+
+.course-creator{
+    color: var(--title-color); 
+}

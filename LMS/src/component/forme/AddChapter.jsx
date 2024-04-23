@@ -9,12 +9,19 @@ import confirm from 'antd/es/modal/confirm';
 
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-const AddChapter = () => {
+const AddChapter = ({role}) => {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if (role === 'user') {
+        navigate('/');
+      }
+    }, [role, navigate]);
     // console.log(courseChaptres);
 
     const { courseId, chapterId } = useParams();
     // var title;
-    const navigate = useNavigate();
 
     const [title, setTilte] = useState('');
 
