@@ -6,7 +6,7 @@ import Item from '../component/item/Item';
 import './css/search.css'
 
 const Search = () => {
-  const { all_course } = useContext(ShopContext);
+  const { published_course } = useContext(ShopContext);
 
   const [searchValue, setSearchValue] = useState('');
   const [searchedCourses, setSearchedCourses] = useState([]);
@@ -37,12 +37,12 @@ const Search = () => {
 
     fetchData(); // Call fetchData when component mounts
 
-  }, [searchParams,all_course ]); // Remove searchedCourses.length from the dependency array
+  }, [searchParams,published_course ]); // Remove searchedCourses.length from the dependency array
 
 
   const filterPrompts = (searchValue) => {
     const regex = new RegExp(searchValue, "i"); // 'i' flag for case-insensitive search
-    return all_course.filter(
+    return published_course.filter(
       (course) =>
         regex.test(course.creator.username) ||
         regex.test(course.small_description) ||

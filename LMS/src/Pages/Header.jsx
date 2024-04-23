@@ -13,7 +13,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Link, useNavigate } from 'react-router-dom'
 import "./css/header.css"
 import Dashbord from '../component/Dashbord'
-import { message } from 'antd'
+import { Button, Form, Input, message, Modal } from 'antd'
 import axios from 'axios'
 
 import { ShopContext } from '../Context/ShopContext'
@@ -21,6 +21,8 @@ import { ShopContext } from '../Context/ShopContext'
 
 function Header() {
   const { role, setTeacher, getCategories } = useContext(ShopContext);
+
+  const [form] = Form.useForm();
 
   const category = getCategories();
 
@@ -31,6 +33,10 @@ function Header() {
   const [openCategory, setOpenCategory] = useState(false);
 
   const addCourse = async () => {
+    navigate(`/teacher/addCourse`);
+  };
+
+  const addCourse1 = async () => {
     // console.log('Received values:', values.title);
     if (!localStorage.getItem('auth-token')) {
       message.info("please login first");
@@ -64,8 +70,85 @@ function Header() {
     navigate(`/search?data=${encodedSearchInput}`); // Use navigate instead of history.push
   };
 
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    form.submit();
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    form.resetFields();
+  };
+
+  const onFinish = async () => {
+    setIsModalOpen(false);
+    if (!localStorage.getItem('auth-token')) {
+      message.info("please login first");
+      navigate('/')
+    }
+    try {
+      const values = await form.getFieldsValue();
+      fetch('http://localhost:5000/api/addcourse', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/form-data',
+          'auth-token': `${localStorage.getItem('auth-token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'title': values.title })
+      }).then(resp => resp.json()).then(data => data.course).then((course) => {
+        navigate(`/teacher/addCourse/${course._id}`);
+      });
+      form.resetFields();
+      message.info("Complete all entry fields");
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong");
+    }
+  };
+
   return (
     <nav className='fixed'>
+      <Modal
+        open={isModalOpen}
+        title="Add Course"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="submit" type="link" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk}>
+            Add
+          </Button>
+        ]}>
+        <div className='PlayVideoContainer'>
+          <p className='input-title'>course title</p>
+          <Form
+            layout="inline"
+            form={form}
+            style={{ justifyContent: "start", gap: '5%' }}
+            onFinish={onFinish}
+          >
+            <Form.Item
+              style={{ width: 350, marginBottom: 20, marginRight: 0, marginLeft: 0 }}
+              name='title'
+              rules={[{ required: true, message: 'Please input the course title to add it' }]}
+            >
+              <Input placeholder="e.g 'Web developer'" />
+            </Form.Item>
+
+          </Form>
+        </div>
+      </Modal>
+
       <div className='navmenu container'>
 
         <div>
@@ -117,7 +200,7 @@ function Header() {
               <>
                 {
                   (role === 'admin' || role === 'teacher') ?
-                    <button className='' onClick={addCourse}>Add course</button> :
+                    <button className='' onClick={showModal}>Add course</button> :
                     // <Link to="/addCourse" ><button className='add-course' ><AddCircleOutlineIcon fontSize="large" /></button></Link>:
                     <button className='' onClick={() => setTeacher()}>Teach mode</button>
                   // <Link to="/" ><button className=''>Teach mode</button></Link>
@@ -129,6 +212,7 @@ function Header() {
                 <Link to="/login" ><button className='primarybtn'>Login</button></Link>
               </>
           }
+
 
 
           {/* {

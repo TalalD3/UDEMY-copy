@@ -1,8 +1,13 @@
-import { message } from 'antd'
-import React from 'react'
+import { Rating } from '@mui/material';
+import { Flex, message, Rate } from 'antd'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+// import { Flex, Rate } from 'antd';
+const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
 const WatchCourseLesson = ({ course, activeLesson, setActiveLesson }) => {
+
+    const [value, setValue] = useState(3);
 
     // if (course.chapters) {
     //     console.log(course?.chapters[0].title)
@@ -53,8 +58,15 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson }) => {
                             </Link>
                             <p>
                                 congratulations, you completed all course chapters
-
                             </p>
+
+                            <div className='rating-input'>
+                                <Flex gap="middle" vertical>
+                                    <Rate tooltips={desc} onChange={setValue} value={value} />
+                                    {value ? <span>{desc[value - 1]}</span> : null}
+                                </Flex>
+                            </div>
+
                         </div>
                     ) : (
                         <div className='watch-koko'>

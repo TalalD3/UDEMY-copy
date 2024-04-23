@@ -69,8 +69,8 @@ const items = [
 
 function FeaturedCourse() {
 
-    const { all_course } = useContext(ShopContext);
-    const courses = all_course.slice(0, 6)
+    const { published_course } = useContext(ShopContext);
+    const courses = published_course.slice(0, 6)
 
 
     return (

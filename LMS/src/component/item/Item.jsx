@@ -1,14 +1,22 @@
 import React, { useContext, useState } from 'react'
 import './item.css'
 
+import { ArrowRightOutlined } from '@ant-design/icons';
+
+
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
 import Stars from './Stars'
 
 const Item = (props) => {
+
+    const { userEnrollCourse } = useContext(ShopContext);
+    const [isUserEnroll, setIsUserEnroll] = useState({});
+
+
     // console.log(props.course);
 
-    const { getCreator } = useContext(ShopContext);
+    // const { getCreator } = useContext(ShopContext);
     // const [username, setUsername] = useState('')
 
 
@@ -18,6 +26,20 @@ const Item = (props) => {
     // };
 
     // fetchUserData();
+
+    const fetchUserData = async () => {
+        if (localStorage.getItem('auth-token')) {
+            try {
+                const data = await userEnrollCourse(props.course._id);
+                setIsUserEnroll(data.success);
+                // console.log(data.success);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+    };
+
+    fetchUserData();
 
     return (
         <Link to={'/course/' + props.course._id}>
@@ -30,18 +52,31 @@ const Item = (props) => {
                     <h4 className='course-description'>{props.course.small_description}</h4>
                     <h5 className='course-creator'>Dr. {props.course.creator.username}</h5>
                     <div className="line" />
-                    <div className="info">
-                        <div className="price">
-                            <p className="new-price">{props.course.price} Da</p>
-                            {props.course.old_price &&
-                                <p className="old-price">{props.course.old_price} Da</p>
-                            }
-                        </div>
-                        <div className="rating">
-                            <Stars rating={props.course.rating} />
-                            <p>{props.course.rating}</p>
-                        </div>
-                    </div>
+                    {
+                        isUserEnroll ?
+                            <div className="info">
+                                <div className="rating">
+                                    <Stars rating={props.course.rating} />
+                                    <p>{props.course.rating}</p>
+                                </div>
+                                <Link to={`/watchCourse/${props.course._id}`}>
+                                    <button className='course-description'>Watch the course <ArrowRightOutlined /></button>
+                                </Link>
+                            </div>
+                            :
+                            <div className="info">
+                                <div className="price">
+                                    <p className="new-price">{props.course.price} Da</p>
+                                    {props.course.old_price &&
+                                        <p className="old-price">{props.course.old_price} Da</p>
+                                    }
+                                </div>
+                                <div className="rating">
+                                    <Stars rating={props.course.rating} />
+                                    <p>{props.course.rating}</p>
+                                </div>
+                            </div>
+                    }
                 </div>
             </div>
         </Link>

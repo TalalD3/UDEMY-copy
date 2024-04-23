@@ -163,6 +163,13 @@ app.get("/api/allcourses", async (req, res) => {
   res.send(courses);
 })
 
+// Creating API for getting published courses 
+app.get("/api/publishedcourses", async (req, res) => {
+  let courses = await Course.find({isPublish:true}).populate('creator');
+  // console.log("All Courses Fetched ++");
+  res.send(courses);
+})
+
 
 // Creating middlewara to fetch user
 const fetchUser = async (req, res, next) => {
@@ -221,25 +228,32 @@ app.post('/api/enroll-course',fetchUser, async (req, res) => {
 
 // endpoint for add Course
 app.post('/api/addcourse', fetchUser, async (req, res) => {
-
   if (!req.user.id) {
-    res.status(400).json({ success: false, errors: "error: " + error });
+    return res.status(400).json({ success: false, errors: "Error: User ID not provided" });
   }
-  // console.log( req.body.title,req.user.id);
+
   try {
+    // Create the course
     const course = await Course.create({
       creator: req.user.id,
+      title: req.body.title,
     });
-    // console.log(course);
 
-    res.json({
+    // Push the ID of the created course to the coursesCreated array of the user
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, {
+      $push: { coursesCreated: course._id }
+    }, { new: true });
+
+    return res.json({
       success: true,
-      course,
+      course
     });
   } catch (error) {
-    res.status(500).json({ success: false, errors: "error: " + error });
+    console.error('Error creating course:', error);
+    return res.status(500).json({ success: false, errors: "Internal Server Error" });
   }
-})
+});
+
 
 // endpoint for add Course
 // app.post('/api/addcourse', fetchUser, async (req, res) => {
@@ -292,6 +306,27 @@ app.post('/api/addcoursedetails/:courseId', async (req, res) => {
     res.status(500).json({ success: false, errors: "Error adding course details" });
   }
 });
+
+app.put('/api/change-publish/:courseId',async(req,res)=>{
+  try {
+    const course = await Course.findOneAndUpdate(
+      { _id: req.params.courseId },
+      {
+        isPublish: req.body.isPublish,
+      },
+      { upsert: true, new: true }
+    );
+
+    if (course) {
+      res.status(200).json({ success: true, course });
+    } else {
+      res.status(400).json({ success: false, errors: "Course not found" });
+    }
+  } catch (error) {
+    console.error('Error adding course details:', error);
+    res.status(500).json({ success: false, errors: "Error adding course details" });
+  }
+})
 
 // endpoint for add Chapter    ***  9dima ***
 app.post('/api/addchapter', async (req, res) => {
@@ -350,11 +385,27 @@ app.delete('/api/courses/:courseId', async (req, res) => {
   try {
     const { courseId } = req.params;
 
+    // Find and delete the course
     const deletedCourse = await Course.findOneAndDelete({ _id: courseId });
 
     if (!deletedCourse) {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
+
+    // Delete all chapters related to the course
+    await Chapter.deleteMany({ _id: { $in: deletedCourse.chapters } });
+
+    // Remove the course from the coursesCreated array of the creator
+    await User.updateOne(
+      { _id: deletedCourse.creator },
+      { $pull: { coursesCreated: courseId } }
+    );
+
+    // Remove the course from the coursesEnrolled array of all users
+    await User.updateMany(
+      { coursesEnrolled: courseId },
+      { $pull: { coursesEnrolled: courseId } }
+    );
 
     res.status(200).json({ success: true, message: 'Course deleted successfully' });
   } catch (error) {
@@ -362,6 +413,7 @@ app.delete('/api/courses/:courseId', async (req, res) => {
     res.status(500).json({ success: false, error: 'Error deleting course' });
   }
 });
+
 
 // endpoint for delete Chapter
 app.delete('/api/courses/:courseId/chapters/:chapterId', async (req, res) => {
@@ -613,6 +665,34 @@ app.get('/api/users/:userId', async (req, res) => {
   }
 });
 
+//endpoint for get all users
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find({});
+
+    if (!users) {
+      return res.status(404).json({ success: false, error: 'Users not found' });
+    }
+    res.status(200).json( users );
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ success: false, error: 'Error fetching user' });
+  }
+});
+
+// endpoint for get the user Data
+app.post('/api/getuserdata', fetchUser, async (req, res) => {
+  let user = await User.findById(req.user.id).populate('coursesCreated').populate('coursesEnrolled');
+  if (user) {
+    res.status(200).send({ success: true, user });
+  } else {
+    res.status(400).send({ success: false });
+  }
+})
+
+
+
+
 // endpoint for getting total order numbers
 app.get('/api/countorders', async (req, res) => {
   try {
@@ -642,6 +722,56 @@ app.get('/api/countcourses', async (req, res) => {
     res.json({ totalCourses });
   } catch (error) {
     console.error("Error counting total courses:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to count total teachers
+app.get('/api/count-teachers', async (req, res) => {
+  try {
+    const teachersCount = await User.aggregate([
+      {
+        $match: { role: 'teacher' } // Filter users with role 'teacher'
+      },
+      {
+        $group: {
+          _id: null, // Group all documents
+          totalTeachers: { $sum: 1 } // Count the number of documents
+        }
+      }
+    ]);
+
+    // If there are no teachers found, return 0 as the count
+    const count = teachersCount.length > 0 ? teachersCount[0].totalTeachers : 0;
+    
+    res.json({ totalTeachers: count });
+  } catch (error) {
+    console.error('Error counting teachers:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to count total admins
+app.get('/api/count-admins', async (req, res) => {
+  try {
+    const adminCount = await User.aggregate([
+      {
+        $match: { role: 'admin' } // Filter users with role 'teacher'
+      },
+      {
+        $group: {
+          _id: null, // Group all documents
+          totalAdmins: { $sum: 1 } // Count the number of documents
+        }
+      }
+    ]);
+
+    // If there are no teachers found, return 0 as the count
+    const count = adminCount.length > 0 ? adminCount[0].totalAdmins : 0;
+    
+    res.json({ totalAdmins: count });
+  } catch (error) {
+    console.error('Error counting teachers:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -812,6 +942,25 @@ app.get('/api/orders-per-course', async (req, res) => {
   }
 });
 
+// Endpoint to get total courses per category
+app.get('/api/total-courses-per-category', async (req, res) => {
+  try {
+    const totalCoursesPerCategory = await Course.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          totalCourses: { $sum: 1 }
+        }
+      }
+    ]);
+    res.json(totalCoursesPerCategory);
+  } catch (error) {
+    console.error("Error fetching total courses per category:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 // Endpoint to get number of orders per course
 // app.get('/api/orders-per-course', async (req, res) => {
 //   try {
@@ -858,9 +1007,31 @@ app.post('/api/getrole', fetchUser, async (req, res) => {
   }
 })
 
+// endpoint for set the user a role
+app.put('/api/change-role/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const { newRole } = req.body;
+
+  try {
+    // Find the user by ID and update their role
+    const updatedUser = await User.findByIdAndUpdate(userId, { role: newRole }, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    return res.json({ success: true, user: updatedUser });
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    return res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+
 // endpoint for get the user
 app.post('/api/userEnrollCourse/:courseId', fetchUser, async (req, res) => {
   try {
+    // console.log(req.params.courseId);
     const user = await User.findOne({ _id: req.user.id, coursesEnrolled: { $in: [req.params.courseId] } });
     if (user) {
       res.status(200).send({ success: true, user });

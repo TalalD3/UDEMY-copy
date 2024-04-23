@@ -13,23 +13,24 @@
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
-    
+
 }
 
 .right-side {
-    
+
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding-bottom: 100px;
     justify-content: center;
     background: #fff;
     gap: 30px;
-    
-    
+
+
 }
 
 
-.h2{
+.h2 {
     font-size: 30px;
     display: grid;
     gap: 40px;
@@ -46,30 +47,30 @@ form {
     margin-bottom: 20px;
 }
 
-.input input{
-width: 100%;
-margin: 0;
-border-radius: 5px;
-height: 50px;
-padding-left: 25px;
-border: none;
-outline: none;
+.input input {
+    width: 100%;
+    margin: 0;
+    border-radius: 5px;
+    height: 50px;
+    padding-left: 25px;
+    border: none;
+    outline: none;
 }
 
-.input{
-    border: 1px solid ;
+.input {
+    border: 1px solid;
     border-color: #8c00ff;
     border-radius: 5px;
 }
 
-.others{
+.others {
     display: flex;
     gap: 20px;
     padding: 10px;
     align-items: center;
 }
 
-.others button{
+.others button {
     border: 1px solid;
     border-color: #8c00ff;
     border-radius: 30px;
@@ -82,7 +83,7 @@ outline: none;
 }
 
 
-.submit button{
+.submit button {
     background: var(--gradiant);
     color: #fff;
     width: 100%;
@@ -90,7 +91,7 @@ outline: none;
     height: 50px;
 }
 
-.submit{
+.submit {
     display: grid;
     gap: 30px;
     width: 100%;
@@ -102,37 +103,37 @@ outline: none;
 }
 
 .button img {
-    height: auto; 
+    height: auto;
     margin: 5px;
 }
 
-.sign{
+.sign {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px ;
-    gap:2%;
+    font-size: 18px;
+    gap: 2%;
 }
 
-.signup{
+.signup {
     color: #7d009d;
-    font-size: 18px ;
+    font-size: 18px;
     text-decoration: underline;
 }
 
-.OR .hr{
- width: 30%;
+.OR .hr {
+    width: 30%;
 }
 
-.OR{
+.OR {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 25px;
-    
+
 }
 
-.topleft{
+.topleft {
     position: absolute;
     color: #fff;
     font-size: 20px;
@@ -141,11 +142,11 @@ outline: none;
     bottom: 80%;
 }
 
-.topleft h2{
-    color:  #fff;
+.topleft h2 {
+    color: #fff;
     font-size: 40px;
 }
 
-label{
+label {
     color: var(--title-color);
 }

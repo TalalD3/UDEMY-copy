@@ -22,51 +22,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
-function createData(id, name, calories, fat, carbs, protein) {
-  return {
-    id,
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
-// const rows = [
-
-// const rows = [
-//   {
-//     courseId: "6147b3240e6c333a5c58d018",
-//     courseName: "Web Development",
-//     totalOrders: 50,
-//     creatorName: "John Doe"
-//   },
-//   {
-//     courseId: "6147b3240e6c333a5c58d019",
-//     courseName: "Data Science",
-//     totalOrders: 30,
-//     creatorName: "Jane Smith"
-//   },
-//   {
-//     courseId: "6147b3240e6c333a5c58d020",
-//     courseName: "Programming",
-//     totalOrders: 25,
-//     creatorName: "Mike Johnson"
-//   },
-//   {
-//     courseId: "6147b3240e6c333a5c58d021",
-//     courseName: "Design",
-//     totalOrders: 20,
-//     creatorName: "Emily Brown"
-//   },
-//   {
-//     courseId: "6147b3240e6c333a5c58d022",
-//     courseName: "Business",
-//     totalOrders: 15,
-//     creatorName: "David Wilson"
-//   }
-// ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {

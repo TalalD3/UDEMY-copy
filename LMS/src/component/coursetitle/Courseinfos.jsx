@@ -17,9 +17,9 @@ function Courseinfos(props) {
       <div className='lessons'>
         <h3><span>Circuluim </span>Course</h3>
         <div className='Circuluim'>
-          <div className='lectures'><img src={lectur} /><h5>number of chapters</h5></div>
+          <div className='lectures'><img src={lectur} /><h5>{props.chapters?.length} number of chapters</h5></div>
           <div className='clock'><img src={clock} /><h5>duration</h5></div>
-        </div>
+        </div> 
         <div>
           {
             props.chapters &&

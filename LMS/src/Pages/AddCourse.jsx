@@ -7,7 +7,6 @@ import './css/course.css'
 
 const AddCourse = () => {
   const navigate = useNavigate();
-  const [course,setCourse] = useState({})
 
   const onFinish = async (values) => {
     // console.log('Received values:', values.title);
@@ -31,7 +30,8 @@ const AddCourse = () => {
       // console.log(course._id);
       // const response = await axios.post("/api/courses", values);
       // navigate(`/`);
-      message.success("Course created");
+      // message.success("Course created");
+      message.info("Complete all entry fields");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong");

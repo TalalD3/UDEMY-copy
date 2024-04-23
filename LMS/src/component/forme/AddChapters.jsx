@@ -5,70 +5,11 @@ import { Reorder } from 'framer-motion'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-const chaptersss = [
-    {
-        title: 'hello',
-        isFree: true,
-        lessons: [],
-    },
-    {
-        title: 'welcome',
-        isFree: true,
-        lessons: [],
-    },
-    {
-        title: 'to are you',
-        isFree: true,
-        lessons: [],
-    },
-]
-
-// const initialItems = ["🍅 Tomato", "🥒 Cucumber", "🧀 Cheese", "🥬 Lettuce"];
 
 const AddChapters = ({ chapters, setChapters }) => {
     const { courseId } = useParams();
     const [form] = Form.useForm();
 
-    // const [chapters, setChapters] = useState([]);
-
-    // useEffect(() => {
-    //     const fetchCourse = async () => {
-    //         try {
-    //             const response = await axios.get(`http://localhost:5000/api/courses/${courseId}`);
-    //             const { data } = response;
-    //             // setCourse(data.course);
-
-    //             // Extract chapters from the course object and update the chapters state
-    //             if (data.course && data.course.chapters) {
-    //                 setChapters(data.course.chapters);
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching course:', error);
-    //             // Handle error if needed
-    //         }
-    //     };
-
-    //     fetchCourse();
-
-    //     return () => {
-    //         // Cleanup logic if needed
-    //     };
-    // }, [courseId]);
-
-
-
-    // const [chaptres, setChaptres] = useState(courseChaptres)
-
-    // const [chaptreDetails, setChaptreDetails] = useState({
-    //     title: '',
-    //     isFree: true,
-    //     lessons: [],
-    // })
-
-    // const handleChaptersFormChange = (e) => {
-    //     setChaptreDetails({ ...chaptreDetails, [e.target.name]: e.target.value })
-    //     console.log(chaptreDetails);
-    // }
 
     const onFinish = async (values) => {
         // console.log('Received values:', values.title);
@@ -118,7 +59,6 @@ const AddChapters = ({ chapters, setChapters }) => {
                     layout="inline"
                     style={{ justifyContent: "start", gap: '5%' }}
                     // onValuesChange={handleChaptersFormChange}
-                    // form={form}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                 >

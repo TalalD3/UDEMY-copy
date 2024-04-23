@@ -15,21 +15,21 @@ export default function Dashbord() {
                 {/* <Link to="/Category" ><button>Category</button></Link> */}
                 <div className={!openCategory ? '' : 'shooo'} onClick={() => setOpenCategory(false)} />
                 <ul className={!openCategory ? 'hidden' : 'dropdown'} >
-                    <li >
+                    {/* <li >
                         <Link to={`/profile`} onClick={() => setOpenCategory(false)}>
                             <button className='dropdownCategory'>Profile</button>
                         </Link>
-                    </li>
+                    </li> */}
                     <li >
                         <Link to={`/myCourses`} onClick={() => setOpenCategory(false)}>
                             <button className='dropdownCategory'>My courses</button>
                         </Link>
                     </li>
-                    <li >
+                    {/* <li >
                         <Link to={`/dashboard`} onClick={() => setOpenCategory(false)}>
                             <button className='dropdownCategory'>Dashboard</button>
                         </Link>
-                    </li>
+                    </li> */}
                     {/* <div className="line"/> */}
                     <li >
                         <button className='dropdownCategory bold' onClick={() => { localStorage.removeItem('auth-token'); window.location.replace('/') }}>Logout</button>

@@ -14,7 +14,7 @@ const WatchCourse = () => {
 
     useEffect(() => {
         async function fetchData() {
-            let responceData;
+            let responceData; 
             if (courseId) {
                 await fetch(`http://localhost:5000/api/courses/${courseId}`)
                     .then(resp => resp.json()).then(data => responceData = data)
@@ -33,7 +33,7 @@ const WatchCourse = () => {
     }, [courseId]);
 
     return (
-        <div className="watchCourse">
+        <div className="container watchCourse">
             
             <WatchCourseSidebar course={course} activeLesson={activeLesson} setActiveLesson={setActiveLesson} />
             <WatchCourseLesson course={course} activeLesson={activeLesson} setActiveLesson={setActiveLesson} />

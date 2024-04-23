@@ -16,6 +16,7 @@ const getDefaultCart = () => {
 const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_course, setAll_course] = useState([]);
+    const [published_course, setPublished_course] = useState([]);
     const [role, setRole] = useState('user');
 
 
@@ -23,6 +24,10 @@ const ShopContextProvider = (props) => {
         fetch('http://localhost:5000/api/allcourses')
             .then(resp => resp.json())
             .then(data => setAll_course(data))
+
+        fetch('http://localhost:5000/api/publishedcourses')
+            .then(resp => resp.json())
+            .then(data => setPublished_course(data))
 
         const fetchRole = async () => {
             if (localStorage.getItem('auth-token')) {
@@ -97,6 +102,25 @@ const ShopContextProvider = (props) => {
         }
     };
 
+    const getUserData = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/getuserdata`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'auth-token': localStorage.getItem('auth-token'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+            const data = await response.json();
+            return data.user;
+        } catch (error) {
+            console.error('Error enrolling course:', error);
+            throw error; // Rethrow the error for handling in the calling function
+        }
+    };
+
     const setAdmin = () => {
         setRole(true);
         if (localStorage.getItem('auth-token')) {
@@ -116,6 +140,21 @@ const ShopContextProvider = (props) => {
         // console.log(userId);
         try {
             const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.log('[get creator]', error);
+            return null;
+        }
+    }
+
+    const getAllUsers = async () => {
+        // console.log(userId);
+        try {
+            const response = await axios.get(`http://localhost:5000/api/users`);
             // console.log(response.data);
             // return response.data;
             if (response.status === 200) {
@@ -125,7 +164,7 @@ const ShopContextProvider = (props) => {
                 return null;
             }
         } catch (error) {
-            console.log('[get creator]', error);
+            console.log('[get all users]', error);
             return null;
         }
     }
@@ -203,6 +242,24 @@ const ShopContextProvider = (props) => {
             throw error;
         }
     }
+
+    const getTotlaTeachers = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/count-teachers');
+            return (response.data.totalTeachers);
+        } catch (error) {
+            console.error('Error fetching total teachers:', error);
+        }
+    };
+
+    const getTotlaAdmins = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/count-admins');
+            return (response.data.totalAdmins);
+        } catch (error) {
+            console.error('Error fetching total admins:', error);
+        }
+    };
 
     const getTotlaOrder = async () => {
         try {
@@ -296,7 +353,7 @@ const ShopContextProvider = (props) => {
         }
     };
 
-    const contextValue = { all_course, cartItems, role, userEnrollCourse, setTeacher, setAdmin, getCreator, getCategories, fetchOrdersPerCourse, fetchOrdersPerCategory, fetchOrdersPerMonth, fetchUsersPerMonth, fetchCoursesPerMonth, getTotlaCourses, getTotlaOrder, getTotlaUsers, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
+    const contextValue = { all_course, published_course, cartItems, role, getUserData, userEnrollCourse, setTeacher, setAdmin,getAllUsers, getCreator, getCategories, fetchOrdersPerCourse, fetchOrdersPerCategory, fetchOrdersPerMonth, fetchUsersPerMonth, fetchCoursesPerMonth, getTotlaCourses, getTotlaOrder, getTotlaUsers, getTotlaTeachers, getTotlaAdmins, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
 
 
     return (

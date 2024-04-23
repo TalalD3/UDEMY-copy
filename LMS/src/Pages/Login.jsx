@@ -66,7 +66,7 @@ function Login() {
         <div className="right-side">
           <form onSubmit={handleFormSubmit}>
             <div className='h2'>
-              <img src={logo} alt="Logo" />
+              {/* <img src={logo} alt="Logo" /> */}
               <h2>{showSignUp ? 'Sign Up' : 'Login'}</h2>
             </div>
             <div className="form-group">

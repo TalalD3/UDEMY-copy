@@ -185,7 +185,6 @@ const AddChapter = () => {
             // Extract chapters from the course object and update the chapters state
             if (data.success) {
                 message.success('chapter added successfully');
-                // Navigate(`/teacher/addCourse/${courseId}`);
                 navigate(`/teacher/addCourse/${courseId}`);
             }
         } catch (error) {
@@ -201,7 +200,7 @@ const AddChapter = () => {
     const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = async() => {
+    const handleOk = async () => {
         setIsModalOpen(false);
         try {
             const response = await axios.delete(`http://localhost:5000/api/courses/${courseId}/chapters/${chapterId}`);
@@ -229,20 +228,8 @@ const AddChapter = () => {
         <section className='section'>
             <div className="container">
                 <div className='flex '>
-                    <Link to={`/teacher/addCourse/${courseId}`}> Back to Course</Link>
-                    <div >
-
-                        {/* <Popconfirm
-                            placement="topRight"
-                            title={'Are you sure delete this chapter?'}
-                            onConfirm={deleteChapter}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button className='ml' type='text' >
-                                Delete
-                            </Button>
-                        </Popconfirm> */}
+                    <Link to={`/teacher/addCourse/${courseId}`}>Back to Course</Link>
+                    <div className='btn-container'>
 
                         <Button className='ml' type='text' onClick={showModal} >
                             Delete
@@ -294,33 +281,39 @@ const AddChapter = () => {
 
                         </Form> */}
 
-                        <Form
-                            name="yourForm"
-                            layout="inline"
-                            onFinish={onFinish}
-                            style={{ justifyContent: "start", gap: '5%' }}
-                            initialValues={{
-                                title: courseChaptres.title,
-                                isFree: false,
-                            }}
-                        >
-                            <p className='filed-title mt'>Chapter title</p>
-                            <Form.Item
-                                style={{ width: "100%", marginBottom: 10, marginTop: 10, marginRight: 0, marginLeft: 0 }}
-                                name='title'
-                            >
-                                <Input placeholder="chapter title" />
-                            </Form.Item>
+                        {
+                            courseChaptres?.title && (
 
-                            <p className='filed-title mt'>Chapter is Free</p>
-                            <Form.Item
-                                name='isFree'
-                                style={{ marginTop: 12, marginRight: 0, marginLeft: 0 }}
-                            // valuePropName="checked"
-                            >
-                                <Switch />
-                            </Form.Item>
-                        </Form>
+                                <Form
+                                    name="yourForm"
+                                    layout="inline"
+                                    onFinish={onFinish}
+                                    style={{ justifyContent: "start", gap: '5%' }}
+                                    initialValues={{
+                                        title: courseChaptres?.title,
+                                        isFree: courseChaptres?.isFree,
+                                    }}
+                                >
+                                    <p className='filed-title mt'>Chapter title</p>
+                                    <Form.Item
+                                        style={{ width: "100%", marginBottom: 10, marginTop: 10, marginRight: 0, marginLeft: 0 }}
+                                        name='title'
+                                    >
+                                        <Input placeholder="chapter title" />
+                                    </Form.Item>
+
+                                    <p className='filed-title mt'>Chapter is Free</p>
+                                    <Form.Item
+                                        name='isFree'
+                                        style={{ marginTop: 12, marginRight: 0, marginLeft: 0 }}
+                                    // valuePropName="checked"
+                                    >
+                                        <Switch />
+                                    </Form.Item>
+                                </Form>
+
+                            )
+                        }
 
 
                         {/* <UploadImageForm /> */}

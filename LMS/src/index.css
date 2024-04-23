@@ -91,6 +91,7 @@ img {
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
+  /* padding: 0 60px; */
 }
 
 .green {

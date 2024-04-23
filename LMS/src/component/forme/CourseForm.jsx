@@ -11,15 +11,11 @@ import UploadImageForm from './UploadImageForm';
 import { ShopContext } from '../../Context/ShopContext';
 
 
-const CourseForm = ({ form, imageUrl, setImageUrl ,course }) => {
+const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
 
     const { getCategories } = useContext(ShopContext);
-  
-    const category = getCategories();
 
-    // const handleFormChange = (changedValues) => {
-    //     console.log('Form values:', changedValues);
-    // };
+    const category = getCategories();
 
     const { Option } = Select;
 
@@ -33,102 +29,90 @@ const CourseForm = ({ form, imageUrl, setImageUrl ,course }) => {
 
     const onFinish = (values) => {
         values.image = imageUrl
-        // console.log('Received values:', values);
-        // Handle form submission, e.g., send data to server
     };
 
 
     return (
         <>
-            <Form
-                // ref={formRef}
-                initialValues={course}
-                layout="inline"
-                style={{ justifyContent: "start" }}
-                // initialValues={formValues}
-                // onValuesChange={handleFormChange}
-                form={form}
-                onFinish={onFinish}
-            // onFinishFailed={onFinishFailed}
-            // labelCol={{ span: 8 }}
-            // wrapperCol={{ span: 2 }}
-            >
-
-                <p className='filed-title mt'>Course title</p>
-                <Form.Item
-                    style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
-                    name='title'
-                    rules={[{ required: true, message: 'Please input the title course' }]} >
-                    <Input placeholder="e.g 'web developer'" />
-                </Form.Item>
-
-                <span className='filed-title'>Course price</span><br />
-                <Form.Item
-                    style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
-                    name='price'
-                    rules={[{ required: true, message: 'Please input the price course' }]} >
-                    <InputNumber placeholder="e.g '599'" style={{ width: '100%' }} addonAfter="DA" />
-                </Form.Item>
-
-                <span className='filed-title'>Course small description</span>
-                <Form.Item
-                    name="small_description"
-                    style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -25, }}
-                    rules={[{ required: true, message: 'Please input the description course' }]}
+            {course.title &&
+                <Form
+                    initialValues={course}
+                    layout="inline"
+                    style={{ justifyContent: "start" }}
+                    form={form}
+                    onFinish={onFinish}
                 >
-                    <Input.TextArea style={{ height: 80, resize: 'none' }} showCount maxLength={200} />
-                </Form.Item>
 
-                <span className='filed-title'>Course description</span>
-                <Form.Item
-                    name="description"
-                    style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -25, }}
-                    rules={[{ required: true, message: 'Please input the description course' }]}
-                >
-                    <Input.TextArea style={{ height: 120, }} />
-                </Form.Item>
+                    <p className='filed-title mt'>Course title</p>
+                    <Form.Item
+                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
+                        name='title'
+                        rules={[{ required: true, message: 'Please input the title course' }]} >
+                        <Input placeholder="e.g 'web developer'" />
+                    </Form.Item>
 
-                <span className='filed-title'>Course category</span>
-                <Form.Item
-                    name="category"
-                    // label="Select"
-                    hasFeedback
-                    style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
-                    rules={[{ required: true, message: 'Please select the course category ' }]}
-                >
-                    <Select placeholder="Please select a category">
-                        {category.map(category => (
-                            <Option key={category.name} value={category.name}>{category.name}</Option>
-                        ))}
-                        {/* <Option value="usa">U.S.A</Option> */}
-                    </Select>
-                </Form.Item>
+                    <span className='filed-title'>Course price</span><br />
+                    <Form.Item
+                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
+                        name='price'
+                        rules={[{ required: true, message: 'Please input the price course' }]} >
+                        <InputNumber placeholder="e.g '599'" style={{ width: '100%' }} addonAfter="DA" />
+                    </Form.Item>
 
-                <span className='filed-title'>Course image</span>
-                <Form.Item
-                    name="image"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please upload an image!',
-                        },
-                    ]}
-                >
-                    <Upload
-                        name="logo"
-                        // fileList={fileList}
-                        action="http://localhost:5000/upload/video"
-                        listType="picture"
-                        maxCount={1}
-                        onChange={handleChange} // Handle change event to get the uploaded image URL
+                    <span className='filed-title'>Course small description</span>
+                    <Form.Item
+                        name="small_description"
+                        style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -25, }}
+                        rules={[{ required: true, message: 'Please input the description course' }]}
                     >
-                        <ImgCrop rotationSlider aspect={5 / 3}>
-                            <Button icon={<UploadOutlined />}>Click to upload</Button>
-                        </ImgCrop>
-                    </Upload>
-                </Form.Item>
+                        <Input.TextArea style={{ height: 80, resize: 'none' }} showCount maxLength={200} />
+                    </Form.Item>
 
-            </Form>
+                    <span className='filed-title'>Course description</span>
+                    <Form.Item
+                        name="description"
+                        style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -25, }}
+                        rules={[{ required: true, message: 'Please input the description course' }]}
+                    >
+                        <Input.TextArea style={{ height: 120, }} />
+                    </Form.Item>
+
+                    <span className='filed-title'>Course category</span>
+                    <Form.Item
+                        name="category"
+                        // label="Select"
+                        hasFeedback
+                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
+                        rules={[{ required: true, message: 'Please select the course category ' }]}
+                    >
+                        <Select placeholder="Please select a category">
+                            {category.map(category => (
+                                <Option key={category.name} value={category.name}>{category.name}</Option>
+                            ))}
+                            {/* <Option value="usa">U.S.A</Option> */}
+                        </Select>
+                    </Form.Item>
+
+                    <span className='filed-title'>Course image</span>
+                    <Form.Item
+                        name="image"
+                        rules={[{ required: true, message: 'Please upload an image!', }]}
+                    >
+                        <Upload
+                            name="logo"
+                            action="http://localhost:5000/upload/video"
+                            listType="picture"
+                            maxCount={1}
+                            onChange={handleChange} // Handle change event to get the uploaded image URL
+                        >
+                            <ImgCrop rotationSlider aspect={5 / 3}>
+                                <Button icon={<UploadOutlined />}>Click to upload</Button>
+                            </ImgCrop>
+                        </Upload>
+                    </Form.Item>
+
+                </Form>
+            }
         </>
     );
 };
