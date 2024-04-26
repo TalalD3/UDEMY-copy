@@ -82,7 +82,8 @@ const TitleForme = ({ course, what }) => {
             const values = await form.getFieldsValue();
 
             // Add the image URL to the form values
-            values.image = imageUrl ? imageUrl : course?.image;
+            // values.image = imageUrl ? imageUrl : course?.image;
+            values.image = imageUrl ? imageUrl : values.image ? values.image : null;
 
             // values.title = values.title ? values.title : courseChaptres.title
 
