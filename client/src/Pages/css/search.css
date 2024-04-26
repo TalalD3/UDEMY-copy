@@ -1,0 +1,7 @@
+.search-container{
+    margin-top: 30px;
+    display: grid;
+    /* justify-content: center; */
+    gap: 50px;
+    grid-template-columns: 1fr 1fr 1fr;
+}

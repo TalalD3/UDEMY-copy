@@ -44,9 +44,9 @@ const User = mongoose.model('User', {
     type: String,
     required: true
   },
-  role:{
+  role: {
     type: String,
-    default:'user'
+    default: 'user'
   },
   coursesCreated: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -165,7 +165,7 @@ app.get("/api/allcourses", async (req, res) => {
 
 // Creating API for getting published courses 
 app.get("/api/publishedcourses", async (req, res) => {
-  let courses = await Course.find({isPublish:true}).populate('creator');
+  let courses = await Course.find({ isPublish: true }).populate('creator');
   // console.log("All Courses Fetched ++");
   res.send(courses);
 })
@@ -188,11 +188,11 @@ const fetchUser = async (req, res, next) => {
 }
 
 // Endpoint to enroll in a course
-app.post('/api/enroll-course',fetchUser, async (req, res) => {
+app.post('/api/enroll-course', fetchUser, async (req, res) => {
   try {
     // Extract user ID and course ID from request body
     const { courseId } = req.body;
-    
+
     const userId = req.user.id;
 
     // Check if the user and course exist
@@ -221,7 +221,7 @@ app.post('/api/enroll-course',fetchUser, async (req, res) => {
     // Return success response
     res.status(200).json({ message: 'Enrolled in course successfully' });
   } catch (error) {
-    console.error("Error enrolling in course:", error);
+    // console.error("Error enrolling in course:", error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -290,6 +290,7 @@ app.post('/api/addcoursedetails/:courseId', async (req, res) => {
         description: req.body.description,
         image: req.body.image,
         price: req.body.price,
+        isPublish: req.body.isPublish,
         small_description: req.body.small_description,
         chapters: req.body.chapters
       },
@@ -307,7 +308,7 @@ app.post('/api/addcoursedetails/:courseId', async (req, res) => {
   }
 });
 
-app.put('/api/change-publish/:courseId',async(req,res)=>{
+app.put('/api/change-publish/:courseId', async (req, res) => {
   try {
     const course = await Course.findOneAndUpdate(
       { _id: req.params.courseId },
@@ -535,6 +536,23 @@ app.post('/api/getCoursebyId', async (req, res) => {
   }
 })
 
+// Endpoint to get total orders by courseId
+app.get('/api/orders-by-course/:courseId', async (req, res) => {
+  try {
+    // Extract the courseId from the request params
+    const { courseId } = req.params;
+
+    // Query the Order model to count total orders for the given courseId
+    const totalOrders = await Order.countDocuments({ course: courseId });
+
+    // Return the totalOrders as a response
+    res.json({ totalOrders });
+  } catch (error) {
+    console.error('Error fetching total orders by courseId:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // endpoint for get the course by courseID include chapter
 app.get('/api/courses/:courseId', async (req, res) => {
   try {
@@ -561,7 +579,7 @@ app.get('/api/chapter/:chapterId', async (req, res) => {
     if (!chapter) {
       return res.status(404).json({ success: false, error: 'Chapter not found' });
     }
-    console.log(chapter);
+    // console.log(chapter);
     res.json({ success: true, chapter });
   } catch (error) {
     console.error('Error fetching chapter:', error);
@@ -658,7 +676,7 @@ app.get('/api/users/:userId', async (req, res) => {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
     // res.status(200).json({ success: true, user });
-    res.status(200).json( user );
+    res.status(200).json(user);
   } catch (error) {
     console.error('Error fetching user:', error);
     res.status(500).json({ success: false, error: 'Error fetching user' });
@@ -673,7 +691,7 @@ app.get('/api/users', async (req, res) => {
     if (!users) {
       return res.status(404).json({ success: false, error: 'Users not found' });
     }
-    res.status(200).json( users );
+    res.status(200).json(users);
   } catch (error) {
     console.error('Error fetching user:', error);
     res.status(500).json({ success: false, error: 'Error fetching user' });
@@ -743,7 +761,7 @@ app.get('/api/count-teachers', async (req, res) => {
 
     // If there are no teachers found, return 0 as the count
     const count = teachersCount.length > 0 ? teachersCount[0].totalTeachers : 0;
-    
+
     res.json({ totalTeachers: count });
   } catch (error) {
     console.error('Error counting teachers:', error);
@@ -768,7 +786,7 @@ app.get('/api/count-admins', async (req, res) => {
 
     // If there are no teachers found, return 0 as the count
     const count = adminCount.length > 0 ? adminCount[0].totalAdmins : 0;
-    
+
     res.json({ totalAdmins: count });
   } catch (error) {
     console.error('Error counting teachers:', error);
@@ -890,7 +908,7 @@ app.get('/api/orders-per-category', async (req, res) => {
         }
       }
     ]);
-    
+
     // Send the orders per category in the response
     res.json(ordersPerCategory);
   } catch (error) {
