@@ -1,5 +1,4 @@
-
-.navmenu{
+.navmenu {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -7,33 +6,33 @@
     z-index: 999;
 }
 
-.logo{
+.logo {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-.pages{
+.pages {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
 
-.login{
+.login {
     display: flex;
-    gap: 25px;   
+    gap: 25px;
     align-items: center;
-    
+
 }
 
-.add-course{
+.add-course {
     margin-top: 10px;
     /* width: 20px; */
 }
 
-.primarybtn{
+.primarybtn {
     background: var(--gradiant);
     padding: 7px 20px;
     border: none;
@@ -45,12 +44,12 @@
     cursor: pointer;
 }
 
-.cart{
+.cart {
     position: relative;
     margin-top: 7px;
 }
 
-.circle{
+.circle {
     position: absolute;
     width: 20px;
     height: 20px;
@@ -64,7 +63,7 @@
     color: #fff;
 }
 
-.ghostbtn{
+.ghostbtn {
     background: none;
     border: none;
     text-decoration: underline;
@@ -74,7 +73,8 @@
     cursor: pointer;
 }
 
-.pages,button{
+.pages,
+button {
     background: none;
     border: none;
     color: #1B2336;
@@ -84,15 +84,15 @@
     cursor: pointer;
 }
 
-.navLinks{
+.navLinks {
     display: flex;
     align-items: center;
     gap: 20px;
-    
+
 }
 
 
-.dashboard{
+.dashboard {
     border-radius: 50%;
     padding: 8px;
     border: 1px solid rgba(0, 0, 0, 0.2);
@@ -101,7 +101,7 @@
     align-items: center;
 }
 
-.dropdown{
+.dropdown {
     z-index: 999;
     position: absolute;
     color: #3b4661c6;
@@ -117,27 +117,28 @@
     padding-right: 20px;
 }
 
-.dropdownCategory{
+.dropdownCategory {
     font-size: 16px;
     color: var(--text-color-dark);
     margin: 2px 0;
     /* width: 100%; */
 }
-.dropdownCategory:hover{
+
+.dropdownCategory:hover {
     color: var(--green);
     /* background-color: var(--title-color); */
 }
 
-.hidden{
+.hidden {
     display: none;
 }
 
-.bold{
+.bold {
     font-weight: 500;
     color: var(--title-color);
 }
 
-.shooo{
+.shooo {
     position: absolute;
     width: 100%;
     top: 0;
@@ -147,27 +148,28 @@
     z-index: 1;
 }
 
-.search{
+.search {
     display: flex;
     justify-content: space-between;
     border-radius: 15px;
     border: 1px solid #C2C2C2;
+    /* max-width: 350px; */
     width: 350px;
     height: 49px;
     padding: 14px 22px;
-    color: #1B1B1B ;
+    color: #1B1B1B;
 }
 
-.search-input{
+.search-input {
     border: none;
     outline: none;
 }
 
-.relative{
+.relative {
     position: relative;
 }
 
-.category{
+.category {
     margin-top: 20px;
     position: absolute;
     display: flex;
@@ -175,11 +177,88 @@
     gap: 10px;
 }
 
-.navLink{
+.navLink {
     z-index: 999;
 }
 
-.input-title{
+.input-title {
     margin-top: 20px;
     margin-bottom: 10px;
+}
+
+.logoWrite {
+    padding-bottom: 3px;
+}
+
+.nav-block {
+    display: none;
+}
+
+
+/*=============== BREAKPOINTS ===============*/
+/* For large devices */
+@media screen and (max-width: 992px) {
+    .logoIcon {
+        width: 45px;
+    }
+
+    .logoWrite {
+        width: 90px;
+    }
+
+    .search {
+        width: 220px;
+        padding: 14px 14px;
+    }
+
+    .login {
+        gap: 15px;
+    }
+
+    .pages,
+    button {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav-hidden {
+        display: none;
+    }
+
+    .nav-block {
+        display: block;
+    }
+
+    .search {
+        width: 100%;
+        flex: 1;
+        margin: 0 15px;
+    }
+
+    .navmenu {
+        padding: 10px 0;
+    }
+}
+
+/* For medium devices */
+@media screen and (max-width: 576px) {
+    .logoIcon {
+        display: none;
+    }
+
+    .search {
+        height: 40px;
+        padding: 10px;
+        margin: 0 10px;
+    }
+}
+
+/* For small devices */
+@media screen and (max-width: 420px) {
+    
+
+    .search img {
+        display: none;
+    }
 }

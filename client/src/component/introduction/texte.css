@@ -1,70 +1,121 @@
-.text{
-    /* position: relative; */
-    /* left: 50px; */
-    /* margin-top: 50px; */
-    /* top: 50px; */
-    text-align: left;
+.text {
+  /* position: relative; */
+  /* left: 50px; */
+  /* margin-top: 50px; */
+  /* top: 50px; */
+  text-align: left;
 }
 
-.title{
-    font-family: var(--fontsaira);
-    color: #ffffff99 ;
-    font-size: 18px;
-    text-align: left;
-    margin-bottom: 5px;
-  }
-
-.coaching{
-    font-family: var(--fontrowdies);
-    font-size: 60px;
-    color: #fff;
-    left: 50px;
-    text-align: left;
+.title {
+  font-family: var(--fontsaira);
+  color: #ffffff99;
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 5px;
 }
+
+.coaching {
+  font-family: var(--fontrowdies);
+  font-size: 60px;
+  color: #fff;
+  left: 50px;
+  text-align: left;
+}
+
 .coaching .highlight {
-    color: var(--green);
-  }
-
-  .getcourse {
-
-    margin-top: 30px;
-    color: #FFFFFF;
-    border: 1px solid #FFFFFF; 
-    border-radius: 10px;
-    padding: 10px; 
-    font-family: var(--fontsaira);
-    display: flex;
-    justify-content: center;
-    width: 190px;
-    
-  }
-  
-  .ggg{
-    color: #fff;
-    font-family: var(--fontsaira);
-  }
-
-  .SRC{
-    position: absolute;
-    margin-top: 30px;
-  }
-
-  .SRC input{
-    width: 400px;
-    background: #FFFFFF;
-    background-position: right center; 
-    padding-right: 30px;
-    border: #fff;
-    border-radius: 10px;
-    height: 50px;
-    padding-left: 10px;
-    
-    
+  color: var(--green);
 }
 
-.imgsrch{
+.getcourse {
+
+  margin-top: 30px;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  width: 190px;
+
+}
+
+.ggg {
+  color: #fff;
+  font-family: var(--fontsaira);
+}
+
+.SRC {
+  position: absolute;
+  margin-top: 30px;
+}
+
+.SRC input {
+  width: 400px;
+  background: #FFFFFF;
+  background-position: right center;
+  padding-right: 30px;
+  border: #fff;
+  border-radius: 10px;
+  height: 50px;
+  padding-left: 10px;
+
+
+}
+
+.imgsrch {
   position: relative;
   width: 80px;
   top: 10px;
   right: 90px;
 }
+
+/*=============== BREAKPOINTS ===============*/
+/* For large devices */
+@media screen and (max-width: 1120px) {
+  .coaching {
+    font-size: 50px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .coaching {
+    font-size: 40px;
+  }
+  .getcourse {
+    font-size: 13px;
+    margin-top: 25px;
+    padding: 6px 14px;
+    width: fit-content;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .coaching {
+    font-size: 30px;
+  }
+  .title{
+    font-size: 14px;
+  }
+  .getcourse {
+    font-size: 10px;
+    margin-top: 20px;
+    padding: 4px 14px;
+  }
+}
+
+/* For medium devices */
+@media screen and (max-width: 576px) {
+  .coaching {
+    font-size: 38px;
+  }
+  .getcourse {
+    font-size: 12px;
+    margin-bottom: 40px;
+  }
+  .title{
+    margin-top: 40px;
+  }
+}
+
+/* For small devices */
+@media screen and (max-width: 350px) {}

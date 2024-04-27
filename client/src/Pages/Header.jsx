@@ -115,7 +115,7 @@ function Header() {
   };
 
   return (
-    <nav className='fixed'>
+    <nav className='fixed section1'>
       <Modal
         open={isModalOpen}
         title="Add Course"
@@ -154,23 +154,23 @@ function Header() {
         <div>
           <Link to="/" >
             <div className='logo'>
-              <img src={logo} />
-              <img src={logotitle} />
+              <img className='logoIcon' src={logo} />
+              <img className='logoWrite' src={logotitle} />
             </div>
           </Link>
         </div>
 
 
         <div className="pages">
-          <ul className='navLinks'>
+          <ul className='navLinks nav-hidden'>
             <li className='navLink'><Link to="/courses" ><button>Courses</button></Link></li>
             {/* <li className='navLink'><Link to="/mycourse" ><button>My Courses</button></Link></li> */}
           </ul>
         </div>
 
 
-        <form onSubmit={handleSubmit}>
-          <div className="search">
+        <div className="search">
+          <form onSubmit={handleSubmit}>
             <input
               className='search-input'
               type="text"
@@ -178,9 +178,9 @@ function Header() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
             />
+          </form>
             <img src={searchicon} />
-          </div>
-        </form>
+        </div>
 
 
         {/* <div>
@@ -200,12 +200,12 @@ function Header() {
               <>
                 {
                   (role === 'admin' || role === 'teacher') ?
-                    <button className='' onClick={showModal}>Add course</button> :
+                    <button className='nav-hidden' onClick={showModal}>Add course</button> :
                     // <Link to="/addCourse" ><button className='add-course' ><AddCircleOutlineIcon fontSize="large" /></button></Link>:
-                    <button className='' onClick={() => setTeacher()}>Teach mode</button>
+                    <button className='nav-hidden' onClick={() => setTeacher()}>Teach mode</button>
                   // <Link to="/" ><button className=''>Teach mode</button></Link>
                 }
-                <Dashbord />
+                <Dashbord setTeacher={setTeacher} showModal={showModal} role={role} />
               </> :
               <>
                 <Link to="/login" ><button className='ghostbtn' onClick={() => message.warning('please login first')}>Teach mode</button></Link>

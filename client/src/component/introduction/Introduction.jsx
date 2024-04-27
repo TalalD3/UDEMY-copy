@@ -11,24 +11,26 @@ function Introduction() {
   return (
     <div className='Bigintro'>
       <div className='Intro'>
-        <div className="container home-container">
+        <section className="section1">
+          <div className="container home-container">
 
-          <div className='mistperson'>
-            <div className='person-container mistcircle'>
-              <img className='person' src={bander} />
-              {/* <div className='mistcircle'></div> */}
-              {/* <img className='mistcircle' src={mist} /> */}
+            <div className='mistperson'>
+              <div className='person-container mistcircle'>
+                <img className='person' src={bander} />
+                {/* <div className='mistcircle'></div> */}
+                {/* <img className='mistcircle' src={mist} /> */}
+              </div>
+              <img className='mistcircle2' src={mist} />
+              <img className='door' src={door} />
+              <img className='door2' src={door} />
             </div>
-            <img className='mistcircle2' src={mist} />
-            <img className='door' src={door} />
-            <img className='door2' src={door} />
-          </div>
 
-          <div className='home-leftside'>
-            <Text className='Text' />
-          </div>
+            <div className='home-leftside'>
+              <Text className='Text' />
+            </div>
 
-        </div>
+          </div>
+        </section>
 
       </div>
     </div>
