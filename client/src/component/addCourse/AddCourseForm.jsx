@@ -18,7 +18,7 @@ const AddCourseForm = ({role}) => {
 
     const getMyCourseById = async () => {
       if (localStorage.getItem('auth-token')) {
-        await fetch('http://localhost:5000/api/getMyCourseById', {
+        await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/getMyCourseById`, {
           method: 'POST',
           headers: {
             Accept: 'application/form-data',

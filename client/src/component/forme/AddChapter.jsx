@@ -49,7 +49,7 @@ const AddChapter = ({ role }) => {
         const fetchChapter = async () => {
             try {
                 // console.log(chapterId);
-                const response = await axios.get(`http://localhost:5000/api/chapter/${chapterId}`);
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/chapter/${chapterId}`);
                 const { data } = response;
                 // console.log(data.chapter.title);
                 setCourseChaptre(data.chapter);
@@ -205,7 +205,7 @@ const AddChapter = ({ role }) => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/addchapterdetails`, chaptreDetails);
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addchapterdetails`, chaptreDetails);
             const { data } = response;
             // setCourse(data.course);
 
@@ -230,7 +230,7 @@ const AddChapter = ({ role }) => {
     const handleOk = async () => {
         setIsModalOpen(false);
         try {
-            const response = await axios.delete(`http://localhost:5000/api/courses/${courseId}/chapters/${chapterId}`);
+            const response = await axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/courses/${courseId}/chapters/${chapterId}`);
             const { data } = response;
 
             if (data.success) {

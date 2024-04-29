@@ -268,7 +268,7 @@ export default function TableUsers({ rows }) {
 
   const setRole = async(newRole,userId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/change-role/${userId}`, { newRole });
+      const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/change-role/${userId}`, { newRole });
       window.location.reload('/admin/manageusers');
       return response.data; // Assuming the server returns the updated user data
     } catch (error) {

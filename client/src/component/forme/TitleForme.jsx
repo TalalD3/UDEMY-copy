@@ -23,7 +23,7 @@ const TitleForme = ({ course, what }) => {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/courses/${courseId}`);
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/courses/${courseId}`);
                 const { data } = response;
                 // setCourse(data.course);
 
@@ -159,7 +159,7 @@ const TitleForme = ({ course, what }) => {
     const handleOk = async () => {
         setIsModalOpen(false);
         try {
-            const response = await axios.delete(`http://localhost:5000/api/courses/${courseId}`);
+            const response = await axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/courses/${courseId}`);
             const { data } = response;
 
             if (data.success) {

@@ -50,7 +50,7 @@ function Course() {
       let responceData;
       // console.log(courseId);
       if (courseId) {
-        await fetch(`http://localhost:5000/api/courses/${courseId}`)
+        await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/courses/${courseId}`)
           .then(resp => resp.json()).then(data => responceData = data)
         if (responceData.success) {
           setCourse(responceData.course);
@@ -125,7 +125,7 @@ function Course() {
 
   const enrollCourse = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/enroll-course', {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/enroll-course`, {
         method: 'POST',
         headers: {
           Accept: 'application/form-data',

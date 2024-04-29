@@ -3,10 +3,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import jwt from 'jsonwebtoken';
 import { connectDB } from "./config/db.js";
-// import courseRoutes from "./routes/course.js";
-// import login from "./routes/login.js";
-// import signUp from "./routes/sign-up.js";
-// import signUploadRoutes from "./routes/sign-upload.js";
 import { errorHandler } from "./middlewares/error.js";
 import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';
@@ -451,79 +447,6 @@ app.get('/api/chapters/:courseId', async (req, res) => {
     res.status(500).json({ success: false, error: 'Error fetching chapters' });
   }
 });
-
-// app.post('/api/addchapter', async (req, res) => {
-
-//   // console.log( req.body.title,req.user.id);
-//   try {
-//     const chapter = await Chapter.create({
-//       title: req.body.title,
-//     });
-//     // console.log(chapter);
-
-//     if (chapter) {
-
-//       // const course = await Course.findByIdAndUpdate(req.body.courseId, { $push: { chapters: chapter._id } }, { new: true }).populate('Chapter');
-//       const course = await Course.findByIdAndUpdate(
-//         req.body.courseId,
-//         { $push: { chapters: chapter._id } },
-//         { new: true }
-//       ).populate('chapters');
-
-//       // .then(updatedCourse => {
-//       //   console.log('Updated course:', updatedCourse);
-//       // })
-//       // .catch(error => {
-//       //   console.error('Error updating course:', error);
-//       // });
-//       console.log('Updated course:', course);
-//       if (course) {
-//         res.json({
-//           success: true,
-//           course,
-//         });
-//       } else {
-//         res.status(400).send({ success: false, errors: "course dosnt found" });
-//       }
-//     } else {
-//       res.status(400).send({ success: false, errors: "chapter dosnt create" });
-
-//     }
-
-//   } catch (error) {
-//     res.status(500).json({ success: false, errors: "error: " + error });
-//   }
-// })
-
-// app.post('/api/addcourse', fetchUser, async (req, res) => {
-
-//   const { title, description, small_description, image, category, price, chapter } = req.body;
-
-//   if (!req.user.id) {
-//     res.status(400);
-//     return next(new Error("please login first"));
-//   }
-
-//   try {
-//     const course = await Course.create({
-//       title,
-//       description,
-//       small_description,
-//       creator: req.user.id,
-//       image,
-//       category,
-//       price,
-//       chapter
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       course,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ success: false, errors: "error: " + error });
-//   }
-// })
 
 app.post('/api/getCoursebyId', async (req, res) => {
   // console.log(req.body.courseId);
@@ -979,49 +902,17 @@ app.get('/api/total-courses-per-category', async (req, res) => {
 });
 
 
-// Endpoint to get number of orders per course
-// app.get('/api/orders-per-course', async (req, res) => {
-//   try {
-//     const ordersPerCourse = await Order.aggregate([
-//       {
-//         $group: {
-//           _id: '$course',
-//           totalOrders: { $sum: 1 }
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: 'courses', // Assuming your course collection is named 'courses'
-//           localField: '_id',
-//           foreignField: '_id',
-//           as: 'courseDetails'
-//         }
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//           courseId: '$_id',
-//           courseName: { $arrayElemAt: ['$courseDetails.title', 0] },
-//           totalOrders: 1
-//         }
-//       }
-//     ]);
-
-//     res.json(ordersPerCourse);
-//   } catch (error) {
-//     console.error('Error fetching number of orders per course:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-
-
 // endpoint for get the value of role
 app.post('/api/getrole', fetchUser, async (req, res) => {
-  let user = await User.findById(req.user.id);
-  if (user) {
-    res.status(200).send({ success: true, role: user.role });
-  } else {
-    res.status(400).send({ success: false, role: 'user' });
+  try {
+    let user = await User.findById(req.user.id);
+    if (user) {
+      res.status(200).send({ success: true, role: user.role });
+    } else {
+      res.send({ success: false, role: 'user' });
+    }
+  } catch (error) {
+    console.log('Error fetching role:', error);
   }
 })
 
@@ -1086,7 +977,7 @@ cloudinary.config({
 
 // Route to handle chapter video uploads
 app.post('/upload/video', upload.single('logo'), async (req, res) => {
-  console.log('start upload');
+  // console.log('start upload');
   try {
     // Upload file to Cloudinary
     const result = await cloudinary.uploader.upload(req.file.path, {

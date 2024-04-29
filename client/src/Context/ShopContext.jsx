@@ -21,18 +21,18 @@ const ShopContextProvider = (props) => {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/allcourses')
+        fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/allcourses`)
             .then(resp => resp.json())
             .then(data => setAll_course(data))
 
-        fetch('http://localhost:5000/api/publishedcourses')
+        fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/publishedcourses`)
             .then(resp => resp.json())
             .then(data => setPublished_course(data))
 
         const fetchRole = async () => {
             if (localStorage.getItem('auth-token')) {
 
-                await fetch('http://localhost:5000/api/getrole', {
+                await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/getrole`, {
                     method: 'POST',
                     headers: {
                         Accept: 'application/form-data',
@@ -56,7 +56,7 @@ const ShopContextProvider = (props) => {
             [itemId]: prev[itemId] + 1,
         }))
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:5000/addtocart', {
+            fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/addtocart`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -71,7 +71,7 @@ const ShopContextProvider = (props) => {
     const setTeacher = () => {
         setRole('teacher');
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:5000/api/setTeacher', {
+            fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/setTeacher`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -85,7 +85,7 @@ const ShopContextProvider = (props) => {
 
     const userEnrollCourse = async (courseId) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/userEnrollCourse/${courseId}`, {
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/userEnrollCourse/${courseId}`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -104,7 +104,7 @@ const ShopContextProvider = (props) => {
 
     const getUserData = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/getuserdata`, {
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/getuserdata`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -124,7 +124,7 @@ const ShopContextProvider = (props) => {
     const setAdmin = () => {
         setRole(true);
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:5000/api/setAdmin', {
+            fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/setAdmin`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -139,7 +139,7 @@ const ShopContextProvider = (props) => {
     const getCreator = async (userId) => {
         // console.log(userId);
         try {
-            const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/users/${userId}`);
             if (response.status === 200) {
                 return response.data;
             } else {
@@ -153,7 +153,7 @@ const ShopContextProvider = (props) => {
 
     const getTotalOrdersByCourseId = async(courseId) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/orders-by-course/${courseId}`);
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/orders-by-course/${courseId}`);
             if (response.status === 200) {
                 return response.data;
             } else {
@@ -168,7 +168,7 @@ const ShopContextProvider = (props) => {
     const getAllUsers = async () => {
         // console.log(userId);
         try {
-            const response = await axios.get(`http://localhost:5000/api/users`);
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/users`);
             // console.log(response.data);
             // return response.data;
             if (response.status === 200) {
@@ -201,7 +201,7 @@ const ShopContextProvider = (props) => {
 
     const fetchOrdersPerCategory = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/orders-per-category');
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/orders-per-category`);
             if (!response.ok) {
                 throw new Error('Failed to fetch orders per category');
             }
@@ -219,7 +219,7 @@ const ShopContextProvider = (props) => {
             [itemId]: prev[itemId] - 1,
         }))
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:5000/removefromcart', {
+            fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/removefromcart`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -244,7 +244,7 @@ const ShopContextProvider = (props) => {
 
     const getTotlaUsers = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/countusers');
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/countusers`);
             if (!response.ok) {
                 throw new Error('Failed to fetch total users');
             }
@@ -259,7 +259,7 @@ const ShopContextProvider = (props) => {
 
     const getTotlaTeachers = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/count-teachers');
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/count-teachers`);
             return (response.data.totalTeachers);
         } catch (error) {
             console.error('Error fetching total teachers:', error);
@@ -268,7 +268,7 @@ const ShopContextProvider = (props) => {
 
     const getTotlaAdmins = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/count-admins');
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/count-admins`);
             return (response.data.totalAdmins);
         } catch (error) {
             console.error('Error fetching total admins:', error);
@@ -277,7 +277,7 @@ const ShopContextProvider = (props) => {
 
     const getTotlaOrder = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/countorders');
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/countorders`);
             if (!response.ok) {
                 throw new Error('Failed to fetch total orders');
             }
@@ -291,7 +291,7 @@ const ShopContextProvider = (props) => {
 
     const getTotlaCourses = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/countcourses');
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/countcourses`);
             if (!response.ok) {
                 throw new Error('Failed to fetch total courses');
             }
@@ -306,7 +306,7 @@ const ShopContextProvider = (props) => {
 
     const fetchUsersPerMonth = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/countusers-per-month');
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/countusers-per-month`);
             if (!response.ok) {
                 throw new Error('Failed to fetch total users per month');
             }
@@ -319,7 +319,7 @@ const ShopContextProvider = (props) => {
 
     const fetchCoursesPerMonth = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/countcourses-per-month');
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/countcourses-per-month`);
             if (!response.ok) {
                 throw new Error('Failed to fetch total courses per month');
             }
@@ -332,7 +332,7 @@ const ShopContextProvider = (props) => {
 
     const fetchOrdersPerMonth = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/countorders-per-month');
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/countorders-per-month`);
             if (!response.ok) {
                 throw new Error('Failed to fetch total orders per month');
             }
@@ -355,7 +355,7 @@ const ShopContextProvider = (props) => {
 
     const fetchOrdersPerCourse = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/orders-per-course');
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/orders-per-course`);
             if (!response.ok) {
                 throw new Error('Failed to fetch orders per course');
             }

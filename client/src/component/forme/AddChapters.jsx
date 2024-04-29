@@ -18,7 +18,7 @@ const AddChapters = ({ chapters, setChapters,saveCourse }) => {
             navigate('/')
         }
         try {
-            fetch('http://localhost:5000/api/addchapter', {
+            fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addchapter`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',

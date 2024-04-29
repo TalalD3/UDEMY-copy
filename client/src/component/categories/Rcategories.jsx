@@ -57,7 +57,7 @@ function Rcategories() {
     useEffect(() => {
         const fetchTotalCoursesPerCategory = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/total-courses-per-category');
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/total-courses-per-category`);
                 setTotalCoursesPerCategory(response.data);
             } catch (error) {
                 console.error('Error fetching total courses per category:', error);

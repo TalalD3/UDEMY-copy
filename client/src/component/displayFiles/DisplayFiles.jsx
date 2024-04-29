@@ -6,7 +6,7 @@ const DisplayFiles = () => {
 
   const [allCourses, setAllCourses] = useState([]);
   const fetchInfo = async () => {
-    await fetch('http://localhost:5000/allcourses', {
+    await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/allcourses`, {
       method: 'GET'
     })
       .then(res => res.json())
@@ -18,7 +18,7 @@ const DisplayFiles = () => {
   }, [])
 
   const removeCourse= async(id)=>{
-    await fetch('http://localhost:5000/removecourse',{
+    await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/removecourse',{
       method:'POST',
       headers:{
         Accept:'application/json',

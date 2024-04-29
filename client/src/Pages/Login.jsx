@@ -37,7 +37,7 @@ function Login() {
 
     console.log(loginOrSignUp , userData);
     try {
-      const response = await axios.post(`http://localhost:5000/api/${loginOrSignUp}`, userData);
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/${loginOrSignUp}`, userData);
 
       const responseData = response.data;
       if (responseData.success) {

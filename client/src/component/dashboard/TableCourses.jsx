@@ -274,7 +274,7 @@ export default function TableCourses({ rows,edit }) {
 
   const setIsPublish = async(isPublish,courseId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/change-publish/${courseId}`, { isPublish });
+      const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/change-publish/${courseId}`, { isPublish });
       window.location.reload();
       return response.data; // Assuming the server returns the updated user data
     } catch (error) {
@@ -285,7 +285,7 @@ export default function TableCourses({ rows,edit }) {
 
   const deleteCourse = async(courseId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/courses/${courseId}`);
+      const response = await axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/courses/${courseId}`);
       window.location.reload();
       return response.data; // Assuming the server returns the updated user data
     } catch (error) {

@@ -37,7 +37,7 @@ function Header() {
       navigate('/login')
     }
     try {
-      fetch('http://localhost:5000/api/addcourse', {
+      fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcourse`, {
         method: 'POST',
         headers: {
           Accept: 'application/form-data',

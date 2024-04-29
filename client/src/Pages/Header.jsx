@@ -20,21 +20,13 @@ import { ShopContext } from '../Context/ShopContext'
 
 
 function Header() {
-  const { role, setTeacher, getCategories } = useContext(ShopContext);
+  const { role, setTeacher } = useContext(ShopContext);
 
   const [form] = Form.useForm();
 
-  const category = getCategories();
 
   const navigate = useNavigate();
-  // const { all_product, cartItems, addToCart, removeFromCart, getTotlaCartAmount } = useContext(ShopContext);
 
-
-  const [openCategory, setOpenCategory] = useState(false);
-
-  const addCourse = async () => {
-    navigate(`/teacher/addCourse`);
-  };
 
   const addCourse1 = async () => {
     // console.log('Received values:', values.title);
@@ -43,7 +35,7 @@ function Header() {
       navigate('/login')
     }
     try {
-      fetch('http://localhost:5000/api/addcourse', {
+      fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcourse`, {
         method: 'POST',
         headers: {
           Accept: 'application/form-data',
@@ -95,7 +87,7 @@ function Header() {
     }
     try {
       const values = await form.getFieldsValue();
-      fetch('http://localhost:5000/api/addcourse', {
+      fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcourse`, {
         method: 'POST',
         headers: {
           Accept: 'application/form-data',
