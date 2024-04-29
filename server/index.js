@@ -19,7 +19,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: 'https://my-edu-full.vercel.app',
+  methods:["POST", "PUT", "DELETE", "GET"],
+  credentials: true,
+}));
+
 app.use(express.json());
 
 // multer for handling file uploads
