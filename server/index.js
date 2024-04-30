@@ -157,6 +157,10 @@ const Order = mongoose.model('Order', {
   }
 })
 
+app.get("/",(req,res)=>{
+  res.json('hello ')
+})
+
 // Creating API for getting all courses 
 app.get("/api/allcourses", async (req, res) => {
   let courses = await Course.find({}).populate('creator');
