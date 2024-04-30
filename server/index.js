@@ -20,7 +20,7 @@ const port = process.env.PORT || 5000;
 
 // Middlewares
 app.use(cors({
-  origin: 'https://my-edu-full.vercel.app',
+  origin: 'https://my-edu-full-api.vercel.app',
   methods:["POST", "PUT", "DELETE", "GET"],
   credentials: true,
 }));
