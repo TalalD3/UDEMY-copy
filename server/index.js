@@ -21,7 +21,7 @@ const port = process.env.PORT || 5000;
 // Middlewares
 app.use(cors(
   {
-  origin: 'https://my-edu-flax.vercel.app',
+  origin: ["https://my-edu-flax.vercel.app"],
   methods:["POST", "PUT", "DELETE", "GET"],
   credentials: true,
 }
