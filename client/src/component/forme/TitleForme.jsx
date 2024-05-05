@@ -88,7 +88,7 @@ const TitleForme = ({ course, what }) => {
             // values.title = values.title ? values.title : courseChaptres.title
 
             // Construct the course object
-            const course = { ...values, chapters, isPublish:true };
+            const course = { ...values, chapters, isPublish: true };
 
             // Submit the form  http://localhost:5000/api/addcourse
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcoursedetails/${courseId}`, course);
@@ -119,14 +119,14 @@ const TitleForme = ({ course, what }) => {
         try {
 
             await form.validateFields(['title']);
-            
+
             // Get form values
             const values = await form.getFieldsValue();
             // console.log(values);
 
             // Add the image URL to the form values
             values.image = imageUrl ? imageUrl : values.image ? values.image : null;
-    
+
             // values.title = values.title ? values.title : courseChaptres.title
 
             // Construct the course object
@@ -176,57 +176,59 @@ const TitleForme = ({ course, what }) => {
 
 
     return (
-        <div className='container addCourse'>
-            <div className="flex">
-                <div>
-                    <h1 className='addcourse-title'>Course setup</h1>
-                    <p className='addcourse-paragraph'>complete all feilds</p>
-                </div>
-                <div className='btn-container'>
+        <section className="section1">
+            <div className='container addCourse'>
+                <div className="flex">
+                    <div>
+                        <h1 className='addcourse-title'>Course setup</h1>
+                        <p className='addcourse-paragraph'>complete all feilds</p>
+                    </div>
+                    <div className='btn-container'>
 
-                    <Button className='ml' type='text' onClick={showModal} >
-                        Delete
-                    </Button>
+                        <Button className='ml' type='text' onClick={showModal} >
+                            Delete
+                        </Button>
 
-                    <Modal title="Are you sure to delete this chapter ?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                        <p>this chapter will be permanently deleted along with its lessons</p>
-                    </Modal>
+                        <Modal title="Are you sure to delete this chapter ?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                            <p>this chapter will be permanently deleted along with its lessons</p>
+                        </Modal>
 
-                    <Button type="default" onClick={saveCourse}>
-                        save
-                    </Button>
+                        <Button type="default" onClick={saveCourse}>
+                            save
+                        </Button>
 
-                    <Button type="primary" onClick={publishCourse}>
-                        Publish
-                    </Button>
-                    {/* <Button type="primary" onClick={publishCourse}>
+                        <Button type="primary" onClick={publishCourse}>
+                            Publish
+                        </Button>
+                        {/* <Button type="primary" onClick={publishCourse}>
                         {what} Course
                     </Button> */}
+                    </div>
+                </div>
+
+                <div className='grid'>
+
+                    <div className='card'>
+                        <h2 className='addcourse-subtitle'>Customize your course</h2>
+
+                        <Form form={form} onFinish={handleSubmit} onFinishFailed={handleFinishFailed}>
+                            {/* <FormComponent /> */}
+                            <CourseForm form={form} imageUrl={imageUrl} setImageUrl={setImageUrl} course={course} />
+                        </Form>
+
+                        <img className='course-image-create' src={imageUrl ? imageUrl : course.image} alt="" />
+
+                        {/* <UploadImageForm /> */}
+                    </div>
+
+                    <div className='card'>
+                        <h2 className='addcourse-subtitle'>Customize your chapters</h2>
+                        <AddChapters chapters={chapters} setChapters={setChapters} saveCourse={saveCourse} />
+                        {/* <AddChapter courseChaptres={courseChaptres} setCourseChaptres={setCourseChaptres} /> */}
+                    </div>
                 </div>
             </div>
-
-            <div className='grid'>
-
-                <div className='card'>
-                    <h2 className='addcourse-subtitle'>Customize your course</h2>
-
-                    <Form form={form} onFinish={handleSubmit} onFinishFailed={handleFinishFailed}>
-                        {/* <FormComponent /> */}
-                        <CourseForm form={form} imageUrl={imageUrl} setImageUrl={setImageUrl} course={course} />
-                    </Form>
-                    
-                    <img className='course-image-create' src={imageUrl ? imageUrl : course.image} alt="" />
-
-                    {/* <UploadImageForm /> */}
-                </div>
-
-                <div className='card'>
-                    <h2 className='addcourse-subtitle'>Customize your chapters</h2>
-                    <AddChapters chapters={chapters} setChapters={setChapters} saveCourse={saveCourse} />
-                    {/* <AddChapter courseChaptres={courseChaptres} setCourseChaptres={setCourseChaptres} /> */}
-                </div>
-            </div>
-        </div>
+        </section>
     );
 }
 

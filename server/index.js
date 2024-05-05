@@ -19,11 +19,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middlewares
-app.use(cors({
-  origin: 'https://my-edu-full.vercel.app',
-  methods:["POST", "PUT", "DELETE", "GET"],
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: 'https://my-edu-full.vercel.app',
+//   methods:["POST", "PUT", "DELETE", "GET"],
+//   credentials: true,
+// }));
+app.use(cors());
 
 app.use(express.json());
 
@@ -109,6 +110,10 @@ const Course = mongoose.model('Course',
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    comments: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
     image: {
       type: String,
       // required: true,
@@ -150,6 +155,29 @@ const Order = mongoose.model('Order', {
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course'
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  }
+})
+
+// Schema Creation for User model
+const Comment = mongoose.model('Comment', {
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course'
+  },
+  rating: {
+    type: Number,
+    default: 4,
+  },
+  comment: {
+    type: String,
   },
   date: {
     type: Date,
@@ -533,7 +561,57 @@ app.post('/api/getMyCourseById', fetchUser, async (req, res) => {
   }
 })
 
+// endpoint for submitting comment
+app.post('/api/addComment', async (req, res) => {
+  try {
+    const course = await Course.findById(req.body.course);
+    if (!course) {
+      return res.status(404).json({ success: false, error: 'Course not found' });
+    }
+    const comment = await Comment.create({
+      comment: req.body.comment,
+      course: req.body.course,
+      rating: req.body.rating,
+      user: req.body.user,
+    })
+    if (comment) {
+      const course = await Course.findByIdAndUpdate(
+        req.body.course,
+        { $push: { comments: comment._id } },
+        { new: true }
+      );
 
+      if (course) {
+        // console.log('Updated course:', course);
+        res.json({
+          success: true,
+          course,
+        });
+      }
+    } else {
+      res.status(500).json({ success: false, error: 'Error creating comment' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, errors: "Error: " + error });
+  }
+})
+
+// endpoint for get the comments by courseID
+app.get('/api/getcomments/:courseId', async (req, res) => {
+  try {
+    // Find the comments by id
+    const comments = await Comment.find({course: req.params.courseId}).populate('user');
+
+    if (!comments) {
+      return res.status(404).json({ success: false, error: 'comments not found' });
+    }
+
+    res.json({ success: true, comments});
+  } catch (error) {
+    console.error('Error getting comments:', error);
+    res.status(500).json({ success: false, error: 'Error getting comments' });
+  }
+});
 
 
 // endpoint for sign Up

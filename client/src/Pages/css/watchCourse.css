@@ -120,6 +120,60 @@
     margin-top: 30px;
 }
 
-.rating-input{
-    margin-top: 50px;
+.comment-div{
+    width: 90%;
+    margin-top: 80px;
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.comment-Up{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.userInfo{
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    gap: 10px;
+}
+
+.comment-avatar{
+    width: 45px;
+}
+
+.commnet-input{
+    margin: 20px 0;
+    min-width: 100%;
+    resize: none;
+    padding: 10px;
+    height: 100px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    text-transform: capitalize;
+    color: var(--text-color-dark);
+}
+.commnet-input:focus{
+    border: none;
+    outline: none;
+}
+
+.send-comment{
+    background-color: rgb(0, 104, 164);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: white;
+    cursor: pointer;
+}
+
+.button-div{
+    display: flex;
+    justify-content: space-between;
 }

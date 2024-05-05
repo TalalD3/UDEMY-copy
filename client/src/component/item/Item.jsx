@@ -10,7 +10,7 @@ import Stars from './Stars'
 
 const Item = (props) => {
 
-    const { userEnrollCourse,getCreator } = useContext(ShopContext);
+    const { userEnrollCourse, getCreator } = useContext(ShopContext);
     const [isUserEnroll, setIsUserEnroll] = useState(false);
     const [username, setUsername] = useState('')
 
@@ -45,35 +45,39 @@ const Item = (props) => {
                     <img className='course-image' src={props.course.image} />
                 </div>
                 <div className="down">
-                    <h3 className='course-title'>{props.course.title}</h3>
-                    <h4 className='course-description'>{props.course.small_description}</h4>
-                    <h5 className='course-creator'>Dr. {props.course.creator.username ? props.course.creator.username : username}</h5>
-                    <div className="line" />
-                    {
-                        isUserEnroll ?
-                            <div className="info">
-                                <div className="rating">
-                                    <Stars rating={props.course.rating} />
-                                    <p>{props.course.rating}</p>
+                    <div className="cardunderLine">
+                        <h3 className='card-title'>{props.course.title}</h3>
+                        <h4 className='course-description'>{props.course.small_description}</h4>
+                    </div>
+                    <div className="cardaboveLine">
+                        <h5 className='course-creator'>Dr. {props.course.creator.username ? props.course.creator.username : username}</h5>
+                        <div className="line" />
+                        {
+                            isUserEnroll ?
+                                <div className="info">
+                                    <div className="rating">
+                                        <Stars rating={props.course.rating} />
+                                        <p>{props.course.rating}</p>
+                                    </div>
+                                    <Link to={`/watchCourse/${props.course._id}`}>
+                                        <button className='course-description'>Watch the course </button>
+                                    </Link>
                                 </div>
-                                <Link to={`/watchCourse/${props.course._id}`}>
-                                    <button className='course-description'>Watch the course </button>
-                                </Link>
-                            </div>
-                            :
-                            <div className="info">
-                                <div className="price">
-                                    <p className="new-price">{props.course.price} Da</p>
-                                    {props.course.old_price &&
-                                        <p className="old-price">{props.course.old_price} Da</p>
-                                    }
+                                :
+                                <div className="info">
+                                    <div className="price">
+                                        <p className="new-price">{props.course.price} Da</p>
+                                        {props.course.old_price &&
+                                            <p className="old-price">{props.course.old_price} Da</p>
+                                        }
+                                    </div>
+                                    <div className="rating">
+                                        <Stars rating={props.course.rating} />
+                                        <p>{props.course.rating}</p>
+                                    </div>
                                 </div>
-                                <div className="rating">
-                                    <Stars rating={props.course.rating} />
-                                    <p>{props.course.rating}</p>
-                                </div>
-                            </div>
-                    }
+                        }
+                    </div>
                 </div>
             </div>
         </Link>

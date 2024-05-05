@@ -124,12 +124,19 @@ img {
     padding: 0 30px;
   }
 
+  .section {
+    padding: 5rem 30px 2rem;
+  }
+
 }
 
 /* For medium devices */
 @media screen and (max-width: 576px) {
   .section1 {
-    padding: 0 20px;
+    padding: 0 16px;
+  }
+  .section {
+    padding: 4rem 16px 1rem;
   }
 }
 

@@ -1,6 +1,6 @@
 .featuredCourse{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 60px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 25px;
     margin-bottom: 80px;
 }

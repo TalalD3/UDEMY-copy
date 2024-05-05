@@ -4,69 +4,6 @@ import itemImg1 from '../../assets/images/itemImg1.png'
 import './featuredCourse.css'
 import { ShopContext } from '../../Context/ShopContext'
 
-const items = [
-    {
-        id: 1,
-        title: 'Data Entry basic to advance',
-        littleDescription: 'Covers pretty much everything you need to know about UX',
-        creator: 'Dr. Abdesselam Mohamed',
-        new_props: 350,
-        old_props: 420,
-        image: itemImg1,
-        rating: 4.5,
-    },
-    {
-        id: 1,
-        title: 'Data Entry basic to advance',
-        littleDescription: 'Covers pretty much everything you need to know about UX',
-        creator: 'Dr. Abdesselam Mohamed',
-        new_props: 350,
-        old_props: 420,
-        image: itemImg1,
-        rating: 4.5,
-    },
-    {
-        id: 1,
-        title: 'Data Entry basic to advance',
-        littleDescription: 'Covers pretty much everything you need to know about UX',
-        creator: 'Dr. Abdesselam Mohamed',
-        new_props: 350,
-        old_props: 420,
-        image: itemImg1,
-        rating: 4.5,
-    },
-    {
-        id: 1,
-        title: 'Data Entry basic to advance',
-        littleDescription: 'Covers pretty much everything you need to know about UX',
-        creator: 'Dr. Abdesselam Mohamed',
-        new_props: 350,
-        old_props: 420,
-        image: itemImg1,
-        rating: 4.5,
-    },
-    {
-        id: 1,
-        title: 'Data Entry basic to advance',
-        littleDescription: 'Covers pretty much everything you need to know about UX',
-        creator: 'Dr. Abdesselam Mohamed',
-        new_props: 350,
-        old_props: 420,
-        image: itemImg1,
-        rating: 4.5,
-    },
-    {
-        id: 1,
-        title: 'Data Entry basic to advance',
-        littleDescription: 'Covers pretty much everything you need to know about UX',
-        creator: 'Dr. Abdesselam Mohamed',
-        new_props: 350,
-        old_props: 420,
-        image: itemImg1,
-        rating: 4.5,
-    },
-]
-
 function FeaturedCourse() {
 
     const { published_course } = useContext(ShopContext);

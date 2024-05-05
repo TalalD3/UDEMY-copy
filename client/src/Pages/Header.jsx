@@ -200,7 +200,7 @@ function Header() {
                 <Dashbord setTeacher={setTeacher} showModal={showModal} role={role} />
               </> :
               <>
-                <Link to="/login" ><button className='ghostbtn' onClick={() => message.warning('please login first')}>Teach mode</button></Link>
+                <Link to="/login" ><button className='ghostbtn nav-hidden' onClick={() => message.warning('please login first')}>Teach mode</button></Link>
                 <Link to="/login" ><button className='primarybtn'>Login</button></Link>
               </>
           }

@@ -205,7 +205,7 @@ function Course() {
 
           <div className='infomation'>
             <Courseinfos bigdescription={course.description} chapters={course.chapters} setPlayVideoUrl={setPlayVideoUrl} showModal={showModal} />
-            <Carousel />
+            <Carousel courseId={courseId} />
           </div>
 
         </div>

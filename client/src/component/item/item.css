@@ -1,10 +1,20 @@
 .course{
-    width: 366px;
+    width: 300px;
+    /* height: 560px; */
     /* filter: drop-shadow(0 5mm 4mm #000); */
     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
     padding: 25px 20px;
     border-radius: 20px;
 }
+
+.down{
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* align-items: flex-end; */
+}
+
 
 .course-image{
     width: 100%;
@@ -13,9 +23,9 @@
     border-radius: 20px;
 }
 
-.course-title{
-    font-weight: 300;
-    font-size: 20px;
+.card-title{
+    font-weight: 400;
+    font-size: 22px;
     margin-top: 10px;
 }
 

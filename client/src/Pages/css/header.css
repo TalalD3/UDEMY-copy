@@ -219,6 +219,17 @@ button {
     button {
         font-size: 18px;
     }
+    .primarybtn {
+        padding: 5px 15px;
+        /* font-weight: 500; */
+        font-size: 18px;
+    }
+    .ghostbtn {
+        font-weight: 400;
+        font-size: 16px;
+        text-decoration: none;
+    }
+    
 }
 
 @media screen and (max-width: 768px) {
@@ -252,10 +263,18 @@ button {
         padding: 10px;
         margin: 0 10px;
     }
+    .login{
+        gap: 0;
+    }
+    .primarybtn {
+        padding: 5px 15px;
+        /* font-weight: 500; */
+        font-size: 16px;
+    }
 }
 
 /* For small devices */
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 450px) {
     
 
     .search img {
