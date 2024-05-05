@@ -9,9 +9,8 @@ function Ad() {
      <div className='ad-container'>
         <img src={photo} />
         <div className='text_container'>
-            <h2>The number one factor in <br/><span> relevance drives out resistance.</span></h2>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.<br/>
-             Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h2>Education Empowerment<br/><span>Unlock Your Potential</span></h2>
+            <p>Step into a world of boundless opportunities with Education Empowerment, your catalyst for personal and professional growth. We believe in the power of education to transform lives and unlock untapped potential. Through innovative programs, personalized guidance, and a supportive community, we empower learners to discover their strengths, overcome challenges, and achieve their aspirations. Join us on a journey of self-discovery and empowerment, where every step forward brings you closer to realizing your dreams.</p>
             
         </div>
      </div>

@@ -12,7 +12,7 @@ function Titre(props) {
   return (
     <div className='container-title'>
       <div className='shadow'>
-
+<div className='section1'>
         <div className='container'>
 
           <div className='infos'>
@@ -27,14 +27,10 @@ function Titre(props) {
                 <div className='students'><img src={user} /><h5>{props.orederCourse}</h5></div></div>
               <div className='rate-stats'>
                 <div className='rating'><h5>{props.rating}</h5><Stars rating={props.rating} /></div>
-
-                <div className='stats'>
-                  <h5>(the number of ratings)</h5>
-                  {/* <h5>(number of students who rated)</h5> */}
-                </div>
               </div>
             </div>
           </div>
+        </div>
         </div>
         
         <div className='graduate'><img src={graduate} /></div>  

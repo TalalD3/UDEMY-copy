@@ -38,9 +38,9 @@ const rview = [
 ];
 
 
-function Carousel({courseId}) {
-  const {getComments} = useContext(ShopContext);
-  const [comments,setComments] = useState([]);
+function Carousel({ courseId }) {
+  const { getComments } = useContext(ShopContext);
+  const [comments, setComments] = useState([]);
 
   const settings = {
     dots: true,
@@ -48,32 +48,42 @@ function Carousel({courseId}) {
     speed: 500,
     slidesToShow: 2,
     slidesToScroll: 1,
-    arrows: true, // Display navigation arrows
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1244,
+        settings: {
+          slidesToShow: 1,
+          arrows: false,
+        },
+      },
+    ],// Display navigation arrows
+
   };
 
-  useEffect(()=>{
-    const fetchComments = async () =>{
+  useEffect(() => {
+    const fetchComments = async () => {
       try {
         const fetchingcomments = await getComments(courseId);
         console.log(fetchingcomments.comments);
-        if(fetchingcomments.success) {
+        if (fetchingcomments.success) {
           fetchingcomments.comments.map(comment => {
-            if(comment.comment.length > 0 && comment.rating > 3){
+            if (comment.comment.length > 0 && comment.rating > 3) {
               setComments(prevComments => ([
                 ...prevComments,
                 comment
               ]));
-          }})
+            }
+          })
         }
       } catch (error) {
         console.log(error);
       }
     }
-  
-    fetchComments();
-  },[courseId])
 
-  
+    fetchComments();
+  }, [courseId])
+
   return (
     <div className="carousel-container"> {/* Add a wrapper for the slider */}
       <Slider {...settings}>

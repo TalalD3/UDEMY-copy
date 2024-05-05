@@ -12,6 +12,7 @@ import './footer.css'
 function Foot() {
   return (
     <div className='foot '>
+    <div className='section1'>
       <div className="container">
         <div className='footersection'>
           <div className='icon'>
@@ -51,23 +52,25 @@ function Foot() {
           </div>
 
         </div>
+        <div className='hr'><hr></hr></div>
         <div className='accounts'>
 
-          <div className='hr'><hr></hr></div>
+          
 
           <div className='copyright'>
 
             <p>Copyright 2024 | All Rights Reserved</p>
 
             <div className='social'>
-              <Link><img src={Fb} /></Link>
-              <Link><img src={insta} /></Link>
-              <Link><img src={x} /></Link>
+              <img src={Fb} />
+              <img src={insta} />
+              <img src={x} />
             </div>
           </div>
 
 
         </div>
+      </div>
       </div>
     </div>
   )

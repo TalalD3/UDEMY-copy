@@ -19,11 +19,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middlewares
-// app.use(cors({
-//   origin: 'https://my-edu-full.vercel.app',
+// app.use(cors(
+//   {
+//   origin: ["https://my-edu-flax.vercel.app"],
 //   methods:["POST", "PUT", "DELETE", "GET"],
 //   credentials: true,
-// }));
+// }
+// ));
 app.use(cors());
 
 app.use(express.json());
@@ -160,6 +162,10 @@ const Order = mongoose.model('Order', {
     type: Date,
     default: Date.now,
   }
+})
+
+app.get("/",(req,res)=>{
+  res.json('hello ')
 })
 
 // Schema Creation for User model
