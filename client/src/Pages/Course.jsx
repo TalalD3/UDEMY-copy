@@ -190,9 +190,15 @@ function Course() {
           rating={course.rating}
           orederCourse={orederCourse}
         />
-
+      <div className='section1'>
         <div className='container cartabout'>
-        <div className='cart'>
+        
+
+          <div className='infomation'>
+            <Courseinfos bigdescription={course.description} chapters={course.chapters} setPlayVideoUrl={setPlayVideoUrl} showModal={showModal} />
+            <Carousel />
+          </div>
+          <div className='cart'>
             <Carte
               img={course.image}
               title={course.title}
@@ -202,12 +208,7 @@ function Course() {
               courseId={courseId}
             />
           </div>
-
-          <div className='infomation'>
-            <Courseinfos bigdescription={course.description} chapters={course.chapters} setPlayVideoUrl={setPlayVideoUrl} showModal={showModal} />
-            <Carousel />
-          </div>
-
+        </div>
         </div>
 
         <Foot />
@@ -216,6 +217,7 @@ function Course() {
 
 
     </div>
+    
   )
 }
 

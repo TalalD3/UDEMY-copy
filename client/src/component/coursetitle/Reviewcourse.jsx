@@ -14,6 +14,7 @@ function Reviewcourse(props) {
         <div className='hisrating'>
           <Stars rating={props.rate} />
           <h4>{props.rate}</h4>
+          <img className='one' src={star} />
         </div>
       </div>
 

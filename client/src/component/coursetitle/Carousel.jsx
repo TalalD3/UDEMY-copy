@@ -43,7 +43,16 @@ function Carousel() {
     speed: 500,
     slidesToShow: 2,
     slidesToScroll:1,
-    arrows: true, // Display navigation arrows
+    arrows: false, 
+    responsive: [
+      {
+        breakpoint: 1244,
+        settings: {
+          slidesToShow: 1,
+          arrows: false,
+        },
+      },
+    ],
     
   };
 

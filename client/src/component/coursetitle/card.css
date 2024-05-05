@@ -56,3 +56,79 @@
     color: #fff;
     font-family: var(--fontsaira)
 }
+
+@media screen and (max-width: 1244px) {
+   .Card{
+    margin-left: 10px;
+    margin-right: 10px;
+   }
+        
+}
+
+@media screen and (max-width: 1015px) {
+    .Card {
+        position: fixed; 
+        bottom: 0; 
+        width: 100%;
+        left: 0; 
+        right: 0; 
+        top: auto; 
+        border-radius: 0;
+        height: auto;
+        margin-left:0px;
+    }
+    .content{
+        display:flex;
+        justify-content: center;
+        gap: 5%;
+        padding: 5px;
+    }
+    .courseimage{
+        width: 100px;
+        justify-self: left;
+    }
+    .courseimage img{
+        border-radius: 0;
+        height: auto;
+    }
+
+    .coursetitle{
+        display: none;
+    }
+    .buy{
+        display: flex;
+        align-items: center;
+    }
+    .price h3{
+        color: #fff;
+        font-family: var(--fontsaira);
+        font-size: 15px;
+    }
+    .buy button{
+       padding: 5px;
+    }
+}
+
+@media screen and (max-width: 770px) {
+
+    .Card {
+        bottom: 40px; 
+    }
+ 
+}
+
+@media screen and (max-width: 480px) {
+
+    .courseimage{
+        display: none;
+    }
+ 
+}
+
+@media screen and (max-width: 480px) {
+
+    .buy button{
+        font-size: 15px;
+     }
+ 
+}

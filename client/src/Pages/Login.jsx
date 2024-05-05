@@ -4,9 +4,10 @@ import facebook from '../assets/icons/facebook.svg';
 import google from '../assets/icons/google.svg';
 import github from '../assets/icons/github.svg';
 import './css/login.css';
-import logo from '../assets/images/colored logo.png';
+import bg from '../assets/images/Login.png';
 import { message } from 'antd';
 import axios from 'axios';
+import Foot from '../component/footer/Foot';
 
 function Login() {
   const [showSignUp, setShowSignUp] = useState(false);
@@ -34,6 +35,19 @@ function Login() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const loginOrSignUp = showSignUp ? 'signup' : 'login';
+    if(userData.email === ''){
+      message.info('Fill the email field..')
+      return
+    }
+    if(userData.password === ''){
+      message.info('Fill the password field..')
+      return
+    }
+
+    if(showSignUp && userData.username === ''){
+      message.info('Fill the username field..')
+      return
+    }
 
     console.log(loginOrSignUp , userData);
     try {
@@ -57,12 +71,7 @@ function Login() {
   return (
     <div>
       <div className="login-container">
-        <div className="left-side">
-          <div className='topleft'>
-            <h2>Easy Learning</h2>
-            <p>Unlock boundless learning opportunities with just a click <br /> sign in now to embark on your educational journey!</p>
-          </div>
-        </div>
+        
         <div className="right-side">
           <form onSubmit={handleFormSubmit}>
             <div className='h2'>
@@ -72,7 +81,7 @@ function Login() {
             <div className="form-group">
               <label htmlFor="Email">Email</label>
               <div className='input'>
-                <input type="email" value={userData.email} id="email" name="email" onChange={handleChange} placeholder='username@gmail.com' />
+                <input type="email" value={userData.email} required id="email" name="email" onChange={handleChange} placeholder='username@gmail.com' />
               </div>
             </div>
             {showSignUp && (
@@ -86,7 +95,7 @@ function Login() {
                     id="username"
                     name="username"
                     placeholder='Enter your username'
-                  // value={username}
+                     
                   />
                 </div>
               </div>
@@ -101,9 +110,9 @@ function Login() {
             <div className='submit'>
               <button type="submit" onClick={handleFormSubmit}>{showSignUp ? 'Sign Up' : 'Login'}</button>
               <div className='OR'>
-                <div className='hr'><hr /></div>
+                
                 <h5>Or continue with</h5>
-                <div className='hr'><hr /></div>
+                
               </div>
             </div>
             <div className='others'>
@@ -120,6 +129,7 @@ function Login() {
           </form>
         </div>
       </div>
+      <Foot />
     </div>
   );
 }

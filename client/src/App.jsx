@@ -16,7 +16,6 @@ import ManageCourses from './component/dashboard/ManageCourses';
 import ManageUsers from './component/dashboard/ManageUsers';
 
 import { ShopContext } from './Context/ShopContext';
-import { Profile } from './Pages/Profile';
 import MyCourses from './Pages/MyCourses';
 import About from './Pages/About';
 
@@ -47,7 +46,7 @@ function App({ location }) {
           <Route path="/login" element={<Login />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/profile" element={<Profile />} />
+          
           <Route path="/about" element={<About />} />
           <Route path="/myCourses" element={<MyCourses />} />
           <Route path="/admin/dashboard" element={<Dashboard role={role} />} />

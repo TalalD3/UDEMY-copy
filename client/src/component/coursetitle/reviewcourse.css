@@ -30,3 +30,39 @@
     color: var(--title-color);
     padding: 15px;
 }
+
+.hisrating .one{
+    display: none;
+}
+
+@media screen and (max-width: 595px) {
+    .commentator{
+        display: flex;
+        align-items: center;
+        gap:15px;
+    }
+    .hisrating{
+        margin-right: 5px;
+    }
+    .hisrating .one{
+        display: block;
+        padding-right: 5px;
+    }
+
+    .hisrating img {
+        display: none;
+    }
+    
+}
+
+@media screen and (max-width: 420px) {
+    .hisname h3{
+        font-size: 13px;
+    }
+    .hisname img{
+        width: 40px;
+    }
+    .hiscomment p{
+        font-size: 12px;
+    }
+}

@@ -8,11 +8,11 @@
     gap: 40px;
 }
 
-.reviews{
+.container_reviews{
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .reviewsection .titre{
@@ -27,6 +27,7 @@
 
 .reviewsection{
     display: grid;
+    justify-content: center;
     gap: 80px;
     padding-top: 20px;
     padding-bottom: 80px;
@@ -39,7 +40,6 @@
     align-items: center;
     padding-left: 20px;
     gap: 30px;
-
 }
 
 .review-container .comment{
@@ -52,3 +52,29 @@
     padding-left: 20px;
     padding-bottom: 40px;
 }
+
+.text{
+    width: 100%;
+    text-align: center;
+}
+
+
+@media screen and (max-width: 430px) {
+    .review-container{
+        width: auto;
+        margin-left: 10px;
+        margin-right: 10px;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 230px) {
+    
+    .review-container .Profile{
+        gap: 10px;
+    }
+}
+
+
+
+
