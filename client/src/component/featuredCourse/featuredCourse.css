@@ -1,6 +1,36 @@
 .featuredCourse{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 60px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-content: center;
+    gap: 30px;
     margin-bottom: 80px;
 }
+
+/*=============== BREAKPOINTS ===============*/
+/* For large devices */
+@media screen and (max-width: 1355px) {
+    .featuredCourse{
+        display: flex;
+        gap: 30px;
+        overflow-x: scroll;
+        padding: 10px;
+        
+    }
+    
+}
+
+@media screen and (max-width: 992px) {
+   
+}
+
+@media screen and (max-width: 768px) {
+   
+}
+
+/* For medium devices */
+@media screen and (max-width: 576px) {
+   
+}
+
+/* For small devices */
+@media screen and (max-width: 350px) {}

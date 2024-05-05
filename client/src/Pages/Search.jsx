@@ -4,6 +4,7 @@ import { ShopContext } from '../Context/ShopContext';
 import Item from '../component/item/Item';
 
 import './css/search.css'
+import Foot from '../component/footer/Foot';
 
 const Search = () => {
   const { published_course } = useContext(ShopContext);
@@ -53,6 +54,7 @@ const Search = () => {
 
 
   return (
+    <div>
     <section className="section">
       <div className="container">
         <div>
@@ -81,6 +83,8 @@ const Search = () => {
         </div>
       </div>
     </section>
+    <Foot />
+    </div>
   )
 }
 

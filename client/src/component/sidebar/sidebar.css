@@ -70,7 +70,7 @@
 @media screen and (max-width: 768px) {
     .sidebar {
         top: auto;
-        bottom: 0;
+        bottom: 0px;
         height: auto;
         width: 100%;
         /* z-index: 99; */
@@ -85,6 +85,7 @@
         justify-content: space-around;
         /* align-items: center; */
         /* gap: 20px; */
+       
     }
 
     .sidebar-description {
@@ -105,8 +106,4 @@
     }
 }
 
-/* For medium devices */
-@media screen and (max-width: 576px) {}
 
-/* For small devices */
-@media screen and (max-width: 350px) {}

@@ -123,6 +123,9 @@ img {
   .section1 {
     padding: 0 30px;
   }
+  .section {
+    padding: 5rem 30px 2rem;
+  }
 
 }
 
@@ -130,6 +133,9 @@ img {
 @media screen and (max-width: 576px) {
   .section1 {
     padding: 0 20px;
+  }
+  .section {
+    padding: 4rem 20px 2rem;
   }
 }
 

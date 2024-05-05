@@ -150,10 +150,10 @@ button {
 
 .search {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     border-radius: 15px;
     border: 1px solid #C2C2C2;
-    /* max-width: 350px; */
     width: 350px;
     height: 49px;
     padding: 14px 22px;
@@ -163,6 +163,8 @@ button {
 .search-input {
     border: none;
     outline: none;
+    width: 100%;
+    
 }
 
 .relative {

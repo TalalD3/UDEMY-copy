@@ -49,3 +49,30 @@ h3 span {
     font-size: 30px;
     margin-left: 20px;
 }
+
+@media screen and (max-width: 1244px) {
+    .cr {
+        margin-left: 30px;
+        width: 100%;
+    }
+    
+
+}
+@media screen and (max-width: 447px) {
+    .clock{
+        font-size: 15px;
+    }
+    .lectures {
+        font-size: 15px;
+    }
+    .clock img {
+        width: 25px;
+        height: 25px;  
+    }
+
+    .lectures img{
+        width: 25px;
+        height: 25px;
+    }
+
+}

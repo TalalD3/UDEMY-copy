@@ -29,7 +29,7 @@ export default function Dashbord({ setTeacher, showModal,role }) {
                     }
                     <li >
                         <Link to={`/myCourses`} onClick={() => setOpenCategory(false)}>
-                            <button className='dropdownCategory'>My courses</button>
+                            <button className='dropdownCategory'>Profile</button>
                         </Link>
                     </li>
                     

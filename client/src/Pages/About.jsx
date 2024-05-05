@@ -46,7 +46,7 @@ function About() {
   },[getTotlaCourses])
 
   return (
-    <div>
+    <div >
       <div className='big-contain'>
 
         <div className='container-about'>

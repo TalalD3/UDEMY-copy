@@ -31,11 +31,11 @@ const rview = [
 function Reviews() {
   return (
     <div className='reviewsection'>
-      <div>
+      <div className='text'>
         <h3 className='titre'>Reviews</h3>
         <p className='these'>What our student say about us</p>
       </div>
-      <div className='container reviews'>
+      <div className='container_reviews'>
         {rview.map(props => (
 
           <Review

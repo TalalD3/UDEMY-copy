@@ -47,6 +47,8 @@ const Item = (props) => {
                 <div className="down">
                     <h3 className='course-title'>{props.course.title}</h3>
                     <h4 className='course-description'>{props.course.small_description}</h4>
+                    
+                    <div className='bottom'>
                     <h5 className='course-creator'>Dr. {props.course.creator.username ? props.course.creator.username : username}</h5>
                     <div className="line" />
                     {
@@ -74,6 +76,7 @@ const Item = (props) => {
                                 </div>
                             </div>
                     }
+                    </div>
                 </div>
             </div>
         </Link>

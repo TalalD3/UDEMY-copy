@@ -1,32 +1,25 @@
-.login-container {
-    display: flex;
-    height: 100vh;
-    background: var(--gradiant);
-}
 
-.left-side {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: url('../../assets/images/Login.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    position: relative;
-
+.login-container{
+max-width: 1280px;
+margin-left: auto;
+margin-right: auto;
+display: grid;
+justify-content: center;
 }
 
 .right-side {
 
-    flex: 1;
     display: flex;
     flex-direction: column;
-    padding-bottom: 100px;
+    margin-top: 30px;
+    
+    
     justify-content: center;
     background: #fff;
-    gap: 30px;
-
-
+    max-width:100%;
+    
+    margin-bottom: 50px;
+   
 }
 
 
@@ -40,7 +33,7 @@
 form {
     display: grid;
     justify-content: center;
-    gap: 30px;
+    gap: 20px;
 }
 
 .form-group {
@@ -49,7 +42,6 @@ form {
 
 .input input {
     width: 100%;
-    margin: 0;
     border-radius: 5px;
     height: 50px;
     padding-left: 25px;
@@ -103,8 +95,8 @@ form {
 }
 
 .button img {
-    height: auto;
-    margin: 5px;
+    min-width: 30px;
+    margin: 2px;
 }
 
 .sign {
@@ -133,20 +125,64 @@ form {
 
 }
 
-.topleft {
-    position: absolute;
-    color: #fff;
-    font-size: 20px;
-    text-align: left;
-    right: 30%;
-    bottom: 80%;
-}
-
-.topleft h2 {
-    color: #fff;
-    font-size: 40px;
-}
 
 label {
     color: var(--title-color);
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .right-side {
+        padding: 0 20px; 
+        padding-bottom: 20px; 
+        padding-top: 40px; 
+    }
+
+    .h2 {
+        font-size: 24px;
+    }
+
+
+    .submit button {
+        padding-left: 40px; 
+        padding-right: 40px;
+    }
+
+    .others {
+        flex-wrap: wrap; 
+        justify-content: center; 
+    }
+
+    .others .button {
+        flex-basis: 30%; 
+    }
+
+    .sign {
+        font-size: 16px;
+    }
+
+    .button img{
+        min-width: 30px;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .h2 {
+        font-size: 20px; 
+    }
+
+    .submit button {
+        padding-left: 30px; 
+        padding-right: 30px;
+    }
+
+    .others .button {
+        flex-basis: 40%;
+    }
+
+    .sign {
+        font-size: 14px; 
+    }
 }

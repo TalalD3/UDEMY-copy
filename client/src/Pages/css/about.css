@@ -23,12 +23,13 @@ width: 100%;
 display: flex;
 align-items: center;
 color: var(--green);
+flex-wrap: wrap;
 }
 
 .student{
+    justify-self: left;
     width: 50%;
     display: flex;
-    /* justify-content: right; */
     overflow: hidden;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
     padding: 25px 20px;
@@ -101,12 +102,12 @@ color: var(--green);
 }
 
 .stats{
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 15%;
-    margin-bottom: -10%;
-    margin-left: 6%;
-    margin-right: 6%;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .counter{
@@ -166,4 +167,47 @@ background-color: var(--green);
 }
 .contact:hover img {
     filter: brightness(0) invert(1);
+}
+
+
+@media screen and (max-width: 1244px) {
+    .big-contain{
+        height:auto; 
+    }
+    .stats{
+        justify-content: center;
+        gap: 30px;
+        padding-right: 30px;
+    }
+    .aboutus{
+        gap: 30px;
+        justify-content: center;
+        }
+
+        .student img{
+          display: none;
+        }    
+        
+}
+
+@media screen and (max-width: 560px) {
+    .student{
+        width: 90%;
+        padding: 25px 20px;
+    }
+    .aboutus{
+        width: auto;
+    }
+    .student p{
+        font-size: 12px;
+    }
+
+    .about-text{
+        max-width:80%;
+        gap: 30px;
+        justify-content: center;
+        margin-left: 0px;
+        
+    }
+        
 }
