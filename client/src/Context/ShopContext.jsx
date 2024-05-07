@@ -165,6 +165,20 @@ const ShopContextProvider = (props) => {
         }
     }
 
+    const getUserComment = async (courseId,userId) =>{
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/getUserComment/${courseId}/${userId}`);
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.log('[get comments]', error);
+            return null;
+        }
+    }
+
     const getTotalOrdersByCourseId = async(courseId) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/orders-by-course/${courseId}`);
@@ -381,7 +395,7 @@ const ShopContextProvider = (props) => {
         }
     };
 
-    const contextValue = { all_course, published_course, cartItems, role, getUserData, getComments, getTotalOrdersByCourseId, userEnrollCourse, setTeacher, setAdmin, getAllUsers, getCreator, getCategories, fetchOrdersPerCourse, fetchOrdersPerCategory, fetchOrdersPerMonth, fetchUsersPerMonth, fetchCoursesPerMonth, getTotlaCourses, getTotlaOrder, getTotlaUsers, getTotlaTeachers, getTotlaAdmins, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
+    const contextValue = { all_course, published_course, cartItems, role, getUserData, getComments, getUserComment, getTotalOrdersByCourseId, userEnrollCourse, setTeacher, setAdmin, getAllUsers, getCreator, getCategories, fetchOrdersPerCourse, fetchOrdersPerCategory, fetchOrdersPerMonth, fetchUsersPerMonth, fetchCoursesPerMonth, getTotlaCourses, getTotlaOrder, getTotlaUsers, getTotlaTeachers, getTotlaAdmins, addToCart, removeFromCart, getTotlaCartAmount, getTotlaCartItem };
 
 
     return (

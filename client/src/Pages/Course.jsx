@@ -18,11 +18,12 @@ function Course() {
   const [playVideoUrl, setPlayVideoUrl] = useState('');
   const videoRef = useRef(null);
   const [username, setUsername] = useState('');
-  const [isUserEnroll, setIsUserEnroll] = useState({});
+  const [role, setRole] = useState('user');
+  const [isUserEnroll, setIsUserEnroll] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orederCourse, setOrederCourse] = useState(0);
 
-  const { getCreator, userEnrollCourse, getTotalOrdersByCourseId } = useContext(ShopContext);
+  const { getCreator, userEnrollCourse, getTotalOrdersByCourseId, getUserData } = useContext(ShopContext);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -100,10 +101,13 @@ function Course() {
 
   const fetchData = async () => {
     if (course.creator) {
-      const user = await getCreator(course.creator);
-      setUsername(user.username);
+      const creator = await getCreator(course.creator);
+      setUsername(creator.username);
     }
+
     if (localStorage.getItem('auth-token')) {
+      const user = await getUserData();
+      setRole(user.role);
       try {
         const data = await userEnrollCourse(courseId);
         setIsUserEnroll(data.success);
@@ -145,7 +149,7 @@ function Course() {
       window.location.reload();
 
     } catch (error) {
-      message.error('Error enrolling in course');
+      message.error('please login first');
     }
   };
 
@@ -196,7 +200,7 @@ function Course() {
 
           <div className='infomation'>
             <Courseinfos bigdescription={course.description} chapters={course.chapters} setPlayVideoUrl={setPlayVideoUrl} showModal={showModal} />
-            <Carousel />
+            <Carousel courseId={courseId} />
           </div>
           <div className='cart'>
             <Carte
@@ -206,12 +210,13 @@ function Course() {
               enrollCourse={enrollCourse}
               isUserEnroll={isUserEnroll}
               courseId={courseId}
+              role={role}
             />
           </div>
         </div>
         </div>
 
-        <Foot />
+        <Foot role={role} />
 
       </div>
 

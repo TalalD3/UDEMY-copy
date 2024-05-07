@@ -8,13 +8,15 @@
 .commentator{
     display: flex;
     align-items: center;
-    gap:50px;
+    justify-content: space-between;
+    /* gap:50px; */
 }
 
 .hisrating{
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 5px;
+    margin-right: 20px;
 }
 
 .hisname{
@@ -24,6 +26,8 @@
 }
 .hisname img{
     margin: 10px;
+    width: 60px;
+    border-radius: 50%;
 }
 
 .hiscomment{
@@ -34,6 +38,7 @@
 .hisrating .one{
     display: none;
 }
+
 
 @media screen and (max-width: 595px) {
     .commentator{

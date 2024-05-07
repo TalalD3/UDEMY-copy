@@ -3,11 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import { UploadOutlined } from '@ant-design/icons';
 
-import UploadImage from './UploadImage';
-import upload_area from "../../assets/icons/cloud-upload-regular-240.png"
 import ImgCrop from 'antd-img-crop';
-import UploadImage1 from './UploadImageForm';
-import UploadImageForm from './UploadImageForm';
 import { ShopContext } from '../../Context/ShopContext';
 
 
@@ -45,7 +41,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
 
                     <p className='filed-title mt'>Course title</p>
                     <Form.Item
-                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
+                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -15 }}
                         name='title'
                         rules={[{ required: true, message: 'Please input the title course' }]} >
                         <Input placeholder="e.g 'web developer'" />
@@ -53,7 +49,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
 
                     <span className='filed-title'>Course price</span><br />
                     <Form.Item
-                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
+                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -15 }}
                         name='price'
                         rules={[{ required: true, message: 'Please input the price course' }]} >
                         <InputNumber placeholder="e.g '599'" style={{ width: '100%' }} addonAfter="DA" />
@@ -62,7 +58,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
                     <span className='filed-title'>Course small description</span>
                     <Form.Item
                         name="small_description"
-                        style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -25, }}
+                        style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -15, }}
                         rules={[{ required: true, message: 'Please input the description course' }]}
                     >
                         <Input.TextArea style={{ height: 80, resize: 'none' }} showCount maxLength={200} />
@@ -71,7 +67,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
                     <span className='filed-title'>Course description</span>
                     <Form.Item
                         name="description"
-                        style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -25, }}
+                        style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -15, }}
                         rules={[{ required: true, message: 'Please input the description course' }]}
                     >
                         <Input.TextArea style={{ height: 120, }} />
@@ -82,7 +78,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
                         name="category"
                         // label="Select"
                         hasFeedback
-                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -25 }}
+                        style={{ width: "100%", height: 20, marginBottom: 10, marginRight: 0, marginTop: -15 }}
                         rules={[{ required: true, message: 'Please select the course category ' }]}
                     >
                         <Select placeholder="Please select a category">

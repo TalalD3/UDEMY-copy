@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 function Carte(props) {
   return (
-    <div className='Card'>
+    <div className={`Card ${props.role === 'admin' ? 'adminCard':''}`}>
       <div className="content">
         <div className='courseimage'> <img src={props.img} /></div>
         <div className='coursetitle'>

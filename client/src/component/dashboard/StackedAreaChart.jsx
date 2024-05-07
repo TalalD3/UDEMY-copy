@@ -23,81 +23,6 @@ const montharray = [
     "Nov",
     "Dec",
 ];
-// const data = [
-//   {
-//     name: "Jan",
-//     Orders: 4000,
-//     users: 2400,
-//     courses: 2400
-//   },
-//   {
-//     name: "Fev",
-//     Orders: 3000,
-//     users: 1398,
-//     courses: 2210
-//   },
-//   {
-//     name: "Mar",
-//     Orders: 2000,
-//     users: 4800,
-//     courses: 2290
-//   },
-//   {
-//     name: "Apr",
-//     Orders: 2780,
-//     users: 3908,
-//     courses: 2000
-//   },
-//   {
-//     name: "May",
-//     Orders: 1890,
-//     users: 4800,
-//     courses: 2181
-//   },
-//   {
-//     name: "Jun",
-//     Orders: 2390,
-//     users: 3800,
-//     courses: 2500
-//   },
-//   {
-//     name: "Jul",
-//     Orders: 3490,
-//     users: 4300,
-//     courses: 2100
-//   },
-//   {
-//     name: "Aug",
-//     Orders: 3490,
-//     users: 4300,
-//     courses: 2100
-//   },
-//   {
-//     name: "Sep",
-//     Orders: 3490,
-//     users: 4300,
-//     courses: 2100
-//   },
-//   {
-//     name: "Oct",
-//     Orders: 3490,
-//     users: 4300,
-//     courses: 2100
-//   },
-//   {
-//     name: "Nov",
-//     Orders: 3490,
-//     users: 4300,
-//     courses: 2100
-//   },
-//   {
-//     name: "Dec",
-//     Orders: 3490,
-//     users: 4300,
-//     courses: 2100
-//   },
-// ];
-
 export default function StackedAreaChart({userData, orderData, courseData}) {
   // const [data, setData] = useState([])
 
@@ -135,13 +60,13 @@ export default function StackedAreaChart({userData, orderData, courseData}) {
 
   return (
     <LineChart
-      width={770}
+      width={700}
       height={400}
       data={data}
       margin={{
         top: 20,
         right: 0,
-        left: 0,
+        left: -30,
         bottom: 5
       }}
     >

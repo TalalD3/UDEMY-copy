@@ -1,4 +1,4 @@
-.watchCourse{
+.watchCourse {
     border-top: 1px solid rgba(0, 0, 0, 0.2);
     border-right: 1px solid rgba(0, 0, 0, 0.2);
 
@@ -6,7 +6,7 @@
     gap: 50px;
 }
 
-.watchCourse-sidebar{
+.watchCourse-sidebar {
     width: 350px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-top: 0;
@@ -15,9 +15,25 @@
     height: 100vh;
 }
 
+.watchCourse-sidebar-menu {
+    font-size: 40px;
+    color: var(--title-color);
+    margin: 10px;
+    /* margin-bottom: 50px; */
+}
+
+.menu-sideBar {
+    display: none;
+}
+
+.menu-sideBar p {
+    font-size: 18px;
+    color: var(--title-color);
+    font-weight: 500;
+}
 
 
-.course-title{
+.course-title {
     margin-left: 10px;
     font-size: 24px;
     color: var(--title-color);
@@ -25,7 +41,7 @@
     margin-bottom: 20px;
 }
 
-.chapter{
+.chapter {
     border-top: 1px solid rgba(0, 0, 0, 0.2);
     /* background-color: #dfdfdf; */
     width: 100%;
@@ -47,65 +63,76 @@
 }
 
 
-.play-icon{
+.play-icon {
     font-size: 30px;
 }
 
-.chapter-lessons{
+
+.chapter-lessons {
     margin-top: 5px;
     display: flex;
     flex-direction: column;
     gap: 7px;
+
     /* padding-left: 57px; */
 }
 
-.chapter-lesson{
+.chapter-lesson {
     padding: 5px;
     /* margin-bottom: 5px; */
     padding-left: 57px;
     cursor: pointer;
 }
-.chapter-playLesson{
+
+.chapter-playLesson {
     background-color: #2aaa9530;
-    border-right: 4px solid var(--green); 
+    border-right: 4px solid var(--green);
     color: var(--green);
 
 }
 
-.hoho{
+.hoho {
     width: 100%;
 }
 
-.watchCourse-info{
+.lesson-video {
+    width: 100%;
+    /* height: 300px; */
+}
+
+.watch-lesson {
+    margin-right: 40px;
+}
+
+.watchCourse-info {
     display: flex;
     gap: 15px;
     align-items: baseline;
 }
 
-.watchCourse-info-btn{
+.watchCourse-info-btn {
     /* max-width: 800px; */
     /* background-color: aqua; */
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 30px;
-    margin-right: 40px;
     margin-bottom: 20px;
 }
 
-.chapter-title{
+.chapter-title {
     font-size: 22px;
     font-weight: 500;
     text-transform: capitalize;
     color: var(--title-color);
 }
 
-.lesson-title{
+.lesson-title {
     font-size: 18px;
     color: var(--text-color-dark);
 }
 
-.next-lesson-btn{
+.next-lesson-btn {
     background-color: #2aaa9530;
     border-radius: 4px;
     padding: 5px 10px;
@@ -116,11 +143,11 @@
     cursor: pointer;
 }
 
-.watch-koko{
+.watch-koko {
     margin-top: 30px;
 }
 
-.comment-div{
+.comment-div {
     width: 90%;
     margin-top: 80px;
     padding: 20px;
@@ -128,24 +155,26 @@
     border-radius: 8px;
 }
 
-.comment-Up{
+.comment-Up {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.userInfo{
+.userInfo {
     display: flex;
     align-items: center;
     font-size: 15px;
+    color: var(--text-color-dark);
     gap: 10px;
 }
 
-.comment-avatar{
-    width: 45px;
+.comment-avatar {
+    width: 50px;
+    border-radius: 50%;
 }
 
-.commnet-input{
+.commnet-input {
     margin: 20px 0;
     min-width: 100%;
     resize: none;
@@ -157,12 +186,13 @@
     text-transform: capitalize;
     color: var(--text-color-dark);
 }
-.commnet-input:focus{
+
+.commnet-input:focus {
     border: none;
     outline: none;
 }
 
-.send-comment{
+.send-comment {
     background-color: rgb(0, 104, 164);
     border-radius: 4px;
     padding: 5px 10px;
@@ -173,7 +203,79 @@
     cursor: pointer;
 }
 
-.button-div{
+.button-div {
     display: flex;
     justify-content: space-between;
+}
+
+
+
+
+
+
+
+/*=============== BREAKPOINTS ===============*/
+/* For large devices */
+
+@media screen and (max-width: 1200px) {
+    .watchCourse {
+        gap: 30px;
+    }
+
+    .watch-lesson {
+        margin-right: 30px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .watchCourse {
+        display: block;
+    }
+
+    .menu-sideBar {
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+    }
+
+    .watchCourse-sidebar {
+        width: auto;
+        border: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        padding-bottom: 10px;
+        height: auto;
+    }
+
+    .watchCourse {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .watch-lesson {
+        margin: 20px;
+    }
+
+    .watchCourse-info-btn {
+        margin-top: 20px;
+    }
+
+    .watch-koko {
+        margin: 20px;
+    }
+
+    .comment-div {
+        margin-top: 30px;
+        width: 100%;
+    }
+}
+
+/* For small devices */
+@media screen and (max-width: 500px) {
+    .watchCourse-info-btn {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: start;
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
 }

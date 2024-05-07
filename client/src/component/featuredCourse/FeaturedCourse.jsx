@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import Item from '../item/Item'
-import itemImg1 from '../../assets/images/itemImg1.png'
 import './featuredCourse.css'
 import { ShopContext } from '../../Context/ShopContext'
 

@@ -8,8 +8,10 @@ function Reviewcourse(props) {
   return (
     <div className='commentaire'>
       <div className='commentator' >
-        <div className='hisname'><img src={props.img} />
-          <h3>{props.name}</h3> </div>
+        <div className='hisname'>
+          <img src={props.img} />
+          <h3>{props.name}</h3>
+        </div>
 
         <div className='hisrating'>
           <Stars rating={props.rate} />

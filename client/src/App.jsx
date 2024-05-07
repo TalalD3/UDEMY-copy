@@ -46,7 +46,6 @@ function App({ location }) {
           <Route path="/login" element={<Login />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/search" element={<Search />} />
-          
           <Route path="/about" element={<About />} />
           <Route path="/myCourses" element={<MyCourses />} />
           <Route path="/admin/dashboard" element={<Dashboard role={role} />} />

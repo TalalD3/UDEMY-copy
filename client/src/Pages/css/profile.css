@@ -9,11 +9,15 @@
 }
 
 .profile-picture {
-    min-width: 100px; 
-    max-width: 100px;
+    /* min-width: 100px; 
+    max-width: 100px; */
+    width: 100px;
     height: 100px; 
     border-radius: 50%; 
     overflow: hidden; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 

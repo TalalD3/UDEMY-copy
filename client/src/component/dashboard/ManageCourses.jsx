@@ -9,7 +9,7 @@ import TableUsers from './TableUsers'
 import TableCourses from './TableCourses'
 import { useNavigate } from 'react-router-dom'
 
-const ManageCourses = ({role}) => {
+const ManageCourses = ({ role }) => {
 
     const navigate = useNavigate();
 
@@ -43,6 +43,7 @@ const ManageCourses = ({role}) => {
     return (
         <section className="section">
             <div className="container">
+                <h1 className='big-title'>Manage Courses</h1>
                 <div className='cards'>
                     <Card total={'Course'} number={all_course.length} extra={'35,000 '} />
                     <Card total={'Published Course'} number={published_course.length} extra={'35,000 '} />

@@ -9,68 +9,68 @@ import insta from '../../assets/icons/insta.png'
 import x from '../../assets/icons/x.png'
 import './footer.css'
 
-function Foot() {
+function Foot({ role }) {
   return (
-    <div className='foot '>
-    <div className='section1'>
-      <div className="container">
-        <div className='footersection'>
-          <div className='icon'>
-            <img src={logo} />
-            <p>Veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <br />
-              commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br />
-              dolore eu fugiat nulla pariatur. </p>
+    <div className={`foot ${role === 'admin' && 'mbPlus'}`} >
+      <div className='section1'>
+        <div className="container">
+          <div className='footersection'>
+            <div className='icon'>
+              <img src={logo} />
+              <p>Veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <br />
+                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br />
+                dolore eu fugiat nulla pariatur. </p>
+            </div>
+
+            <div className='links'>
+              <h3>Quick links</h3>
+              <div className='path'>
+                <Link to='/about' ><p>About</p></Link>
+                <Link to='/courses'><p>Course</p></Link>
+                <Link><p>Contact</p></Link>
+              </div>
+            </div>
+
+
+            <div className='contacts'>
+              <h3>Contacts us</h3>
+              <div className='phone'>
+                <img src={phone} />
+                <p>054900000</p>
+              </div>
+
+              <div className='email'>
+                <img src={mail} />
+                <p>talalmoh@gmail.com</p>
+              </div>
+
+              <div className='location'>
+                <img src={gps} />
+                <p>el eulma</p>
+              </div>
+
+            </div>
+
           </div>
-
-          <div className='links'>
-            <h3>Quick links</h3>
-            <div className='path'>
-              <Link to='/about' ><p>About</p></Link>
-              <Link to='/courses'><p>Course</p></Link>
-              <Link><p>Contact</p></Link>
-            </div>
-          </div>
+          <div className='hr'><hr></hr></div>
+          <div className='accounts'>
 
 
-          <div className='contacts'>
-            <h3>Contacts us</h3>
-            <div className='phone'>
-              <img src={phone} />
-              <p>054900000</p>
+
+            <div className='copyright'>
+
+              <p>Copyright 2024 | All Rights Reserved</p>
+
+              <div className='social'>
+                <img src={Fb} />
+                <img src={insta} />
+                <img src={x} />
+              </div>
             </div>
 
-            <div className='email'>
-              <img src={mail} />
-              <p>talalmoh@gmail.com</p>
-            </div>
-
-            <div className='location'>
-              <img src={gps} />
-              <p>el eulma</p>
-            </div>
 
           </div>
-
         </div>
-        <div className='hr'><hr></hr></div>
-        <div className='accounts'>
-
-          
-
-          <div className='copyright'>
-
-            <p>Copyright 2024 | All Rights Reserved</p>
-
-            <div className='social'>
-              <img src={Fb} />
-              <img src={insta} />
-              <img src={x} />
-            </div>
-          </div>
-
-
-        </div>
-      </div>
       </div>
     </div>
   )

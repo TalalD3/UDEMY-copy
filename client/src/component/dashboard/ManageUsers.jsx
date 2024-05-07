@@ -8,7 +8,7 @@ import { ShopContext } from '../../Context/ShopContext'
 import TableUsers from './TableUsers'
 import { useNavigate } from 'react-router-dom'
 
-const ManageUsers = ({role}) => {
+const ManageUsers = ({ role }) => {
 
     const navigate = useNavigate();
 
@@ -65,6 +65,7 @@ const ManageUsers = ({role}) => {
     return (
         <section className="section">
             <div className="container">
+                <h1 className='big-title'>Manage Users</h1>
                 <div className='cards'>
                     <Card total={'Users'} number={totalUsers} extra={'35,000 '} />
                     <Card total={'Teachers'} number={totalTeachers} extra={'35,000 '} />

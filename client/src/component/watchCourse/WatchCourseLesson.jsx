@@ -13,10 +13,21 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
 
 
 
-    const [value, setValue] = useState(fullComment.rating);
-    const [comment, setComment] = useState(fullComment.comment);
+    const [value, setValue] = useState(fullComment?.rating);
+    const [comment, setComment] = useState(fullComment?.comment);
     // const [prevComment, setPrevComment] = useState({});
     const [disable, setDisable] = useState(false);
+
+    useEffect(() => {
+        const fetchComment = () => {
+            if (fullComment) {
+                setComment(fullComment.comment);
+                setValue(fullComment.rating);
+            }
+        }
+    
+        fetchComment();
+    },[fullComment])
 
 
     const submitComment = async() => {
@@ -71,7 +82,7 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
                             // ref={videoRef}
                             src={course.chapters[activeLesson?.chapterIndex].lessons[activeLesson?.lessonIndex].videoUrl}
                             // width={'100%'}
-                            height={'400px'}
+                            // height={'400px'}
                         ></video>
 
 
@@ -90,7 +101,7 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
                                 <div className='comment-Up'>
                                     <div className="userInfo">
                                         {/* <img src={course.user.avatar} alt='avatar' /> */}
-                                        <img src={ronald} alt="" className='comment-avatar' />
+                                        <img src={user.picture} alt="" className='comment-avatar' />
                                         <p>{user.username}</p>
                                     </div>
                                     <Rate tooltips={desc} onChange={setValue} value={value} />
@@ -123,4 +134,4 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
     )
 }
 
-export default WatchCourseLesson
+export default WatchCourseLesson;

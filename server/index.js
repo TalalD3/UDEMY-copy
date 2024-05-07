@@ -52,6 +52,14 @@ const User = mongoose.model('User', {
     type: String,
     default: 'user'
   },
+  picture: {
+    type: String,
+    default: 'https://jalshobaki.com/img/default_profile_image.png'
+    // default: 'https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG-Picture.png'
+  },
+  bio: {
+    type: String,
+  },
   coursesCreated: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course'
@@ -164,7 +172,7 @@ const Order = mongoose.model('Order', {
   }
 })
 
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
   res.json('hello ')
 })
 
@@ -574,29 +582,49 @@ app.post('/api/addComment', async (req, res) => {
     if (!course) {
       return res.status(404).json({ success: false, error: 'Course not found' });
     }
-    const comment = await Comment.create({
-      comment: req.body.comment,
-      course: req.body.course,
-      rating: req.body.rating,
-      user: req.body.user,
-    })
-    if (comment) {
-      const course = await Course.findByIdAndUpdate(
-        req.body.course,
-        { $push: { comments: comment._id } },
-        { new: true }
-      );
 
-      if (course) {
-        // console.log('Updated course:', course);
-        res.json({
-          success: true,
-          course,
-        });
-      }
-    } else {
-      res.status(500).json({ success: false, error: 'Error creating comment' });
+    const user = await User.findById(req.body.user);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
     }
+
+    let comment = await Comment.findOneAndUpdate({ course: req.body.course, user: req.body.user }, {
+      comment: req.body.comment,
+      rating: req.body.rating,
+    });
+
+    if (comment) {
+      res.json({
+        success: true,
+        comment,
+      });
+    } else {
+      const newComment = await Comment.create({
+        comment: req.body.comment,
+        course: req.body.course,
+        rating: req.body.rating,
+        user: req.body.user,
+      });
+
+      if (newComment) {
+        const course = await Course.findByIdAndUpdate(
+          req.body.course,
+          { $push: { comments: comment._id } },
+          { new: true }
+        );
+
+        if (course) {
+          // console.log('Updated course:', course);
+          res.json({
+            success: true,
+            course,
+          });
+        }
+      } else {
+        res.status(500).json({ success: false, error: 'Error creating comment' });
+      }
+    }
+    // If no comment exists, create a new one
   } catch (error) {
     res.status(500).json({ success: false, errors: "Error: " + error });
   }
@@ -606,13 +634,30 @@ app.post('/api/addComment', async (req, res) => {
 app.get('/api/getcomments/:courseId', async (req, res) => {
   try {
     // Find the comments by id
-    const comments = await Comment.find({course: req.params.courseId}).populate('user');
+    const comments = await Comment.find({ course: req.params.courseId }).populate('user');
 
     if (!comments) {
       return res.status(404).json({ success: false, error: 'comments not found' });
     }
 
-    res.json({ success: true, comments});
+    res.json({ success: true, comments });
+  } catch (error) {
+    console.error('Error getting comments:', error);
+    res.status(500).json({ success: false, error: 'Error getting comments' });
+  }
+});
+
+// endpoint for get the comments by courseID and userId
+app.get('/api/getUserComment/:courseId/:userId', async (req, res) => {
+  try {
+    // Find the comments by id
+    const comments = await Comment.find({ course: req.params.courseId, user: req.params.userId }).populate('user');
+
+    if (!comments) {
+      return res.status(404).json({ success: false, error: 'comments not found' });
+    }
+
+    res.json({ success: true, comments });
   } catch (error) {
     console.error('Error getting comments:', error);
     res.status(500).json({ success: false, error: 'Error getting comments' });
@@ -677,6 +722,24 @@ app.post('/api/login', async (req, res) => {
 
 })
 
+//endpoint for update user profile
+app.post('/api/user/update', async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.body.id, {
+      username: req.body.username,
+      bio: req.body.bio,
+      picture: req.body.picture,
+    }, { new: true })
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+})
+
 //endpoint for get user information by id
 app.get('/api/users/:userId', async (req, res) => {
   try {
@@ -716,7 +779,7 @@ app.post('/api/getuserdata', fetchUser, async (req, res) => {
   if (user) {
     res.status(200).send({ success: true, user });
   } else {
-    res.status(400).send({ success: false });
+    res.send({ success: false });
   }
 })
 

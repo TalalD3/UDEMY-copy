@@ -7,7 +7,7 @@ import WatchCourseLesson from '../component/watchCourse/WatchCourseLesson';
 import { ShopContext } from '../Context/ShopContext';
 
 const WatchCourse = () => {
-    const { getUserData, getComments } = useContext(ShopContext);
+    const { getUserData, getUserComment } = useContext(ShopContext);
 
     const { courseId } = useParams();
     const [course, setCourse] = useState({});
@@ -51,21 +51,23 @@ const WatchCourse = () => {
         fetchData();
 
         const fetchComments = async () => {
-            try {
-                const fetchingcomments = await getComments(courseId);
-                // setPrevComment(fetchingcomments.comments)
-                console.log(fetchingcomments);
-                console.log(fetchingcomments.comments[0]);
-                setComment(fetchingcomments.comments[0]);
-
-            } catch (error) {
-                console.log(error);
+            if (user?._id){
+                try {
+                    const fetchingcomments = await getUserComment(courseId,user._id);
+                    // setPrevComment(fetchingcomments.comments)
+                    console.log(fetchingcomments);
+                    console.log(fetchingcomments.comments[0]);
+                    setComment(fetchingcomments.comments[0]);
+    
+                } catch (error) {
+                    console.log(error);
+                }
             }
         }
 
         fetchComments();
 
-    }, [courseId]);
+    }, [courseId,user?._id]);
 
     return (
         <section className="section1">

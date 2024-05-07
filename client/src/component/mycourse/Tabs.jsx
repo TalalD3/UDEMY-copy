@@ -19,7 +19,7 @@ const MyTabs = ({ userData }) => {
             children:
                 <div className='tabs-container'>
                     {
-                        userData.coursesEnrolled?.length ?
+                        userData?.coursesEnrolled?.length ?
                             (
                                 userData.coursesEnrolled?.map((course, index) => {
                                     return (

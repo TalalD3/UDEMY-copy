@@ -19,21 +19,22 @@ const MyCourses = () => {
         }
         fetchUserData();
     }, [getUserData]);
-    
-    
+
+
 
 
     return (
-        <div className='profile_page'>
-        
-        <Profile />
+        <section className="section">
+            <div className='container'>
 
-        <div className="container" style={{marginTop:"30px"}}>
-            <MyTabs userData={userData} />
-        </div>
+                <Profile userData={userData} />
 
+                <div style={{ marginTop: "30px" }}>
+                    <MyTabs userData={userData} />
+                </div>
 
-        </div>
+            </div>
+        </section>
     )
 }
 

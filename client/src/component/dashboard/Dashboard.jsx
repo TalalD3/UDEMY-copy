@@ -98,61 +98,10 @@ const Dashboard = ({ role }) => {
     }, [getTotlaCourses, getTotlaOrder, getTotlaUsers]);
 
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const courses = await getTotlaCourses();
-    //             setTotalCourses(courses);
-    //         } catch (error) {
-    //             console.error("Error fetching total courses:", error);
-    //         }
-
-    //         try {
-    //             const orders = await getTotlaOrder();
-    //             setTotalOrders(orders);
-    //         } catch (error) {
-    //             console.error("Error fetching total orders:", error);
-    //         }
-
-    //         try {
-    //             const users = await getTotlaUsers();
-    //             setTotalUsers(users);
-    //         } catch (error) {
-    //             console.error("Error fetching total users:", error);
-    //         }
-
-    //         try {
-    //             const orders = await fetchOrdersPerMonth();
-    //             // console.log('oreders:', orders);
-    //             setOrdersPerMonth(orders);
-    //         } catch (error) {
-    //             console.error("Error fetching total users:", error);
-    //         }
-
-    //         try {
-    //             const users = await fetchUsersPerMonth();
-    //             // console.log('users:', users);
-    //             setUsersPerMonth(users);
-    //         } catch (error) {
-    //             console.error("Error fetching total users:", error);
-    //         }
-
-    //         try {
-    //             const courses = await fetchCoursesPerMonth();
-    //             // console.log('courses:', courses);
-    //             setCoursesPerMonth(courses);
-    //         } catch (error) {
-    //             console.error("Error fetching total users:", error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [getTotlaCourses, getTotlaOrder, getTotlaUsers,usersPerMonth, ordersPerMonth , coursesPerMonth]);
-
-
     return (
         <section className="section">
             <div className="container">
+                <h1 className='big-title'>Analytics</h1>
                 <div className='cards'>
                     <Card total={'Orders'} number={totalOrders} extra={'35,000 '} />
                     <Card total={'Users'} number={totalUsers} extra={'35,000 '} />
@@ -160,13 +109,17 @@ const Dashboard = ({ role }) => {
                     {/* <Card total={'Page Views'} number={'4,42,236'} extra={'35,000 '} /> */}
                 </div>
                 <div className='analytics'>
-                    <p className='analytics-title'>Analytics Orders, Users and Course</p>
-                    <p className='analytics-title'>Top categories</p>
-                    <div className='dashboard-card'>
-                        <StackedAreaChart userData={usersPerMonth} orderData={ordersPerMonth} courseData={coursesPerMonth} />
+                    <div>
+                        <p className='analytics-title'>Analytics Orders, Users and Course</p>
+                        <div className='dashboard-card analytics-perMonth mt'>
+                            <StackedAreaChart userData={usersPerMonth} orderData={ordersPerMonth} courseData={coursesPerMonth} />
+                        </div>
                     </div>
-                    <div className='dashboard-card last'>
-                        <SimpleBarChart ordersPerCategory={ordersPerCategory} />
+                    <div>
+                        <p className='analytics-title'>Top categories</p>
+                        <div className='dashboard-card last mt'>
+                            <SimpleBarChart ordersPerCategory={ordersPerCategory} />
+                        </div>
                     </div>
                 </div>
                 <div className='teble'>
