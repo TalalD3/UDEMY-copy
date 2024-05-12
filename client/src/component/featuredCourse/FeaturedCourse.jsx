@@ -6,7 +6,8 @@ import { ShopContext } from '../../Context/ShopContext'
 function FeaturedCourse() {
 
     const { published_course } = useContext(ShopContext);
-    const courses = published_course.slice(0, 6)
+    const courses = published_course.sort((a, b) => b.rating - a.rating);
+    const sortedCourses = courses.slice(0, 8);
 
 
     return (
@@ -15,8 +16,8 @@ function FeaturedCourse() {
             <p className="section_subtitle">Unlock the pinnacle of learning in our courses.</p>
             <div className="container featuredCourse">
                 {
-                    courses.map((course) => (
-                        <Item course={course} key={course._id} />
+                    courses.map((sortedCourses) => (
+                        <Item course={sortedCourses} key={sortedCourses._id} />
                     ))
                 }
             </div>

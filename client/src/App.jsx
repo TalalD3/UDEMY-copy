@@ -19,7 +19,7 @@ import { ShopContext } from './Context/ShopContext';
 import MyCourses from './Pages/MyCourses';
 import About from './Pages/About';
 
-function App({ location }) {
+function App() {
   const { role } = useContext(ShopContext);
 
   // const [therole,setrole] = useState('user');

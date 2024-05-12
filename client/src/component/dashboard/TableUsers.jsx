@@ -350,7 +350,7 @@ export default function TableUsers({ rows }) {
                     <TableCell align="right"><CustomizedMenus role={row.role} id={row._id} setRole={setRole} /></TableCell>
                     {/* <TableCell align="left">
                         <div>
-                          <i class='bx bx-dots-horizontal-rounded'></i>
+                          <i className='bx bx-dots-horizontal-rounded'></i>
                         </div>
                     </TableCell> */}
                   </TableRow>

@@ -89,23 +89,25 @@ function Rcategories() {
                 <h3 className='top'>Top<span>Categories</span></h3>
                 <h5>12,000+ unique online course list designs</h5>
             </div>
-            <div className='container'>
+            <section className="sectoin1">
+                <div className='container'>
 
 
-                <div className='categories-container'>
-                    {category.slice(0, 6).map(props => (
+                    <div className='categories-container'>
+                        {category.slice(0, 6).map(props => (
 
-                        <Category
-                            key={props.title}
-                            img={props.img}
-                            title={props.title}
-                            courses={props.totalCourses}
-                        />
+                            <Category
+                                key={props.title}
+                                img={props.img}
+                                title={props.title}
+                                courses={props.totalCourses}
+                            />
 
-                    ))}
+                        ))}
+                    </div>
+
                 </div>
-
-            </div>
+            </section>
         </div>
     )
 }

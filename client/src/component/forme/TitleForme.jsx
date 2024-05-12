@@ -6,11 +6,11 @@ import AddChapter from './AddChapter';
 
 import './titleforme.css'
 import CourseForm from './CourseForm';
-import UploadImageForm from './UploadImageForm';
 import { Button, Form, message, Modal } from 'antd';
 import axios from 'axios';
 import AddChapters from './AddChapters';
 import { useNavigate, useParams } from 'react-router-dom';
+import AddQuis from './AddQuis';
 
 
 const TitleForme = ({ course, what }) => {
@@ -18,6 +18,8 @@ const TitleForme = ({ course, what }) => {
     const { courseId } = useParams();
     const navigate = useNavigate();
     const [chapters, setChapters] = useState([]);
+    const [questions, setQuestions] = useState([]);
+
 
 
     useEffect(() => {
@@ -25,11 +27,14 @@ const TitleForme = ({ course, what }) => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/courses/${courseId}`);
                 const { data } = response;
-                // setCourse(data.course);
 
                 // Extract chapters from the course object and update the chapters state
                 if (data.course && data.course.chapters) {
                     setChapters(data.course.chapters);
+                }
+                
+                if (data.course && data.course.quiz) {
+                    setQuestions(data.course.quiz.questions);
                 }
             } catch (error) {
                 console.error('Error fetching course:', error);
@@ -81,14 +86,37 @@ const TitleForme = ({ course, what }) => {
             // Get form values
             const values = await form.getFieldsValue();
 
+            if (questions.length > 0) {
+                questions.forEach((question,index) => {
+                    if (question.question.length < 1) {
+                        message.error('There are no question in '+ index);
+                        isError = true; // Set isError flag to true if an error is encountered
+                        return;
+                    }
+                    if (question.options.length < 1) {
+                        message.error('There are no options in '+ index);
+                        isError = true; // Set isError flag to true if an error is encountered
+                        return;
+                    }
+                })
+            }
+
+            if (isError) {
+                return; // Exit the function if an error is encountered
+            }
+
             // Add the image URL to the form values
             // values.image = imageUrl ? imageUrl : course?.image;
             values.image = imageUrl ? imageUrl : values.image ? values.image : null;
 
             // values.title = values.title ? values.title : courseChaptres.title
 
+            const quiz = {
+                questions
+            }
+
             // Construct the course object
-            const course = { ...values, chapters, isPublish: true };
+            const course = { ...values, chapters, isPublish: true, quiz };
 
             // Submit the form  http://localhost:5000/api/addcourse
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcoursedetails/${courseId}`, course);
@@ -127,10 +155,13 @@ const TitleForme = ({ course, what }) => {
             // Add the image URL to the form values
             values.image = imageUrl ? imageUrl : values.image ? values.image : null;
 
-            // values.title = values.title ? values.title : courseChaptres.title
+            // console.log(questions);
+            const quiz = {
+                questions
+            }
 
             // Construct the course object
-            const course = { ...values, chapters };
+            const course = { ...values, chapters, quiz };
             // console.log(course);
 
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcoursedetails/${courseId}`, course);
@@ -200,9 +231,6 @@ const TitleForme = ({ course, what }) => {
                         <Button type="primary" onClick={publishCourse}>
                             Publish
                         </Button>
-                        {/* <Button type="primary" onClick={publishCourse}>
-                        {what} Course
-                    </Button> */}
                     </div>
                 </div>
 
@@ -226,6 +254,11 @@ const TitleForme = ({ course, what }) => {
                         <AddChapters chapters={chapters} setChapters={setChapters} saveCourse={saveCourse} />
                         {/* <AddChapter courseChaptres={courseChaptres} setCourseChaptres={setCourseChaptres} /> */}
                     </div>
+                </div>
+
+                <div className='card mt'>
+                    <h2 className='addcourse-subtitle'>Customize your Quis</h2>
+                    <AddQuis questions={questions} setQuestions={setQuestions} />
                 </div>
             </div>
         </section>

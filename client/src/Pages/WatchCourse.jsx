@@ -5,12 +5,15 @@ import WatchCourseSidebar from '../component/watchCourse/WatchCourseSidebar';
 import './css/watchCourse.css'
 import WatchCourseLesson from '../component/watchCourse/WatchCourseLesson';
 import { ShopContext } from '../Context/ShopContext';
+import { message } from 'antd';
+import axios from 'axios';
 
 const WatchCourse = () => {
     const { getUserData, getUserComment } = useContext(ShopContext);
 
     const { courseId } = useParams();
     const [course, setCourse] = useState({});
+    const [progress, setProgress] = useState({});
     const [user, setUser] = useState({});
     const [comment, setComment] = useState({
         comment: '',
@@ -51,14 +54,11 @@ const WatchCourse = () => {
         fetchData();
 
         const fetchComments = async () => {
-            if (user?._id){
+            if (user?._id) {
                 try {
-                    const fetchingcomments = await getUserComment(courseId,user._id);
-                    // setPrevComment(fetchingcomments.comments)
-                    console.log(fetchingcomments);
-                    console.log(fetchingcomments.comments[0]);
+                    const fetchingcomments = await getUserComment(courseId, user._id);
                     setComment(fetchingcomments.comments[0]);
-    
+
                 } catch (error) {
                     console.log(error);
                 }
@@ -67,14 +67,29 @@ const WatchCourse = () => {
 
         fetchComments();
 
-    }, [courseId,user?._id]);
+        const fetchProgress = async () => {
+            if (user?._id) {
+                try {
+                    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/getprogress/user/${user._id}/course/${courseId}`);
+                    setProgress(response.data.progress);
+
+                } catch (error) {
+                    console.error('Error updating progress:', error);
+                    return null;
+                }
+            }
+        };
+
+        fetchProgress();
+
+    }, [courseId, user?._id]);
 
     return (
         <section className="section1">
             <div className="container watchCourse">
-
-                <WatchCourseSidebar course={course} activeLesson={activeLesson} setActiveLesson={setActiveLesson} />
-                <WatchCourseLesson course={course} activeLesson={activeLesson} setActiveLesson={setActiveLesson} user={user} fullComment={comment} setComment={setComment} />
+                
+                <WatchCourseSidebar course={course} activeLesson={activeLesson} setActiveLesson={setActiveLesson} progress={progress} />
+                <WatchCourseLesson course={course} activeLesson={activeLesson} setActiveLesson={setActiveLesson} user={user} fullComment={comment} setComment={setComment} setProgress={setProgress} progress={progress} />
 
             </div>
         </section>

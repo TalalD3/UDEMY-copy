@@ -3,7 +3,7 @@
     border-right: 1px solid rgba(0, 0, 0, 0.2);
 
     display: flex;
-    gap: 50px;
+    /* gap: 0px; */
 }
 
 .watchCourse-sidebar {
@@ -67,6 +67,10 @@
     font-size: 30px;
 }
 
+.check-icon {
+    font-size: 20px;
+}
+
 
 .chapter-lessons {
     margin-top: 5px;
@@ -79,8 +83,10 @@
 
 .chapter-lesson {
     padding: 5px;
-    /* margin-bottom: 5px; */
     padding-left: 57px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     cursor: pointer;
 }
 
@@ -91,18 +97,36 @@
 
 }
 
+.watch-btn{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.read-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
 .hoho {
     width: 100%;
+    padding: 30px;
 }
 
 .lesson-video {
+    aspect-ratio: 16/9;
     width: 100%;
-    /* height: 300px; */
 }
 
-.watch-lesson {
+/* .watch-lesson {
     margin-right: 40px;
-}
+} */
+
+/* .watch-progress{
+    margin-top: 30px;
+} */
 
 .watchCourse-info {
     display: flex;
@@ -143,12 +167,13 @@
     cursor: pointer;
 }
 
-.watch-koko {
+/* .watch-koko {
     margin-top: 30px;
-}
+    margin-right: 30px;
+} */
 
 .comment-div {
-    width: 90%;
+    width: 100%;
     margin-top: 80px;
     padding: 20px;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -208,7 +233,55 @@
     justify-content: space-between;
 }
 
+.quiz-div{
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+}
 
+.quis-submit-btn{
+    background-color: #2aaa9530;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: var(--green);
+    cursor: pointer;
+}
+
+.quis-btn{
+    background-color: #2a6eaa20;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #2a6eaa;
+    cursor: pointer;
+}
+
+.quis-score-faild{
+    background-color: #aa2a2a30;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #aa2a2a;
+    cursor: pointer;
+}
+
+.correct-answer{
+    color: white;
+    background-color: var(--green);
+    font-weight: 600;
+    width: max-content;
+    border-radius: 6px;
+    padding: 4px 10px;
+    margin-left: -8px;
+}
 
 
 
@@ -218,16 +291,20 @@
 /* For large devices */
 
 @media screen and (max-width: 1200px) {
-    .watchCourse {
+    /* .watchCourse {
         gap: 30px;
-    }
+    } */
 
-    .watch-lesson {
+    /* .watch-lesson {
         margin-right: 30px;
-    }
+    } */
 }
 
 @media screen and (max-width: 992px) {
+    .hoho{
+        padding: 20px;
+    }
+
     .watchCourse {
         display: block;
     }
@@ -250,17 +327,17 @@
         border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
-    .watch-lesson {
+    /* .watch-lesson {
         margin: 20px;
-    }
+    } */
 
     .watchCourse-info-btn {
         margin-top: 20px;
     }
 
-    .watch-koko {
+    /* .watch-koko {
         margin: 20px;
-    }
+    } */
 
     .comment-div {
         margin-top: 30px;
@@ -268,8 +345,13 @@
     }
 }
 
+
 /* For small devices */
 @media screen and (max-width: 500px) {
+    .hoho{
+        padding: 15px;
+    }
+
     .watchCourse-info-btn {
         display: flex;
         flex-direction: column;

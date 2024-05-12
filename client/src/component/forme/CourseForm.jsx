@@ -61,7 +61,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
                         style={{ width: "100%", marginBottom: -12, marginRight: 0, marginTop: -15, }}
                         rules={[{ required: true, message: 'Please input the description course' }]}
                     >
-                        <Input.TextArea style={{ height: 80, resize: 'none' }} showCount maxLength={200} />
+                        <Input.TextArea style={{ height: 80, resize: 'none' }} showCount maxLength={150} minLength={100} />
                     </Form.Item>
 
                     <span className='filed-title'>Course description</span>

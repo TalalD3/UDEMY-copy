@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
 
-const AddChapters = ({ chapters, setChapters,saveCourse }) => {
+const AddChapters = ({ chapters, setChapters, saveCourse }) => {
     const { courseId } = useParams();
     const [form] = Form.useForm();
 
@@ -18,6 +18,14 @@ const AddChapters = ({ chapters, setChapters,saveCourse }) => {
             navigate('/')
         }
         try {
+            const existingObj = chapters?.find(chapter => chapter.title === values.title);
+
+            // If an object with the same title exists, don't add it again
+            if (existingObj) {
+                message.warning(`chapter with title '${values.title}' already exists in the chapters.`);
+                return;
+            } 
+
             fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addchapter`, {
                 method: 'POST',
                 headers: {

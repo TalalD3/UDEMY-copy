@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@fontsource/roboto": "^5.0.12"
+    "@fontsource/roboto": "^5.0.12",
+    "bcrypt": "^5.1.1"
   }
 }

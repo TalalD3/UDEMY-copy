@@ -7,6 +7,8 @@ import { errorHandler } from "./middlewares/error.js";
 import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+
 
 
 // import User from "./models/Users.js";
@@ -29,6 +31,8 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 
 app.use(express.json());
+
+const saltRounds = 10;
 
 // multer for handling file uploads
 const upload = multer({ dest: 'uploads/' });
@@ -102,61 +106,128 @@ const Chapter = mongoose.model('Chapter',
 );
 
 // Schema Creation for Course model
-const Course = mongoose.model('Course',
+const Course = mongoose.model('Course', {
+  title: {
+    type: String,
+    // required: true,
+  },
+  description: {
+    type: String,
+    // required: true,
+  },
+  small_description: {
+    type: String,
+    // required: true,
+  },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment',
+  }],
+  image: {
+    type: String,
+    // required: true,
+  },
+  category: {
+    type: String,
+    // required: true,
+  },
+  price: {
+    type: Number,
+    // required: true,
+  },
+  rating: {
+    type: Number,
+    default: 4,
+  },
+  chapters: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Chapter',
+  }],
+  quiz: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Quiz',
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  isPublish: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+
+// Schema Creation for Quiz model
+const Quiz = mongoose.model('Quiz',
   {
-    title: {
-      type: String,
-      // required: true,
-    },
-    description: {
-      type: String,
-      // required: true,
-    },
-    small_description: {
-      type: String,
-      // required: true,
-    },
-    creator: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    comments: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Comment',
-    },
-    image: {
-      type: String,
-      // required: true,
-    },
-    category: {
-      type: String,
-      // required: true,
-    },
-    price: {
+    time: {
       type: Number,
-      // required: true,
+      default: 60,
     },
-    rating: {
-      type: Number,
-      default: 4,
-      // required: true,
-    },
-    chapters: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Chapter'
+    questions: [{
+      question: {
+        type: String,
+      },
+      hint: {
+        type: String,
+      },
+      options: [{
+        option: {
+          type: String,
+        },
+        isCorrect: {
+          type: Boolean,
+          default: false,
+        },
+      }],
     }],
     date: {
       type: Date,
       default: Date.now,
     },
-    isPublish: {
-      type: Boolean,
-      default: false,
-    },
   }
 );
 
-// Schema Creation for User model
+// Schema Creation for Progress model
+const Progress = mongoose.model('Progress', {
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course'
+  },
+  chapterProgress: [{
+    chapter: {
+      type: Number,
+    },
+    lessonProgress: [{
+      lesson: {
+        type: Number,
+      },
+      isCompleted: {
+        type: Boolean,
+        default: false
+      }
+    }]
+  }],
+  progress: {
+    type: Number,
+    default: 0
+  },
+  completedAt: {
+    type: Date,
+    default: null
+  }
+});
+
+// Schema Creation for Order model
 const Order = mongoose.model('Order', {
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -170,10 +241,6 @@ const Order = mongoose.model('Order', {
     type: Date,
     default: Date.now,
   }
-})
-
-app.get("/", (req, res) => {
-  res.json('hello ')
 })
 
 // Schema Creation for User model
@@ -198,6 +265,11 @@ const Comment = mongoose.model('Comment', {
     default: Date.now,
   }
 })
+
+app.get("/", (req, res) => {
+  res.json('hello ')
+})
+
 
 // Creating API for getting all courses 
 app.get("/api/allcourses", async (req, res) => {
@@ -297,34 +369,31 @@ app.post('/api/addcourse', fetchUser, async (req, res) => {
   }
 });
 
-
-// endpoint for add Course
-// app.post('/api/addcourse', fetchUser, async (req, res) => {
-
-//   if (!req.user.id) {
-//     res.status(400).json({ success: false, errors: "error: " + error });
-//   }
-//   // console.log( req.body.title,req.user.id);
-//   try {
-//     const course = await Course.create({
-//       title: req.body.title,
-//       creator: req.user.id,
-//     });
-//     console.log(course);
-
-//     res.json({
-//       success: true,
-//       course,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ success: false, errors: "error: " + error });
-//   }
-// })
-
 // endpoint for add Course details
 app.post('/api/addcoursedetails/:courseId', async (req, res) => {
   const courseId = req.params.courseId;
   try {
+    let quizId;
+    if (req.body.quiz) {
+      const course = await Course.findById(courseId);
+      if (course && course.quiz) {
+        const quiz = await Quiz.findByIdAndUpdate(
+          course.quiz._id,
+          {
+            time: req.body.quiz.time,
+            questions: req.body.quiz.questions
+          },
+          { upsert: true, new: true }
+        );
+        quizId = quiz._id;
+      } else {
+        const quiz = await Quiz.create({
+          time: req.body.quiz.time,
+          questions: req.body.quiz.questions
+        });
+        quizId = quiz._id;
+      }
+    }
     const course = await Course.findOneAndUpdate(
       { _id: courseId },
       {
@@ -335,7 +404,8 @@ app.post('/api/addcoursedetails/:courseId', async (req, res) => {
         price: req.body.price,
         isPublish: req.body.isPublish,
         small_description: req.body.small_description,
-        chapters: req.body.chapters
+        chapters: req.body.chapters,
+        quiz: quizId
       },
       { upsert: true, new: true }
     );
@@ -350,6 +420,7 @@ app.post('/api/addcoursedetails/:courseId', async (req, res) => {
     res.status(500).json({ success: false, errors: "Error adding course details" });
   }
 });
+
 
 app.put('/api/change-publish/:courseId', async (req, res) => {
   try {
@@ -527,7 +598,7 @@ app.get('/api/orders-by-course/:courseId', async (req, res) => {
 app.get('/api/courses/:courseId', async (req, res) => {
   try {
     // Fetch course by courseId from the database and populate the chapters
-    const course = await Course.findById(req.params.courseId).populate('chapters');
+    const course = await Course.findById(req.params.courseId).populate('chapters').populate('quiz');
 
     if (!course) {
       return res.status(404).json({ success: false, error: 'Course not found' });
@@ -588,17 +659,15 @@ app.post('/api/addComment', async (req, res) => {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
 
-    let comment = await Comment.findOneAndUpdate({ course: req.body.course, user: req.body.user }, {
-      comment: req.body.comment,
-      rating: req.body.rating,
-    });
+    // Find existing comment or create a new one
+    let comment = await Comment.findOneAndUpdate(
+      { course: req.body.course, user: req.body.user },
+      { comment: req.body.comment, rating: req.body.rating },
+      { new: true } // upsert: If no document matches the query, MongoDB will create a new document
+    );
 
-    if (comment) {
-      res.json({
-        success: true,
-        comment,
-      });
-    } else {
+    // If a new comment is created, update the course
+    if (!comment) {
       const newComment = await Comment.create({
         comment: req.body.comment,
         course: req.body.course,
@@ -606,29 +675,91 @@ app.post('/api/addComment', async (req, res) => {
         user: req.body.user,
       });
 
-      if (newComment) {
-        const course = await Course.findByIdAndUpdate(
-          req.body.course,
-          { $push: { comments: comment._id } },
-          { new: true }
-        );
-
-        if (course) {
-          // console.log('Updated course:', course);
-          res.json({
-            success: true,
-            course,
-          });
-        }
-      } else {
-        res.status(500).json({ success: false, error: 'Error creating comment' });
-      }
+      await Course.findByIdAndUpdate(
+        req.body.course,
+        { $push: { comments: newComment._id } },
+        { new: true }
+      );
     }
-    // If no comment exists, create a new one
+
+
+    // Calculate average rating for the course
+    const updatedCourse = await Course.findById(req.body.course).populate('comments');
+    const ratings = updatedCourse.comments.map(comment => comment.rating);
+    const averageRating = ratings.reduce((acc, rating) => acc + rating, 0) / ratings.length;
+    const roundedRating = Math.round(averageRating * 2) / 2;
+
+
+    // Update course with the average rating
+    const addRatingCourse = await Course.findByIdAndUpdate(
+      req.body.course,
+      { rating: roundedRating },
+      { new: true }
+    );
+
+
+    res.json({
+      success: true,
+      course: addRatingCourse
+    });
   } catch (error) {
-    res.status(500).json({ success: false, errors: "Error: " + error });
+    res.status(500).json({ success: false, error: 'Error: ' + error });
   }
-})
+});
+
+// app.post('/api/addComment', async (req, res) => {
+//   try {
+//     const course = await Course.findById(req.body.course);
+//     if (!course) {
+//       return res.status(404).json({ success: false, error: 'Course not found' });
+//     }
+
+//     const user = await User.findById(req.body.user);
+//     if (!user) {
+//       return res.status(404).json({ success: false, error: 'User not found' });
+//     }
+
+//     let comment = await Comment.findOneAndUpdate({ course: req.body.course, user: req.body.user }, {
+//       comment: req.body.comment,
+//       rating: req.body.rating,
+//     });
+
+//     if (comment) {
+//       res.json({
+//         success: true,
+//         comment,
+//       });
+//     } else {
+//       const newComment = await Comment.create({
+//         comment: req.body.comment,
+//         course: req.body.course,
+//         rating: req.body.rating,
+//         user: req.body.user,
+//       });
+
+//       if (newComment) {
+//         const course = await Course.findByIdAndUpdate(
+//           req.body.course,
+//           { $push: { comments: comment._id } },
+//           { new: true }
+//         );
+
+//         if (course) {
+//           // console.log('Updated course:', course);
+//           res.json({
+//             success: true,
+//             course,
+//           });
+//         }
+//       } else {
+//         res.status(500).json({ success: false, error: 'Error creating comment' });
+//       }
+//     }
+//     // If no comment exists, create a new one
+//   } catch (error) {
+//     res.status(500).json({ success: false, errors: "Error: " + error });
+//   }
+// })
 
 // endpoint for get the comments by courseID
 app.get('/api/getcomments/:courseId', async (req, res) => {
@@ -664,18 +795,89 @@ app.get('/api/getUserComment/:courseId/:userId', async (req, res) => {
   }
 });
 
+// Endpoint to update chapter and lesson progress
+app.put('/api/progress/user/:userId/course/:courseId/chapters/:chapterId/lessons/:lessonId', async (req, res) => {
+  try {
+    const { userId, courseId, chapterId, lessonId } = req.params;
 
-// endpoint for sign Up
+    // Find the user's progress for the specified course
+    let progress = await Progress.findOne({ user: userId, course: courseId });
+    if (!progress) {
+      progress = await Progress.create({ user: userId, course: courseId });
+    }
+
+    // Find the chapter progress for the specified chapter
+    let chapterProgress = progress.chapterProgress.find(chapter => chapter.chapter.toString() === chapterId);
+    if (!chapterProgress) {
+      // If chapter progress doesn't exist, create it
+      chapterProgress = { chapter: chapterId, lessonProgress: [{ lesson: lessonId, isCompleted: true }] }; // Initialize lessonProgress with the lessonId
+      progress.chapterProgress.push(chapterProgress);
+    }
+
+    // Find the lesson progress for the specified lesson
+    let lessonProgress = chapterProgress.lessonProgress.find(lesson => lesson.lesson.toString() === lessonId);
+    if (!lessonProgress) {
+      // If lesson progress doesn't exist, create it
+      lessonProgress = { lesson: lessonId, isCompleted: true };
+      chapterProgress.lessonProgress.push(lessonProgress);
+    } else {
+      lessonProgress.isCompleted = true;
+    }
+
+    const course = await Course.findById(courseId).populate('chapters');
+    // Calculate the total number of lessons in the course
+    const totalLessonsOnCourse = course.chapters.reduce((total, chapter) => total + chapter.lessons.length, 0);
+    let totalCompletedLessons = 0;
+    for (const chapterProgress of progress.chapterProgress) {
+      for (const lessonProgress of chapterProgress.lessonProgress) {
+        if (lessonProgress.isCompleted) {
+          totalCompletedLessons++;
+        }
+      }
+    }
+
+
+    progress.progress = (totalCompletedLessons / totalLessonsOnCourse) * 100;
+
+    await progress.save();
+
+    res.json({ success: true, progress });
+  } catch (error) {
+    console.error('Error updating progress:', error);
+    res.status(500).json({ success: false, error: 'Error updating progress' });
+  }
+});
+
+// Endpoint to get chapter and lesson progress
+app.get('/api/getprogress/user/:userId/course/:courseId', async (req, res) => {
+  try {
+    const { userId, courseId } = req.params;
+    // Find the user's progress for the specified course
+    let progress = await Progress.findOne({ user: userId, course: courseId });
+    if (!progress) {
+      return res.json({ success: false, message: 'Progress with those course Id and user id not found' });
+    }
+    return res.json({ success: true, progress });
+
+  } catch (error) {
+    console.error('Error getting progress:', error);
+    return res.status(500).json({ success: false, error: 'Error getting progress' });
+  }
+});
+
+
+
 app.post('/api/signup', async (req, res) => {
   let check = await User.findOne({ email: req.body.email });
   if (check) {
-    return res.status(400).json({ success: false, errors: "existing user found for same email address" })
+    return res.json({ success: false, errors: "existing user found for same email address" })
   }
   try {
+    const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
     const user = await User.create({
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
     });
 
     const data = {
@@ -701,7 +903,8 @@ app.post('/api/login', async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
 
   if (user) {
-    const passCompare = req.body.password === user.password;
+    const passCompare = bcrypt.compareSync(req.body.password, user.password);
+    // const passCompare = req.body.password === user.password;
     if (passCompare) {
       const data = {
         user: {

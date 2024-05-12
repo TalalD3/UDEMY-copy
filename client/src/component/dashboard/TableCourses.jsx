@@ -369,7 +369,7 @@ export default function TableCourses({ rows,edit }) {
                     <TableCell align="right"><CustomizedMenusCourses isPublish={row.isPublish} id={row._id} setIsPublish={setIsPublish} deleteCourse={deleteCourse} edit={edit} /></TableCell>
                     {/* <TableCell align="left">
                         <div>
-                          <i class='bx bx-dots-horizontal-rounded'></i>
+                          <i className='bx bx-dots-horizontal-rounded'></i>
                         </div>
                     </TableCell> */}
                   </TableRow>

@@ -43,15 +43,6 @@ function Carousel({ courseId }) {
           // setComments(goodComment);
           // console.log(fetchingcomments.comments);
           setComments(goodComment);
-          console.log(goodComment[0]);
-          // fetchingcomments.comments.map(comment => {
-          //   if (comment.comment.length > 0) {
-          //     setComments(prevComments => ([
-          //       ...prevComments,
-          //       comment
-          //     ]));
-          //   }
-          // })
         }
       } catch (error) {
         console.log(error);
