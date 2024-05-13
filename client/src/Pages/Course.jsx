@@ -216,8 +216,6 @@ function Course() {
         </div>
         </div>
 
-        <Foot role={role} />
-
       </div>
 
 

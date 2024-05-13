@@ -37,11 +37,8 @@ function Carousel({ courseId }) {
     const fetchComments = async () => {
       try {
         const fetchingcomments = await getComments(courseId);
-        // console.log(fetchingcomments.comments);
         if (fetchingcomments.success) {
           const goodComment = fetchingcomments.comments.filter(comment => comment.comment.length > 0);
-          // setComments(goodComment);
-          // console.log(fetchingcomments.comments);
           setComments(goodComment);
         }
       } catch (error) {

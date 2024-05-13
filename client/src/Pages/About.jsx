@@ -98,7 +98,6 @@ function About() {
 
 
       </div>
-      <Foot />
     </div>
   )
 }

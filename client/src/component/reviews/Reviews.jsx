@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Review from './Review'
 import wade from '../../assets/images/wade.png'
 import ronald from '../../assets/images/ronald.png'
 import jacob from '../../assets/images/jacob.png'
 import "./review.css"
+import { func } from 'prop-types'
+import axios from 'axios'
 
 const rview = [
   {
@@ -29,6 +31,30 @@ const rview = [
 
 
 function Reviews() {
+  const [allReviews, setReviews] = useState([]);
+
+  useEffect(() => {
+
+    const getReviews = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/getAllComments');
+
+        const sortedReviews = response.data.comments.sort((a, b) => b.rating - a.rating);
+        const filteredReviews = sortedReviews.filter(review => review.comment.length > 15);
+        // console.log(filteredReviews.splice(0,3));
+
+        setReviews(filteredReviews.splice(0, 3));
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getReviews();
+
+  }, [allReviews.length])
+
+
   return (
     <div className='reviewsection'>
       <div className='text'>
@@ -36,13 +62,13 @@ function Reviews() {
         <p className='these'>What our student say about us</p>
       </div>
       <div className='container_reviews'>
-        {rview.map(props => (
-
+        {allReviews.map(review => (
           <Review
-            key={props.id}
-            img={props.img}
-            name={props.name}
-            comment={props.comment}
+            key={review._id}
+            img={review.user.picture}
+            name={review.user.username}
+            comment={review.comment}
+            rating={review.rating}
           />
 
         ))}

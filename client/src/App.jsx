@@ -18,6 +18,7 @@ import ManageUsers from './component/dashboard/ManageUsers';
 import { ShopContext } from './Context/ShopContext';
 import MyCourses from './Pages/MyCourses';
 import About from './Pages/About';
+import Foot from './component/footer/Foot';
 
 function App() {
   const { role } = useContext(ShopContext);
@@ -57,6 +58,7 @@ function App() {
           <Route path="/course/:courseId" element={<Course />} />
           <Route path="/watchCourse/:courseId" element={<WatchCourse />} />
         </Routes>
+        <Foot role={role} />
       </BrowserRouter>
     </div>
   );

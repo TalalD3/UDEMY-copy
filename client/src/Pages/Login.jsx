@@ -141,7 +141,6 @@ function Login() {
           </form>
         </div>
       </div>
-      <Foot />
     </div>
   );
 }

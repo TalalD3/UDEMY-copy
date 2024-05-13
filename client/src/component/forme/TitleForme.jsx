@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 
 import { useState } from 'react';
 
-import AddChapter from './AddChapter';
 
 import './titleforme.css'
 import CourseForm from './CourseForm';

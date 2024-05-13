@@ -83,7 +83,6 @@ const Search = () => {
         </div>
       </div>
     </section>
-    <Foot />
     </div>
   )
 }

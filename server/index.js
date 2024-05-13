@@ -778,6 +778,16 @@ app.get('/api/getcomments/:courseId', async (req, res) => {
   }
 });
 
+// endpoint for get all comments 
+app.get('/api/getAllComments', async (req,res)=>{
+  try {
+    const comments = await Comment.find({}).populate('user');
+    res.json({ success: true, comments });
+  } catch (error) {
+    console.log(error);
+  }
+}) 
+
 // endpoint for get the comments by courseID and userId
 app.get('/api/getUserComment/:courseId/:userId', async (req, res) => {
   try {
@@ -1331,6 +1341,51 @@ cloudinary.config({
 })
 
 // Route to handle chapter video uploads
+// const cloudinary = require('cloudinary').v2;
+
+// Route to handle chapter video uploads
+// app.post('/upload/video', async (req, res) => {
+//   try {
+//     // Check if file exists in the request body
+//     console.log(req.body); // Log the file received in the request body
+
+//     // Upload file to Cloudinary
+//     const result = await cloudinary.uploader.upload(req.body, {
+//       folder: 'images'
+//     });
+
+//     // Send Cloudinary response back to client
+//     res.json(result);
+//   } catch (error) {
+//     console.error('Error uploading image to Cloudinary:', error);
+//     res.status(500).json({ error: 'Error uploading image to Cloudinary' });
+//   }
+// });
+
+// app.post('/upload/images', async (req, res) => {
+//   try {
+//     console.log(req.files);
+//     // Check if there is a file in the request
+//     if (!req.files || !req.files.image) {
+//       return res.status(400).json({ message: 'No file uploaded' });
+//     }
+
+
+//     // Upload file to Cloudinary
+//     const result = await cloudinary.uploader.upload(req.files.image.tempFilePath, {
+//       folder: 'images' // Optional - specify folder for the uploaded image
+//     });
+
+//     // Return Cloudinary URL of the uploaded image
+//     res.status(200).json({ imageUrl: result.secure_url });
+//   } catch (error) {
+//     console.error('Error uploading file:', error);
+//     res.status(500).json({ message: 'Error uploading file' });
+//   }
+// });
+
+
+
 app.post('/upload/video', upload.single('logo'), async (req, res) => {
   // console.log('start upload');
   try {

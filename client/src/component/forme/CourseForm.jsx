@@ -5,6 +5,7 @@ import { UploadOutlined } from '@ant-design/icons';
 
 import ImgCrop from 'antd-img-crop';
 import { ShopContext } from '../../Context/ShopContext';
+import axios from 'axios';
 
 
 const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
@@ -26,6 +27,38 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
     const onFinish = (values) => {
         values.image = imageUrl
     };
+
+    const handleCustomRequest = async ({ file, onSuccess, onError }) => {
+        try {
+            const formData = new FormData();
+            // formData.append('logo', file);
+            formData.append('file', file);
+
+            console.log(formData);
+
+
+            // const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/upload/video`, {
+            //     method: 'POST',
+            //     body: formData,
+            // });
+
+            // const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/upload/video`,file)
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/upload/video`, formData);
+
+
+            if (!response.ok) {
+                throw new Error('Failed to upload image');
+            }
+
+            const data = await response.json();
+            console.log(response);
+            onSuccess(data);
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            onError(error);
+        }
+    };
+
 
 
     return (
@@ -97,7 +130,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
                         <ImgCrop rotationSlider aspect={5 / 3}>
                             <Upload
                                 name="logo"
-                                action="http://localhost:5000/upload/video"
+                                action={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/upload/video`}
                                 listType="text"
                                 maxCount={1}
                                 onChange={handleChange} // Handle change event to get the uploaded image URL
@@ -106,6 +139,7 @@ const CourseForm = ({ form, imageUrl, setImageUrl, course }) => {
                             </Upload>
                         </ImgCrop>
                     </Form.Item>
+
 
                 </Form>
             }

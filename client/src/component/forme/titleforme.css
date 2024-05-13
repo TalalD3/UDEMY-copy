@@ -375,6 +375,12 @@ li svg {
         grid-template-columns: 1fr;
         gap: 50px;
     }
+    .addQuis-question {
+        width: 300px;
+    }
+    .addQuis-option-input {
+        width: 200px;
+    }
 }
 
 /* For medium devices */
@@ -382,5 +388,14 @@ li svg {
     .btn-container {
         /* flex-direction: column-reverse; */
         gap: 5px;
+    }
+    ..addQuis-questions{
+        gap: 10px;
+    }
+    .addQuis-question {
+        width: 100%;
+    }
+    .addQuis-option-input {
+        width: 120px;
     }
 }

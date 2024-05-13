@@ -118,7 +118,7 @@ const UserProfile = ({userData}) => {
                             <ImgCrop rotationSlider cropShape='round' >
                                 <Upload
                                     name="logo"
-                                    action="http://localhost:5000/upload/video"
+                                    action={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/upload/video`}
                                     listType="text"
                                     maxCount={1}
                                     // onChange={(e) => setProfilePicture(URL.createObjectURL(e.target.files[0]))}

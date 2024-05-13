@@ -24,12 +24,12 @@ const MyCourses = () => {
 
 
     return (
-        <section className="section">
+        <section className="section1">
             <div className='container'>
 
                 <Profile userData={userData} />
 
-                <div style={{ marginTop: "30px" }}>
+                <div style={{ marginTop: "30px" , marginBottom:"80px"}}>
                     <MyTabs userData={userData} />
                 </div>
 

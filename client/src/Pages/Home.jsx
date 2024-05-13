@@ -16,7 +16,6 @@ function Home() {
       <Categories />
       <Ad />
       <Reviews />
-      <Foot />
     </div>
   )
 }
