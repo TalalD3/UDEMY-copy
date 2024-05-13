@@ -389,7 +389,7 @@ li svg {
         /* flex-direction: column-reverse; */
         gap: 5px;
     }
-    ..addQuis-questions{
+    .addQuis-questions{
         gap: 10px;
     }
     .addQuis-question {
