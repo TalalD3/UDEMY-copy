@@ -59,7 +59,6 @@ const User = mongoose.model('User', {
   picture: {
     type: String,
     default: 'https://jalshobaki.com/img/default_profile_image.png'
-    // default: 'https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG-Picture.png'
   },
   bio: {
     type: String,
@@ -98,6 +97,10 @@ const Chapter = mongoose.model('Chapter',
         // required: true
       }
     }],
+    quiz: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Quiz',
+    },
     date: {
       type: Date,
       default: Date.now,
@@ -147,10 +150,6 @@ const Course = mongoose.model('Course', {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Chapter',
   }],
-  quiz: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Quiz',
-  },
   date: {
     type: Date,
     default: Date.now,
@@ -373,27 +372,7 @@ app.post('/api/addcourse', fetchUser, async (req, res) => {
 app.post('/api/addcoursedetails/:courseId', async (req, res) => {
   const courseId = req.params.courseId;
   try {
-    let quizId;
-    if (req.body.quiz) {
-      const course = await Course.findById(courseId);
-      if (course && course.quiz) {
-        const quiz = await Quiz.findByIdAndUpdate(
-          course.quiz._id,
-          {
-            time: req.body.quiz.time,
-            questions: req.body.quiz.questions
-          },
-          { upsert: true, new: true }
-        );
-        quizId = quiz._id;
-      } else {
-        const quiz = await Quiz.create({
-          time: req.body.quiz.time,
-          questions: req.body.quiz.questions
-        });
-        quizId = quiz._id;
-      }
-    }
+    
     const course = await Course.findOneAndUpdate(
       { _id: courseId },
       {
@@ -405,7 +384,6 @@ app.post('/api/addcoursedetails/:courseId', async (req, res) => {
         isPublish: req.body.isPublish,
         small_description: req.body.small_description,
         chapters: req.body.chapters,
-        quiz: quizId
       },
       { upsert: true, new: true }
     );
@@ -477,10 +455,31 @@ app.post('/api/addchapter', async (req, res) => {
 // endpoint for add Chapter details
 app.post('/api/addchapterdetails', async (req, res) => {
   try {
+    let quizId;
+    if (req.body.quiz) {
+      const chapter = await Chapter.findById(req.body.id);
+      if (chapter && chapter.quiz) {
+        const quiz = await Quiz.findByIdAndUpdate(
+          chapter.quiz,
+          {
+            time: req.body.quiz.time,
+            questions: req.body.quiz.questions
+          },
+          { upsert: true, new: true }
+        );
+        quizId = quiz._id;
+      } else {
+        const quiz = await Quiz.create({
+          time: req.body.quiz.time,
+          questions: req.body.quiz.questions
+        });
+        quizId = quiz._id;
+      }
+    }
 
     const chapter = await Chapter.findOneAndUpdate(
       { _id: req.body.id }, // Search condition
-      { title: req.body.title, isFree: req.body.isFree, lessons: req.body.lessons }, // Document to create or replace
+      { title: req.body.title, isFree: req.body.isFree, lessons: req.body.lessons , quiz: quizId }, // Document to create or replace
       { upsert: true, new: true });
 
     // console.log(chapter);
@@ -598,7 +597,7 @@ app.get('/api/orders-by-course/:courseId', async (req, res) => {
 app.get('/api/courses/:courseId', async (req, res) => {
   try {
     // Fetch course by courseId from the database and populate the chapters
-    const course = await Course.findById(req.params.courseId).populate('chapters').populate('quiz');
+    const course = await Course.findById(req.params.courseId).populate('chapters');
 
     if (!course) {
       return res.status(404).json({ success: false, error: 'Course not found' });
@@ -615,7 +614,7 @@ app.get('/api/courses/:courseId', async (req, res) => {
 app.get('/api/chapter/:chapterId', async (req, res) => {
   try {
     // Find the chapter by id
-    const chapter = await Chapter.findById(req.params.chapterId);
+    const chapter = await Chapter.findById(req.params.chapterId).populate('quiz');
 
     if (!chapter) {
       return res.status(404).json({ success: false, error: 'Chapter not found' });

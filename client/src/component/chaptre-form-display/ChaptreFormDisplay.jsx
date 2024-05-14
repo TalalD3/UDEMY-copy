@@ -23,11 +23,9 @@ const ChaptreFormDisplay = ({ lesson, index, deleteLesson }) => {
                     </div>
                 </div>
                 <video
-                    className='videoChaptre'
+                    className='lesson-video'
                     controls
                     src={lesson.videoUrl}
-                    height={'220px'}
-                    width={'100%'}
                 ></video>
             </div>
         </Reorder.Item>
