@@ -5,9 +5,7 @@ import { ThreeDots } from 'react-loader-spinner'
 import ChaptresFormDisplay from '../chaptre-form-display/ChaptresFormDisplay';
 import LinearWithValueLabel from '../LinearWithValueLabel';
 import { Button, Form, Input, message, Modal, Popconfirm, Switch } from 'antd';
-import confirm from 'antd/es/modal/confirm';
-
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import AddQuis from './AddQuis';
 
 const AddChapter = ({ role }) => {
 
@@ -43,6 +41,8 @@ const AddChapter = ({ role }) => {
     const [courseChaptres, setCourseChaptre] = useState([]);
     const [lessons, setLessons] = useState([]);
 
+    const [questions, setQuestions] = useState([]);
+
 
 
     useEffect(() => {
@@ -54,6 +54,7 @@ const AddChapter = ({ role }) => {
                 // console.log(data.chapter.title);
                 setCourseChaptre(data.chapter);
                 setLessons(data.chapter.lessons);
+                setQuestions(data.chapter.quiz.questions);
             } catch (error) {
                 console.error('Error fetching chapter:', error);
                 // Handle error if needed
@@ -151,29 +152,6 @@ const AddChapter = ({ role }) => {
         }
     }
 
-    const addLesson = () => {
-
-        // Check if an object with the same title already exists in the array
-        const existingObj = lessons.find(lesson => lesson.title === lessonDetails.title);
-
-        // If an object with the same title exists, don't add it again
-        if (existingObj) {
-            message.warning(`lesson with title '${lessonDetails.title}' already exists in the lessons.`)
-        } else {
-            setLessons(
-                [
-                    ...lessons,
-                    {
-                        title: lessonDetails.title,
-                        videoUrl: lessonDetails.videoUrl
-                    }
-                ]
-            )
-            message.success('chapter added successfully')
-        }
-
-    }
-
     const deleteLesson = (index) => {
         if (index > -1) {
             setLessons((prevChapter) =>
@@ -195,13 +173,38 @@ const AddChapter = ({ role }) => {
             return;
         }
 
+        let isError = false;
+        if (questions.length > 0) {
+            questions.forEach((question,index) => {
+                if (question.question.length < 1) {
+                    message.error('There are no question in '+ index);
+                    isError = true; // Set isError flag to true if an error is encountered
+                    return;
+                }
+                if (question.options.length < 1) {
+                    message.error('There are no options in '+ index);
+                    isError = true; // Set isError flag to true if an error is encountered
+                    return;
+                }
+            })
+        }
+
+        if (isError) {
+            return; // Exit the function if an error is encountered
+        }
+
         const title = values.title ? values.title : courseChaptres.title
+
+        const quiz = {
+            questions
+        }
 
         let chaptreDetails = {
             id: chapterId,
             title: title,
             isFree: values.isFree,
             lessons: lessons,
+            quiz
         }
 
         try {
@@ -313,45 +316,6 @@ const AddChapter = ({ role }) => {
 
                 < div className='grid mt' >
 
-                    <div className='card'>
-                        <h2 className='addcourse-subtitle'>Customize your chapter</h2>
-
-                        {
-                            courseChaptres?.title && (
-
-                                <Form
-                                    name="yourForm"
-                                    layout="inline"
-                                    onFinish={onFinish}
-                                    style={{ justifyContent: "start", gap: '5%' }}
-                                    initialValues={{
-                                        title: courseChaptres?.title,
-                                        isFree: courseChaptres?.isFree,
-                                    }}
-                                >
-                                    <p className='filed-title mt'>Chapter title</p>
-                                    <Form.Item
-                                        style={{ width: "100%", marginBottom: 10, marginTop: 10, marginRight: 0, marginLeft: 0 }}
-                                        name='title'
-                                    >
-                                        <Input placeholder="chapter title" />
-                                    </Form.Item>
-
-                                    <p className='filed-title mt'>Chapter is Free</p>
-                                    <Form.Item
-                                        name='isFree'
-                                        style={{ marginTop: 12, marginRight: 0, marginLeft: 0 }}
-                                    // valuePropName="checked"
-                                    >
-                                        <Switch />
-                                    </Form.Item>
-                                </Form>
-
-                            )
-                        }
-
-
-                    </div>
 
                     <div className='card'>
                         <h2 className='addcourse-subtitle'>Customize your lessons</h2>
@@ -385,12 +349,10 @@ const AddChapter = ({ role }) => {
                                 <div className="image-input">
                                     <input onChange={(e) => setVideo((prev) => e.target.files[0])} type="file" accept='video/*' name="video" id="video" />
                                     <video
-                                        className='videoChaptre'
+                                        className='lesson-video'
                                         controls
                                         ref={videoRef}
                                         src={videoSrc}
-                                        width={'100%'}
-                                        height={'280px'}
                                     ></video>
                                 </div>
                             </div>
@@ -404,6 +366,50 @@ const AddChapter = ({ role }) => {
 
                         </div>
                     </div>
+
+                    <div className='card'>
+                        <h2 className='addcourse-subtitle'>Customize your chapter</h2>
+
+                        {
+                            courseChaptres?.title && (
+
+                                <Form
+                                    name="yourForm"
+                                    layout="inline"
+                                    onFinish={onFinish}
+                                    style={{ justifyContent: "start", gap: '5%' }}
+                                    initialValues={{
+                                        title: courseChaptres?.title,
+                                        isFree: courseChaptres?.isFree,
+                                    }}
+                                >
+                                    <p className='filed-title mt'>Chapter title</p>
+                                    <Form.Item
+                                        style={{ width: "100%", marginBottom: 10, marginTop: 10, marginRight: 0, marginLeft: 0 }}
+                                        name='title'
+                                    >
+                                        <Input placeholder="chapter title" />
+                                    </Form.Item>
+
+                                    <p className='filed-title mt'>Chapter is Free</p>
+                                    <Form.Item
+                                        name='isFree'
+                                        style={{ marginTop: 12, marginRight: 0, marginLeft: 0 , marginBottom: 15 }}
+                                    // valuePropName="checked"
+                                    >
+                                        <Switch />
+                                    </Form.Item>
+                                </Form>
+
+                            )
+                        }
+
+                        <h2 className='addcourse-subtitle mt'>Customize your Quis</h2>
+                        <AddQuis questions={questions} setQuestions={setQuestions} />
+
+
+                    </div>
+
 
                 </div >
             </div>

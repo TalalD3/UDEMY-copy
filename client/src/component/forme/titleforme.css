@@ -284,14 +284,15 @@ li svg {
 }
 
 .addQuis-add-question {
-    margin-top: 20px;
+    margin-top: 0px;
     font-size: 16px;
     color: var(--title-color);
 }
 
 .addQuis-questions {
     display: flex;
-    gap: 20px;
+    justify-content: space-between;
+    gap: 10px;
     margin-bottom: 30px;
 }
 
@@ -300,7 +301,12 @@ li svg {
     flex-direction: column;
     gap: 10px;
     margin-bottom: 10px;
-    width: 400px;
+    width: 100%;
+}
+
+.addQuis-things{
+    width: 100%;
+    max-width: 400px;
 }
 
 .addQuis-question-input {
@@ -308,7 +314,6 @@ li svg {
     height: 30px;
     padding: 4px 11px;
     border-radius: 6px;
-    width: 100%;
 }
 
 .addQuis-point-input{
@@ -316,7 +321,7 @@ li svg {
     height: 30px;
     padding: 4px 1px 4px 9px;
     border-radius: 6px;
-    width: 65px;
+    width: 100%;
 }
 
 .addQuis-point-input:focus,.addQuis-question-input:focus,.addQuis-option-input:focus{
@@ -360,7 +365,7 @@ li svg {
     height: 30px;
     padding: 4px 11px;
     border-radius: 6px;
-    width: 300px;
+    width: 100%;
 }
 
 .addQuis-remove-option {
@@ -370,32 +375,41 @@ li svg {
 }
 
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
     .grid {
         grid-template-columns: 1fr;
         gap: 50px;
     }
-    .addQuis-question {
+    /* .addQuis-question {
         width: 300px;
     }
     .addQuis-option-input {
         width: 200px;
-    }
+    } */
 }
 
 /* For medium devices */
 @media screen and (max-width: 576px) {
-    .btn-container {
-        /* flex-direction: column-reverse; */
-        gap: 5px;
+    .addCourse-top{
+        flex-direction: column;
+        align-items: start;
+        margin-bottom: 30px;
     }
-    ..addQuis-questions{
+    .btn-container{
+        flex-direction: row-reverse;
+        gap: 15px;
+    }
+    .addQuis-questions{
         gap: 10px;
     }
     .addQuis-question {
         width: 100%;
     }
-    .addQuis-option-input {
+    /* .addQuis-option-input {
         width: 120px;
+    } */
+    .addQuis-things{
+        width: 100%;
+        max-width: 100%;
     }
 }

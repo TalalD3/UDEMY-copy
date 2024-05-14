@@ -17,7 +17,6 @@ const TitleForme = ({ course, what }) => {
     const { courseId } = useParams();
     const navigate = useNavigate();
     const [chapters, setChapters] = useState([]);
-    const [questions, setQuestions] = useState([]);
 
 
 
@@ -85,37 +84,16 @@ const TitleForme = ({ course, what }) => {
             // Get form values
             const values = await form.getFieldsValue();
 
-            if (questions.length > 0) {
-                questions.forEach((question,index) => {
-                    if (question.question.length < 1) {
-                        message.error('There are no question in '+ index);
-                        isError = true; // Set isError flag to true if an error is encountered
-                        return;
-                    }
-                    if (question.options.length < 1) {
-                        message.error('There are no options in '+ index);
-                        isError = true; // Set isError flag to true if an error is encountered
-                        return;
-                    }
-                })
-            }
-
-            if (isError) {
-                return; // Exit the function if an error is encountered
-            }
-
+            
             // Add the image URL to the form values
             // values.image = imageUrl ? imageUrl : course?.image;
             values.image = imageUrl ? imageUrl : values.image ? values.image : null;
 
             // values.title = values.title ? values.title : courseChaptres.title
 
-            const quiz = {
-                questions
-            }
 
             // Construct the course object
-            const course = { ...values, chapters, isPublish: true, quiz };
+            const course = { ...values, chapters, isPublish: true };
 
             // Submit the form  http://localhost:5000/api/addcourse
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcoursedetails/${courseId}`, course);
@@ -155,12 +133,9 @@ const TitleForme = ({ course, what }) => {
             values.image = imageUrl ? imageUrl : values.image ? values.image : null;
 
             // console.log(questions);
-            const quiz = {
-                questions
-            }
-
+            
             // Construct the course object
-            const course = { ...values, chapters, quiz };
+            const course = { ...values, chapters };
             // console.log(course);
 
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/addcoursedetails/${courseId}`, course);
@@ -208,14 +183,14 @@ const TitleForme = ({ course, what }) => {
     return (
         <section className="section1">
             <div className='container addCourse'>
-                <div className="flex">
+                <div className="flex addCourse-top">
                     <div>
                         <h1 className='addcourse-title'>Course setup</h1>
                         <p className='addcourse-paragraph'>complete all feilds</p>
                     </div>
                     <div className='btn-container'>
 
-                        <Button className='ml' type='text' onClick={showModal} >
+                        <Button type='text' onClick={showModal} >
                             Delete
                         </Button>
 
@@ -250,15 +225,15 @@ const TitleForme = ({ course, what }) => {
 
                     <div className='card'>
                         <h2 className='addcourse-subtitle'>Customize your chapters</h2>
-                        <AddChapters chapters={chapters} setChapters={setChapters} saveCourse={saveCourse} />
+                        <AddChapters chapters={chapters} setChapters={setChapters} saveCourse={saveCourse}/>
                         {/* <AddChapter courseChaptres={courseChaptres} setCourseChaptres={setCourseChaptres} /> */}
                     </div>
                 </div>
 
-                <div className='card mt'>
+                {/* <div className='card mt'>
                     <h2 className='addcourse-subtitle'>Customize your Quis</h2>
                     <AddQuis questions={questions} setQuestions={setQuestions} />
-                </div>
+                </div> */}
             </div>
         </section>
     );

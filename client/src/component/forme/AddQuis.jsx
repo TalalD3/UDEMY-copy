@@ -89,7 +89,7 @@ const AddQuis = ({questions, setQuestions}) => {
             {questions?.map((question, index) => (
                 <div key={index} className='addQuis-questions'>
                     <p>{index}</p>
-                    <div>
+                    <div className='addQuis-things'>
                         <div className="addQuis-question">
                             <input className='addQuis-question-input' name='question' placeholder='question ...' type="text" value={question.question} onChange={(e) => handleQuestionChange(e, index)} />
                             <input className='addQuis-question-input' name='hint' placeholder='hint eg.choose multiple answers' type="text" value={question.hint} onChange={(e) => handleQuestionChange(e, index)} />
