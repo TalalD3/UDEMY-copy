@@ -54,7 +54,8 @@ const AddChapter = ({ role }) => {
                 // console.log(data.chapter.title);
                 setCourseChaptre(data.chapter);
                 setLessons(data.chapter.lessons);
-                setQuestions(data.chapter.quiz.questions);
+                if(data.chapter.quiz?.questions)
+                    setQuestions(data.chapter.quiz?.questions);
             } catch (error) {
                 console.error('Error fetching chapter:', error);
                 // Handle error if needed

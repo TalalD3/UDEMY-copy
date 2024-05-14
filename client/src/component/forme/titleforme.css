@@ -291,7 +291,7 @@ li svg {
 
 .addQuis-questions {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     gap: 10px;
     margin-bottom: 30px;
 }

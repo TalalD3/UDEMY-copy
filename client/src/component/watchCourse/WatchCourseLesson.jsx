@@ -55,16 +55,28 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
 
 
     const nextLesson = () => {
-        if (activeLesson.lessonIndex < course.chapters[activeLesson.chapterIndex].lessons.length - 1) {
-            setActiveLesson({ ...activeLesson, lessonIndex: activeLesson.lessonIndex + 1 })
-        } else {
+        if (activeLesson.lessonIndex === -1) {
             if (activeLesson.chapterIndex < course.chapters.length - 1) {
                 setActiveLesson({ ...activeLesson, chapterIndex: activeLesson.chapterIndex + 1, lessonIndex: 0 })
             } else {
                 setActiveLesson({ chapterIndex: -1, lessonIndex: -1 })
-                message.success('congratulations, you are completed all course chapters')
             }
-        }
+        } else
+
+            if (activeLesson.lessonIndex < course.chapters[activeLesson.chapterIndex].lessons.length - 1) {
+                setActiveLesson({ ...activeLesson, lessonIndex: activeLesson.lessonIndex + 1 })
+            } else {
+                if (course.chapters[activeLesson.chapterIndex].quiz.questions.length > 0) {
+                    setActiveLesson({ ...activeLesson, lessonIndex: -1 })
+                } else {
+                    if (activeLesson.chapterIndex < course.chapters.length - 1) {
+                        setActiveLesson({ ...activeLesson, chapterIndex: activeLesson.chapterIndex + 1, lessonIndex: 0 })
+                    } else {
+                        setActiveLesson({ chapterIndex: -1, lessonIndex: -1 })
+                        message.success('congratulations, you are completed all course chapters')
+                    }
+                }
+            }
     }
 
     const handleCheckOptionChange = (e, questionIndex, optionIndex) => {
@@ -88,15 +100,19 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
             return newAnswers;
         });
     }
+    const handleResetOption = () => {
+        setShowCorrectAnswers(false);
+        setAnswers([]);
+    }
 
     const handleCheck = () => {
-        if (!course || !course.quiz) return;
-        const totalQuestions = course.quiz.questions.length;
+        if (!course.chapters[activeLesson?.chapterIndex] || !course.chapters[activeLesson?.chapterIndex].quiz) return;
+        const totalQuestions = course.chapters[activeLesson?.chapterIndex].quiz.questions.length;
         let newScore = 0; // Calculate score locally
         for (let i = 0; i < totalQuestions; i++) {
             const selectedOptionIndexes = answers[i];
             if (selectedOptionIndexes && selectedOptionIndexes.length > 0) {
-                const correctOptionIndexes = course.quiz.questions[i].options
+                const correctOptionIndexes = course.chapters[activeLesson?.chapterIndex].quiz.questions[i].options
                     .map((option, index) => option.isCorrect ? index : null)
                     .filter(index => index !== null);
                 const isAllCorrect = selectedOptionIndexes.every(index => correctOptionIndexes.includes(index));
@@ -123,6 +139,7 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
             return null;
         }
     };
+
 
     return (
         <div className='hoho'>
@@ -196,46 +213,6 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
                                 congratulations, you completed all course chapters
                             </p>
 
-                            {course?.quiz && <div className="quiz-div">
-                                <div className="flex">
-                                    <p >Answer the <span className='green' style={{ fontWeight: '600' }}>quiz questions</span> and get your <span style={{ color: 'blue', fontWeight: '600' }}>result</span></p>
-                                    <p className={`${(score === (course?.quiz?.questions.length)) ? 'quis-submit-btn' : (score < (course?.quiz?.questions.length) / 2) ? 'quis-score-faild' : 'quis-btn'}`}>Score {score}</p>
-                                </div>
-                                {course?.quiz?.questions.map((question, index) => (
-                                    <div key={index} className='addQuis-questions mt'>
-                                        <p>{index}</p>
-                                        <div>
-                                            <div className="addQuis-question">
-                                                <p>{question.question}</p>
-                                                <p>{question.hint}</p>
-                                            </div>
-                                            <div className='addQuis-options'>
-                                                {question.options?.map((option, optionIndex) => (
-                                                    <div
-                                                        key={optionIndex}
-                                                        className={`addQuis-option ${showCorrectAnswers && option.isCorrect ? 'correct-answer' : ''}`}
-                                                    >
-                                                        <input
-                                                            className='addQuis-option-checkbox'
-                                                            name={`option_${index}_${optionIndex}`}
-                                                            type="checkbox"
-                                                            checked={answers[index] && answers[index].includes(optionIndex)}
-                                                            onChange={(e) => handleCheckOptionChange(e, index, optionIndex)}
-                                                            disabled={showCorrectAnswers}
-                                                        />
-                                                        <p>{option.option}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                                <div className='flex'>
-                                    <button className='quis-submit-btn' onClick={handleCheck}>Submit</button>
-                                    <button className='quis-btn' onClick={handleShowAnswers}>Show Answers</button>
-                                </div>
-                            </div>}
-
                             <div className='comment-div'>
                                 <div className='comment-Up'>
                                     <div className="userInfo">
@@ -256,6 +233,64 @@ const WatchCourseLesson = ({ course, activeLesson, setActiveLesson, user, fullCo
                             </div>
 
                         </div>
+                    ) : (activeLesson?.lessonIndex === -1 && activeLesson?.chapterIndex >= 0) ? (
+
+                        <div style={{ marginTop: '30px' }}>
+
+                            <button className='next-lesson-btn quiz-next-btn' onClick={nextLesson}>Next Lesson</button>
+
+
+
+                            {course.chapters[activeLesson?.chapterIndex]?.quiz?.questions?.length
+                                ?
+                                <div className="quiz-div">
+                                    <div className="flex">
+                                        <p >Answer the <span className='green' style={{ fontWeight: '600' }}>quiz questions</span> and get your <span style={{ color: 'blue', fontWeight: '600' }}>result</span></p>
+                                        <p className={`${(score === (course.chapters[activeLesson?.chapterIndex]?.quiz?.questions.length)) ? 'quis-submit-btn' : (score < (course.chapters[activeLesson?.chapterIndex]?.quiz?.questions.length) / 2) ? 'quis-score-faild' : 'quis-btn'}`}>Score {score}</p>
+                                    </div>
+                                    {course.chapters[activeLesson?.chapterIndex]?.quiz?.questions.map((question, index) => (
+                                        <div key={index} className='addQuis-questions mt'>
+                                            <p>{index}</p>
+                                            <div>
+                                                <div className="addQuis-question">
+                                                    <p>{question.question}</p>
+                                                    <p>{question.hint}</p>
+                                                </div>
+                                                <div className='addQuis-options'>
+                                                    {question.options?.map((option, optionIndex) => (
+                                                        <div
+                                                            key={optionIndex}
+                                                            className={`addQuis-option ${showCorrectAnswers && option.isCorrect ? 'correct-answer' : ''}`}
+                                                        >
+                                                            <input
+                                                                className='addQuis-option-checkbox'
+                                                                name={`option_${index}_${optionIndex}`}
+                                                                type="checkbox"
+                                                                checked={answers[index] && answers[index].includes(optionIndex)}
+                                                                onChange={(e) => handleCheckOptionChange(e, index, optionIndex)}
+                                                                disabled={showCorrectAnswers}
+                                                            />
+                                                            <p>{option.option}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    <div className='flex'>
+                                        <button className='quis-submit-btn' onClick={handleCheck}>Submit</button>
+                                        <div className="flex">
+                                            <button className='quis-btn ' onClick={handleResetOption}>reset</button>
+                                            <button className='quis-btn ml' onClick={handleShowAnswers}>Show Answers</button>
+                                        </div>
+                                    </div>
+                                </div> :
+                                <p>no quiz</p>
+                            }
+
+                        </div>
+
+
                     ) : (
                         <div className='watch-koko'>
                             <p>

@@ -31,9 +31,9 @@ const TitleForme = ({ course, what }) => {
                     setChapters(data.course.chapters);
                 }
                 
-                if (data.course && data.course.quiz) {
-                    setQuestions(data.course.quiz.questions);
-                }
+                // if (data.course && data.course.quiz) {
+                //     setQuestions(data.course.quiz.questions);
+                // }
             } catch (error) {
                 console.error('Error fetching course:', error);
                 // Handle error if needed

@@ -372,7 +372,7 @@ app.post('/api/addcourse', fetchUser, async (req, res) => {
 app.post('/api/addcoursedetails/:courseId', async (req, res) => {
   const courseId = req.params.courseId;
   try {
-    
+
     const course = await Course.findOneAndUpdate(
       { _id: courseId },
       {
@@ -479,7 +479,7 @@ app.post('/api/addchapterdetails', async (req, res) => {
 
     const chapter = await Chapter.findOneAndUpdate(
       { _id: req.body.id }, // Search condition
-      { title: req.body.title, isFree: req.body.isFree, lessons: req.body.lessons , quiz: quizId }, // Document to create or replace
+      { title: req.body.title, isFree: req.body.isFree, lessons: req.body.lessons, quiz: quizId }, // Document to create or replace
       { upsert: true, new: true });
 
     // console.log(chapter);
@@ -597,7 +597,14 @@ app.get('/api/orders-by-course/:courseId', async (req, res) => {
 app.get('/api/courses/:courseId', async (req, res) => {
   try {
     // Fetch course by courseId from the database and populate the chapters
-    const course = await Course.findById(req.params.courseId).populate('chapters');
+    // const course = await Course.findById(req.params.courseId).populate('chapters');
+    const course = await Course.findById(req.params.courseId)
+      .populate({
+        path: 'chapters',
+        populate: {
+          path: 'quiz',
+        },
+      });
 
     if (!course) {
       return res.status(404).json({ success: false, error: 'Course not found' });
@@ -778,14 +785,14 @@ app.get('/api/getcomments/:courseId', async (req, res) => {
 });
 
 // endpoint for get all comments 
-app.get('/api/getAllComments', async (req,res)=>{
+app.get('/api/getAllComments', async (req, res) => {
   try {
     const comments = await Comment.find({}).populate('user');
     res.json({ success: true, comments });
   } catch (error) {
     console.log(error);
   }
-}) 
+})
 
 // endpoint for get the comments by courseID and userId
 app.get('/api/getUserComment/:courseId/:userId', async (req, res) => {

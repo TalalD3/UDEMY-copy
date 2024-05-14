@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 const WatchCourseSidebar = ({ course, activeLesson, setActiveLesson, progress }) => {
     const [openChapter, setOpenChapter] = useState(null)
     const [openMenu, setOpenMenu] = useState(true);
+    const quizIndex = 9999;
 
     return (
         <div>
@@ -44,8 +45,16 @@ const WatchCourseSidebar = ({ course, activeLesson, setActiveLesson, progress })
                                                         })
                                                     }
                                                     <p >{lesson.title}</p>
+
                                                 </div>
                                             ))
+                                        }
+                                        { 
+                                            chapter.quiz?.questions?.length > 0 &&
+                                            <div className={`chapter-lesson ${(activeLesson?.lessonIndex === -1 && activeLesson?.chapterIndex === chapterIndex) && 'chapter-playLesson'}`} onClick={() => setActiveLesson({ chapterIndex, lessonIndex:-1 })}>
+                                                <i className='bx bx-medal check-icon'></i>
+                                                <p >quiz</p>
+                                            </div>
                                         }
                                     </div>}
                             </div>
