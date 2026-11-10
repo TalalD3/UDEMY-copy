@@ -1,41 +1,36 @@
 [build]
-  base = "client"
-  command = "npm run build"
-  publish = "dist"
+  command = "cd client && npm install && npm run build && cd ../netlify/functions && npm install"
+  publish = "client/dist"
 
 [functions]
-  directory = "../netlify/functions"
+  directory = "netlify/functions"
   node_bundler = "esbuild"
-  included_files = []
+  external_node_modules = ["bcrypt"]
 
-# Route all /api/* requests to the serverless function
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api/api/:splat"
+  to = "/.netlify/functions/api/:splat"
   status = 200
   force = true
 
-# Also handle legacy routes used by cart (addtocart / removefromcart)
+[[redirects]]
+  from = "/upload/*"
+  to = "/.netlify/functions/api/upload/:splat"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/addtocart"
-  to = "/.netlify/functions/api/api/addtocart"
+  to = "/.netlify/functions/api/addtocart"
   status = 200
   force = true
 
 [[redirects]]
   from = "/removefromcart"
-  to = "/.netlify/functions/api/api/removefromcart"
+  to = "/.netlify/functions/api/removefromcart"
   status = 200
   force = true
 
-# Also handle the upload route
-[[redirects]]
-  from = "/upload/*"
-  to = "/.netlify/functions/api/api/upload/:splat"
-  status = 200
-  force = true
-
-# SPA fallback – must be LAST
 [[redirects]]
   from = "/*"
   to = "/index.html"

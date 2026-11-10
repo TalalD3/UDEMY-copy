@@ -1,2 +1,5 @@
-/*    /index.html   200
-
+/api/*         /.netlify/functions/api/:splat        200!
+/upload/*      /.netlify/functions/api/upload/:splat 200!
+/addtocart     /.netlify/functions/api/addtocart     200!
+/removefromcart /.netlify/functions/api/removefromcart 200!
+/*             /index.html                           200

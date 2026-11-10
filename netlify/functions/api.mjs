@@ -7,26 +7,27 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import serverless from "serverless-http";
 
-// ─── Express App ────────────────────────────────────────────────
+// ─── Express App & Router ────────────────────────────────────────
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+const router = express.Router();
 const saltRounds = 10;
 
-// multer – use /tmp for serverless (no persistent disk)
+// multer – use /tmp for serverless environments
 const upload = multer({ dest: "/tmp/uploads/" });
 
-// ─── MongoDB Connection (cached across warm invocations) ────────
+// ─── MongoDB Connection (cached across warm lambda invocations) ──
 let isConnected = false;
 const connectDB = async () => {
-  if (isConnected) return;
+  if (isConnected && mongoose.connection.readyState === 1) return;
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI);
     isConnected = true;
     console.log(`MongoDB connected: ${conn.connection.host}`);
   } catch (error) {
-    console.log(error);
+    console.error("MongoDB connection error:", error);
   }
 };
 
@@ -101,7 +102,7 @@ const CommentSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
-// Use existing models if they exist (avoids "Cannot overwrite model" in warm lambdas)
+// Guard model recompilation in warm serverless lambdas
 const User = mongoose.models.User || mongoose.model("User", UserSchema);
 const Chapter = mongoose.models.Chapter || mongoose.model("Chapter", ChapterSchema);
 const Course = mongoose.models.Course || mongoose.model("Course", CourseSchema);
@@ -132,51 +133,63 @@ const fetchUser = async (req, res, next) => {
   }
 };
 
-// ─── Middleware: connect to DB before every request ─────────────
+// ─── Ensure DB Connection Middleware ───────────────────────────
 app.use(async (req, res, next) => {
   await connectDB();
   next();
 });
 
-// ─── Routes ─────────────────────────────────────────────────────
+// ─── API Routes (Defined on Router) ─────────────────────────────
 
-app.get("/api/", (req, res) => {
-  res.json("hello ");
+router.get("/", (req, res) => {
+  res.json({ message: "My-Edu API is running" });
 });
 
-// Getting all courses
-app.get("/api/allcourses", async (req, res) => {
-  let courses = await Course.find({}).populate("creator");
-  res.send(courses);
+// All courses
+router.get("/allcourses", async (req, res) => {
+  try {
+    const courses = await Course.find({}).populate("creator");
+    res.send(courses);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Getting published courses
-app.get("/api/publishedcourses", async (req, res) => {
-  let courses = await Course.find({ isPublish: true }).populate("creator");
-  res.send(courses);
+// Published courses
+router.get("/publishedcourses", async (req, res) => {
+  try {
+    const courses = await Course.find({ isPublish: true }).populate("creator");
+    res.send(courses);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Enroll in a course
-app.post("/api/enroll-course", fetchUser, async (req, res) => {
+// Enroll in course
+router.post("/enroll-course", fetchUser, async (req, res) => {
   try {
     const { courseId } = req.body;
     const userId = req.user.id;
     const user = await User.findById(userId);
     const course = await Course.findById(courseId);
+
     if (!user) return res.status(404).json({ error: "User not found" });
     if (!course) return res.status(404).json({ error: "Course not found" });
+
     user.coursesEnrolled.push(courseId);
     await user.save();
+
     const order = new Order({ user: userId, course: courseId });
     await order.save();
+
     res.status(200).json({ message: "Enrolled in course successfully" });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Add Course
-app.post("/api/addcourse", fetchUser, async (req, res) => {
+// Add course
+router.post("/addcourse", fetchUser, async (req, res) => {
   if (!req.user.id) return res.status(400).json({ success: false, errors: "Error: User ID not provided" });
   try {
     const course = await Course.create({ creator: req.user.id, title: req.body.title });
@@ -189,11 +202,20 @@ app.post("/api/addcourse", fetchUser, async (req, res) => {
 });
 
 // Add course details
-app.post("/api/addcoursedetails/:courseId", async (req, res) => {
+router.post("/addcoursedetails/:courseId", async (req, res) => {
   try {
     const course = await Course.findOneAndUpdate(
       { _id: req.params.courseId },
-      { title: req.body.title, category: req.body.category, description: req.body.description, image: req.body.image, price: req.body.price, isPublish: req.body.isPublish, small_description: req.body.small_description, chapters: req.body.chapters },
+      {
+        title: req.body.title,
+        category: req.body.category,
+        description: req.body.description,
+        image: req.body.image,
+        price: req.body.price,
+        isPublish: req.body.isPublish,
+        small_description: req.body.small_description,
+        chapters: req.body.chapters,
+      },
       { upsert: true, new: true }
     );
     if (course) res.status(200).json({ success: true, course });
@@ -205,9 +227,13 @@ app.post("/api/addcoursedetails/:courseId", async (req, res) => {
 });
 
 // Change publish status
-app.put("/api/change-publish/:courseId", async (req, res) => {
+router.put("/change-publish/:courseId", async (req, res) => {
   try {
-    const course = await Course.findOneAndUpdate({ _id: req.params.courseId }, { isPublish: req.body.isPublish }, { upsert: true, new: true });
+    const course = await Course.findOneAndUpdate(
+      { _id: req.params.courseId },
+      { isPublish: req.body.isPublish },
+      { upsert: true, new: true }
+    );
     if (course) res.status(200).json({ success: true, course });
     else res.status(400).json({ success: false, errors: "Course not found" });
   } catch (error) {
@@ -216,11 +242,15 @@ app.put("/api/change-publish/:courseId", async (req, res) => {
 });
 
 // Add chapter
-app.post("/api/addchapter", async (req, res) => {
+router.post("/addchapter", async (req, res) => {
   try {
     const chapter = await Chapter.create({ title: req.body.title });
     if (chapter) {
-      const course = await Course.findByIdAndUpdate(req.body.courseId, { $push: { chapters: chapter._id } }, { new: true }).populate("chapters");
+      const course = await Course.findByIdAndUpdate(
+        req.body.courseId,
+        { $push: { chapters: chapter._id } },
+        { new: true }
+      ).populate("chapters");
       if (course) res.json({ success: true, course });
       else res.status(400).send({ success: false, errors: "Course not found" });
     } else {
@@ -232,20 +262,31 @@ app.post("/api/addchapter", async (req, res) => {
 });
 
 // Add chapter details
-app.post("/api/addchapterdetails", async (req, res) => {
+router.post("/addchapterdetails", async (req, res) => {
   try {
     let quizId;
     if (req.body.quiz) {
       const chapter = await Chapter.findById(req.body.id);
       if (chapter && chapter.quiz) {
-        const quiz = await Quiz.findByIdAndUpdate(chapter.quiz, { time: req.body.quiz.time, questions: req.body.quiz.questions }, { upsert: true, new: true });
+        const quiz = await Quiz.findByIdAndUpdate(
+          chapter.quiz,
+          { time: req.body.quiz.time, questions: req.body.quiz.questions },
+          { upsert: true, new: true }
+        );
         quizId = quiz._id;
       } else {
-        const quiz = await Quiz.create({ time: req.body.quiz.time, questions: req.body.quiz.questions });
+        const quiz = await Quiz.create({
+          time: req.body.quiz.time,
+          questions: req.body.quiz.questions,
+        });
         quizId = quiz._id;
       }
     }
-    const chapter = await Chapter.findOneAndUpdate({ _id: req.body.id }, { title: req.body.title, isFree: req.body.isFree, lessons: req.body.lessons, quiz: quizId }, { upsert: true, new: true });
+    const chapter = await Chapter.findOneAndUpdate(
+      { _id: req.body.id },
+      { title: req.body.title, isFree: req.body.isFree, lessons: req.body.lessons, quiz: quizId },
+      { upsert: true, new: true }
+    );
     if (chapter) res.status(200).json({ success: true, chapter });
     else res.status(400).send({ success: false, errors: "Chapter not created" });
   } catch (error) {
@@ -254,14 +295,16 @@ app.post("/api/addchapterdetails", async (req, res) => {
 });
 
 // Delete Course
-app.delete("/api/courses/:courseId", async (req, res) => {
+router.delete("/courses/:courseId", async (req, res) => {
   try {
     const { courseId } = req.params;
     const deletedCourse = await Course.findOneAndDelete({ _id: courseId });
     if (!deletedCourse) return res.status(404).json({ success: false, message: "Course not found" });
+
     await Chapter.deleteMany({ _id: { $in: deletedCourse.chapters } });
     await User.updateOne({ _id: deletedCourse.creator }, { $pull: { coursesCreated: courseId } });
     await User.updateMany({ coursesEnrolled: courseId }, { $pull: { coursesEnrolled: courseId } });
+
     res.status(200).json({ success: true, message: "Course deleted successfully" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Error deleting course" });
@@ -269,11 +312,12 @@ app.delete("/api/courses/:courseId", async (req, res) => {
 });
 
 // Delete Chapter
-app.delete("/api/courses/:courseId/chapters/:chapterId", async (req, res) => {
+router.delete("/courses/:courseId/chapters/:chapterId", async (req, res) => {
   try {
     const { courseId, chapterId } = req.params;
     const deletedChapter = await Chapter.findOneAndDelete({ _id: chapterId });
     if (!deletedChapter) return res.status(404).json({ success: false, message: "Chapter not found" });
+
     await Course.findByIdAndUpdate(courseId, { $pull: { chapters: chapterId } });
     res.status(200).json({ success: true, message: "Chapter deleted successfully" });
   } catch (error) {
@@ -282,7 +326,7 @@ app.delete("/api/courses/:courseId/chapters/:chapterId", async (req, res) => {
 });
 
 // Get chapters by course ID
-app.get("/api/chapters/:courseId", async (req, res) => {
+router.get("/chapters/:courseId", async (req, res) => {
   try {
     const chapters = await Chapter.find({ courseId: req.params.courseId });
     res.json({ success: true, chapters });
@@ -291,15 +335,15 @@ app.get("/api/chapters/:courseId", async (req, res) => {
   }
 });
 
-// Get course by ID (POST)
-app.post("/api/getCoursebyId", async (req, res) => {
+// Get course by ID
+router.post("/getCoursebyId", async (req, res) => {
   const course = await Course.findById(req.body.courseId);
   if (course) res.status(200).send({ success: true, course });
   else res.status(400).send({ success: false, errors: "not found course" });
 });
 
 // Get total orders by courseId
-app.get("/api/orders-by-course/:courseId", async (req, res) => {
+router.get("/orders-by-course/:courseId", async (req, res) => {
   try {
     const totalOrders = await Order.countDocuments({ course: req.params.courseId });
     res.json({ totalOrders });
@@ -308,10 +352,13 @@ app.get("/api/orders-by-course/:courseId", async (req, res) => {
   }
 });
 
-// Get course by courseID with chapters
-app.get("/api/courses/:courseId", async (req, res) => {
+// Get course by courseID with populated chapters
+router.get("/courses/:courseId", async (req, res) => {
   try {
-    const course = await Course.findById(req.params.courseId).populate({ path: "chapters", populate: { path: "quiz" } });
+    const course = await Course.findById(req.params.courseId).populate({
+      path: "chapters",
+      populate: { path: "quiz" },
+    });
     if (!course) return res.status(404).json({ success: false, error: "Course not found" });
     res.json({ success: true, course });
   } catch (error) {
@@ -320,7 +367,7 @@ app.get("/api/courses/:courseId", async (req, res) => {
 });
 
 // Get chapter by ID
-app.get("/api/chapter/:chapterId", async (req, res) => {
+router.get("/chapter/:chapterId", async (req, res) => {
   try {
     const chapter = await Chapter.findById(req.params.chapterId).populate("quiz");
     if (!chapter) return res.status(404).json({ success: false, error: "Chapter not found" });
@@ -331,18 +378,18 @@ app.get("/api/chapter/:chapterId", async (req, res) => {
 });
 
 // Get my course by ID
-app.post("/api/getMyCourseById", fetchUser, async (req, res) => {
+router.post("/getMyCourseById", fetchUser, async (req, res) => {
   const course = await Course.findById(req.body.courseId);
   if (course) {
     if (course.creator == req.user.id) res.status(200).send({ success: true, course });
-    else res.status(400).send({ success: false, errors: "wtf bro you are not the creator" });
+    else res.status(400).send({ success: false, errors: "Unauthorized: not creator" });
   } else {
     res.status(400).send({ success: false, errors: "not found course" });
   }
 });
 
 // Add comment
-app.post("/api/addComment", async (req, res) => {
+router.post("/addComment", async (req, res) => {
   try {
     const course = await Course.findById(req.body.course);
     if (!course) return res.status(404).json({ success: false, error: "Course not found" });
@@ -356,15 +403,28 @@ app.post("/api/addComment", async (req, res) => {
     );
 
     if (!comment) {
-      const newComment = await Comment.create({ comment: req.body.comment, course: req.body.course, rating: req.body.rating, user: req.body.user });
-      await Course.findByIdAndUpdate(req.body.course, { $push: { comments: newComment._id } }, { new: true });
+      const newComment = await Comment.create({
+        comment: req.body.comment,
+        course: req.body.course,
+        rating: req.body.rating,
+        user: req.body.user,
+      });
+      await Course.findByIdAndUpdate(
+        req.body.course,
+        { $push: { comments: newComment._id } },
+        { new: true }
+      );
     }
 
     const updatedCourse = await Course.findById(req.body.course).populate("comments");
     const ratings = updatedCourse.comments.map((c) => c.rating);
     const averageRating = ratings.reduce((acc, r) => acc + r, 0) / ratings.length;
     const roundedRating = Math.round(averageRating * 2) / 2;
-    const addRatingCourse = await Course.findByIdAndUpdate(req.body.course, { rating: roundedRating }, { new: true });
+    const addRatingCourse = await Course.findByIdAndUpdate(
+      req.body.course,
+      { rating: roundedRating },
+      { new: true }
+    );
     res.json({ success: true, course: addRatingCourse });
   } catch (error) {
     res.status(500).json({ success: false, error: "Error: " + error });
@@ -372,7 +432,7 @@ app.post("/api/addComment", async (req, res) => {
 });
 
 // Get comments by courseID
-app.get("/api/getcomments/:courseId", async (req, res) => {
+router.get("/getcomments/:courseId", async (req, res) => {
   try {
     const comments = await Comment.find({ course: req.params.courseId }).populate("user");
     if (!comments) return res.status(404).json({ success: false, error: "comments not found" });
@@ -383,19 +443,22 @@ app.get("/api/getcomments/:courseId", async (req, res) => {
 });
 
 // Get all comments
-app.get("/api/getAllComments", async (req, res) => {
+router.get("/getAllComments", async (req, res) => {
   try {
     const comments = await Comment.find({}).populate("user");
     res.json({ success: true, comments });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Get user comment by courseID and userId
-app.get("/api/getUserComment/:courseId/:userId", async (req, res) => {
+// Get user comment
+router.get("/getUserComment/:courseId/:userId", async (req, res) => {
   try {
-    const comments = await Comment.find({ course: req.params.courseId, user: req.params.userId }).populate("user");
+    const comments = await Comment.find({
+      course: req.params.courseId,
+      user: req.params.userId,
+    }).populate("user");
     if (!comments) return res.status(404).json({ success: false, error: "comments not found" });
     res.json({ success: true, comments });
   } catch (error) {
@@ -403,8 +466,8 @@ app.get("/api/getUserComment/:courseId/:userId", async (req, res) => {
   }
 });
 
-// Update progress
-app.put("/api/progress/user/:userId/course/:courseId/chapters/:chapterId/lessons/:lessonId", async (req, res) => {
+// Progress update
+router.put("/progress/user/:userId/course/:courseId/chapters/:chapterId/lessons/:lessonId", async (req, res) => {
   try {
     const { userId, courseId, chapterId, lessonId } = req.params;
     let progress = await Progress.findOne({ user: userId, course: courseId });
@@ -441,11 +504,11 @@ app.put("/api/progress/user/:userId/course/:courseId/chapters/:chapterId/lessons
 });
 
 // Get progress
-app.get("/api/getprogress/user/:userId/course/:courseId", async (req, res) => {
+router.get("/getprogress/user/:userId/course/:courseId", async (req, res) => {
   try {
     const { userId, courseId } = req.params;
     let progress = await Progress.findOne({ user: userId, course: courseId });
-    if (!progress) return res.json({ success: false, message: "Progress with those course Id and user id not found" });
+    if (!progress) return res.json({ success: false, message: "Progress not found" });
     return res.json({ success: true, progress });
   } catch (error) {
     return res.status(500).json({ success: false, error: "Error getting progress" });
@@ -453,12 +516,18 @@ app.get("/api/getprogress/user/:userId/course/:courseId", async (req, res) => {
 });
 
 // Signup
-app.post("/api/signup", async (req, res) => {
-  let check = await User.findOne({ email: req.body.email });
-  if (check) return res.json({ success: false, errors: "existing user found for same email address" });
+router.post("/signup", async (req, res) => {
   try {
+    const check = await User.findOne({ email: req.body.email });
+    if (check) return res.json({ success: false, errors: "existing user found for same email address" });
+
     const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
-    const user = await User.create({ username: req.body.username, email: req.body.email, password: hashedPassword });
+    const user = await User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: hashedPassword,
+    });
+
     const data = { user: { id: user.id } };
     const token = jwt.sign(data, process.env.JWT_SECRET || "secret_ecom");
     res.json({ success: true, token });
@@ -468,35 +537,41 @@ app.post("/api/signup", async (req, res) => {
 });
 
 // Login
-app.post("/api/login", async (req, res) => {
-  let user = await User.findOne({ email: req.body.email });
-  if (user) {
-    const passCompare = bcrypt.compareSync(req.body.password, user.password);
-    if (passCompare) {
-      const data = { user: { id: user.id } };
-      const token = jwt.sign(data, process.env.JWT_SECRET || "secret_ecom");
-      res.json({ success: true, token });
-    } else {
-      res.json({ success: false, errors: "Wrong Password" });
+router.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      const passCompare = bcrypt.compareSync(req.body.password, user.password);
+      if (passCompare) {
+        const data = { user: { id: user.id } };
+        const token = jwt.sign(data, process.env.JWT_SECRET || "secret_ecom");
+        return res.json({ success: true, token });
+      }
+      return res.json({ success: false, errors: "Wrong Password" });
     }
-  } else {
-    res.json({ success: false, errors: "Wrong Email Id" });
+    return res.json({ success: false, errors: "Wrong Email Id" });
+  } catch (error) {
+    res.status(500).json({ success: false, errors: error.message });
   }
 });
 
-// Update user profile
-app.post("/api/user/update", async (req, res) => {
+// User profile update
+router.post("/user/update", async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.body.id, { username: req.body.username, bio: req.body.bio, picture: req.body.picture }, { new: true });
+    const user = await User.findByIdAndUpdate(
+      req.body.id,
+      { username: req.body.username, bio: req.body.bio, picture: req.body.picture },
+      { new: true }
+    );
     if (!user) return res.status(404).json({ success: false, error: "User not found" });
     res.status(200).json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 });
 
 // Get user by ID
-app.get("/api/users/:userId", async (req, res) => {
+router.get("/users/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ success: false, error: "User not found" });
@@ -507,25 +582,29 @@ app.get("/api/users/:userId", async (req, res) => {
 });
 
 // Get all users
-app.get("/api/users", async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
     const users = await User.find({});
     if (!users) return res.status(404).json({ success: false, error: "Users not found" });
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ success: false, error: "Error fetching user" });
+    res.status(500).json({ success: false, error: "Error fetching users" });
   }
 });
 
 // Get user data
-app.post("/api/getuserdata", fetchUser, async (req, res) => {
-  let user = await User.findById(req.user.id).populate("coursesCreated").populate("coursesEnrolled");
-  if (user) res.status(200).send({ success: true, user });
-  else res.send({ success: false });
+router.post("/getuserdata", fetchUser, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("coursesCreated").populate("coursesEnrolled");
+    if (user) res.status(200).send({ success: true, user });
+    else res.send({ success: false });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
-// Count orders
-app.get("/api/countorders", async (req, res) => {
+// Analytics & Counts
+router.get("/countorders", async (req, res) => {
   try {
     const totalOrders = await Order.countDocuments();
     res.json({ totalOrders });
@@ -534,8 +613,7 @@ app.get("/api/countorders", async (req, res) => {
   }
 });
 
-// Count users
-app.get("/api/countusers", async (req, res) => {
+router.get("/countusers", async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     res.json({ totalUsers });
@@ -544,8 +622,7 @@ app.get("/api/countusers", async (req, res) => {
   }
 });
 
-// Count courses
-app.get("/api/countcourses", async (req, res) => {
+router.get("/countcourses", async (req, res) => {
   try {
     const totalCourses = await Course.countDocuments();
     res.json({ totalCourses });
@@ -554,60 +631,64 @@ app.get("/api/countcourses", async (req, res) => {
   }
 });
 
-// Count teachers
-app.get("/api/count-teachers", async (req, res) => {
+router.get("/count-teachers", async (req, res) => {
   try {
-    const teachersCount = await User.aggregate([{ $match: { role: "teacher" } }, { $group: { _id: null, totalTeachers: { $sum: 1 } } }]);
-    const count = teachersCount.length > 0 ? teachersCount[0].totalTeachers : 0;
-    res.json({ totalTeachers: count });
+    const teachersCount = await User.aggregate([
+      { $match: { role: "teacher" } },
+      { $group: { _id: null, totalTeachers: { $sum: 1 } } },
+    ]);
+    res.json({ totalTeachers: teachersCount.length > 0 ? teachersCount[0].totalTeachers : 0 });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Count admins
-app.get("/api/count-admins", async (req, res) => {
+router.get("/count-admins", async (req, res) => {
   try {
-    const adminCount = await User.aggregate([{ $match: { role: "admin" } }, { $group: { _id: null, totalAdmins: { $sum: 1 } } }]);
-    const count = adminCount.length > 0 ? adminCount[0].totalAdmins : 0;
-    res.json({ totalAdmins: count });
+    const adminCount = await User.aggregate([
+      { $match: { role: "admin" } },
+      { $group: { _id: null, totalAdmins: { $sum: 1 } } },
+    ]);
+    res.json({ totalAdmins: adminCount.length > 0 ? adminCount[0].totalAdmins : 0 });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Users per month
-app.get("/api/countusers-per-month", async (req, res) => {
+router.get("/countusers-per-month", async (req, res) => {
   try {
-    const usersPerMonth = await User.aggregate([{ $group: { _id: { month: { $month: "$date" }, year: { $year: "$date" } }, totalUsers: { $sum: 1 } } }]);
+    const usersPerMonth = await User.aggregate([
+      { $group: { _id: { month: { $month: "$date" }, year: { $year: "$date" } }, totalUsers: { $sum: 1 } } },
+    ]);
     res.json(usersPerMonth);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Courses per month
-app.get("/api/countcourses-per-month", async (req, res) => {
+router.get("/countcourses-per-month", async (req, res) => {
   try {
-    const coursesPerMonth = await Course.aggregate([{ $group: { _id: { month: { $month: "$date" }, year: { $year: "$date" } }, totalCourses: { $sum: 1 } } }]);
+    const coursesPerMonth = await Course.aggregate([
+      { $group: { _id: { month: { $month: "$date" }, year: { $year: "$date" } }, totalCourses: { $sum: 1 } } },
+    ]);
     res.json(coursesPerMonth);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Orders per month
-app.get("/api/countorders-per-month", async (req, res) => {
+router.get("/countorders-per-month", async (req, res) => {
   try {
-    const ordersPerMonth = await Order.aggregate([{ $group: { _id: { month: { $month: "$date" }, year: { $year: "$date" } }, totalOrders: { $sum: 1 } } }]);
+    const ordersPerMonth = await Order.aggregate([
+      { $group: { _id: { month: { $month: "$date" }, year: { $year: "$date" } }, totalOrders: { $sum: 1 } } },
+    ]);
     res.json(ordersPerMonth);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Orders per category
-app.get("/api/orders-per-category", async (req, res) => {
+router.get("/orders-per-category", async (req, res) => {
   try {
     const ordersPerCategory = await Order.aggregate([
       { $lookup: { from: "courses", localField: "course", foreignField: "_id", as: "courseInfo" } },
@@ -621,8 +702,7 @@ app.get("/api/orders-per-category", async (req, res) => {
   }
 });
 
-// Orders per course
-app.get("/api/orders-per-course", async (req, res) => {
+router.get("/orders-per-course", async (req, res) => {
   try {
     const ordersPerCourse = await Order.aggregate([
       { $group: { _id: "$course", totalOrders: { $sum: 1 } } },
@@ -636,29 +716,28 @@ app.get("/api/orders-per-course", async (req, res) => {
   }
 });
 
-// Total courses per category
-app.get("/api/total-courses-per-category", async (req, res) => {
+router.get("/total-courses-per-category", async (req, res) => {
   try {
-    const totalCoursesPerCategory = await Course.aggregate([{ $group: { _id: "$category", totalCourses: { $sum: 1 } } }]);
+    const totalCoursesPerCategory = await Course.aggregate([
+      { $group: { _id: "$category", totalCourses: { $sum: 1 } } },
+    ]);
     res.json(totalCoursesPerCategory);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Get role
-app.post("/api/getrole", fetchUser, async (req, res) => {
+router.post("/getrole", fetchUser, async (req, res) => {
   try {
-    let user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
     if (user) res.status(200).send({ success: true, role: user.role });
     else res.send({ success: false, role: "user" });
   } catch (error) {
-    console.log("Error fetching role:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Change role
-app.put("/api/change-role/:userId", async (req, res) => {
+router.put("/change-role/:userId", async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.userId, { role: req.body.newRole }, { new: true });
     if (!updatedUser) return res.status(404).json({ success: false, message: "User not found" });
@@ -668,8 +747,7 @@ app.put("/api/change-role/:userId", async (req, res) => {
   }
 });
 
-// Check if user enrolled in course
-app.post("/api/userEnrollCourse/:courseId", fetchUser, async (req, res) => {
+router.post("/userEnrollCourse/:courseId", fetchUser, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.user.id, coursesEnrolled: { $in: [req.params.courseId] } });
     if (user) res.status(200).send({ success: true, user });
@@ -679,38 +757,48 @@ app.post("/api/userEnrollCourse/:courseId", fetchUser, async (req, res) => {
   }
 });
 
-// Set teacher
-app.post("/api/setTeacher", fetchUser, async (req, res) => {
-  await User.findByIdAndUpdate(req.user.id, { role: "teacher" });
-  res.send("you are now teacher, post courses for free");
+router.post("/setTeacher", fetchUser, async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { role: "teacher" });
+    res.send("you are now teacher, post courses for free");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Set admin
-app.post("/api/setAdmin", fetchUser, async (req, res) => {
-  await User.findByIdAndUpdate(req.user.id, { role: "admin" });
-  res.send("you are now admin");
+router.post("/setAdmin", fetchUser, async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { role: "admin" });
+    res.send("you are now admin");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Upload video/image
-app.post("/api/upload/video", upload.single("logo"), async (req, res) => {
+// Upload video / image
+router.post("/upload/video", upload.single("logo"), async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path, { folder: "images" });
     res.json(result);
   } catch (error) {
-    console.error("Error uploading image to Cloudinary:", error);
     res.status(500).json({ error: "Error uploading image to Cloudinary" });
   }
 });
 
-// Legacy routes without /api prefix (used by cart in ShopContext)
-app.post("/api/addtocart", (req, res) => {
+// Cart endpoints
+router.post("/addtocart", (req, res) => {
   res.json({ success: true });
 });
 
-app.post("/api/removefromcart", (req, res) => {
+router.post("/removefromcart", (req, res) => {
   res.json({ success: true });
 });
 
-// ─── Export as Netlify Function ─────────────────────────────────
+// ─── Multi-Mount for Netlify Rewrites ───────────────────────────
+// Mount the router on all possible paths so requests never 404:
+app.use("/api", router);
+app.use("/.netlify/functions/api", router);
+app.use("/", router);
+
+// ─── Export Serverless Handler ──────────────────────────────────
 export const handler = serverless(app);
-
