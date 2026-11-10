@@ -125,7 +125,7 @@ const fetchUser = async (req, res, next) => {
     return res.status(401).send({ errors: "Please authenticate using valid token" });
   }
   try {
-    const data = jwt.verify(token, process.env.JWT_SECRET || "secret_ecom");
+    const data = jwt.verify(token, process.env.JWT_SECRET);
     req.user = data.user;
     next();
   } catch (error) {
@@ -529,7 +529,7 @@ router.post("/signup", async (req, res) => {
     });
 
     const data = { user: { id: user.id } };
-    const token = jwt.sign(data, process.env.JWT_SECRET || "secret_ecom");
+    const token = jwt.sign(data, process.env.JWT_SECRET);
     res.json({ success: true, token });
   } catch (error) {
     res.status(500).json({ success: false, errors: "error: " + error });
@@ -544,7 +544,7 @@ router.post("/login", async (req, res) => {
       const passCompare = bcrypt.compareSync(req.body.password, user.password);
       if (passCompare) {
         const data = { user: { id: user.id } };
-        const token = jwt.sign(data, process.env.JWT_SECRET || "secret_ecom");
+        const token = jwt.sign(data, process.env.JWT_SECRET);
         return res.json({ success: true, token });
       }
       return res.json({ success: false, errors: "Wrong Password" });
