@@ -59,7 +59,7 @@ function Foot({ role }) {
 
             <div className='copyright'>
 
-              <p>Copyright 2024 | All Rights Reserved</p>
+              <p>Copyright 2023 | All Rights Reserved</p>
 
               <div className='social'>
                 <img src={Fb} />
