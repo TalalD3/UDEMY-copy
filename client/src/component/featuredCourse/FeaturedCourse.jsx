@@ -6,8 +6,8 @@ import { ShopContext } from '../../Context/ShopContext'
 function FeaturedCourse() {
 
     const { published_course } = useContext(ShopContext);
-    const courses = published_course.sort((a, b) => b.rating - a.rating);
-    const sortedCourses = courses.slice(0, 8);
+    const sortedCourses = published_course.sort((a, b) => b.rating - a.rating);
+    const courses = sortedCourses.slice(0, 8);
 
 
     return (

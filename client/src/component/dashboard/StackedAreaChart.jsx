@@ -24,13 +24,31 @@ const montharray = [
     "Dec",
 ];
 export default function StackedAreaChart({userData, orderData, courseData}) {
-  // const [data, setData] = useState([])
+
+  const monthOrder = {
+    "Jan": 1,
+    "Feb": 2,
+    "Mar": 3,
+    "Apr": 4,
+    "May": 5,
+    "Jun": 6,
+    "Jul": 7,
+    "Aug": 8,
+    "Sep": 9,
+    "Oct": 10,
+    "Nov": 11,
+    "Dec": 12
+  };
+  
 
   const transformData = (userData, orderData, courseData) => {
+    const sortedOrderData = orderData.sort((a,b)=>a._id.month - b._id.month);
+    // console.log(sortedOrderData);
+
     const result = [];
 
     // Combine the data into a single array
-    const combinedData = [...userData, ...orderData, ...courseData];
+    const combinedData = [...userData, ...sortedOrderData, ...courseData];
 
     // Group the combined data by month and year
     const groupedData = combinedData.reduce((acc, curr) => {
@@ -49,11 +67,14 @@ export default function StackedAreaChart({userData, orderData, courseData}) {
       const { month, year, totalUsers, totalOrders, totalCourses } = groupedData[key];
       result.push({ name: montharray[month-1], Orders: totalOrders, users: totalUsers, courses: totalCourses });
     }
+    result.sort((a, b) => monthOrder[a.name] - monthOrder[b.name])
+    // console.log(result);
 
     return result;
   };
 
   const data = transformData(userData, orderData, courseData);
+  // console.log(data);
 
   // setData();
 
@@ -62,7 +83,7 @@ export default function StackedAreaChart({userData, orderData, courseData}) {
     <LineChart
       width={700}
       height={400}
-      data={data}
+      data={data.sort((a, b) => monthOrder[a.name] - monthOrder[b.name])}
       margin={{
         top: 20,
         right: 0,

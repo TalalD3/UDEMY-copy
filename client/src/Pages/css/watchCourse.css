@@ -130,7 +130,8 @@
 
 .watchCourse-info {
     display: flex;
-    gap: 15px;
+    flex-direction: column;
+    gap: 0px;
     align-items: baseline;
 }
 

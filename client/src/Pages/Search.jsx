@@ -57,7 +57,7 @@ const Search = () => {
     <div>
     <section className="section">
       <div className="container">
-        <div>
+        <div  >
           <h1>Search Results</h1>
           <p>{searchedCourses.length} results for  “{searchValue}”</p>
           {/* <p>Search Query: {searchValue}</p> */}

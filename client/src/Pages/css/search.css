@@ -3,21 +3,17 @@
     display: grid;
     gap: 50px;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-bottom: 80px;
 }
 
-@media screen and (max-width: 1244px) {
+@media screen and (max-width: 1450px) {
     .search-container{
-        gap: 20px;
+        gap: 30px;
         display:flex;
         flex-wrap: wrap;
+        justify-content: center;
     } 
 
 }
 
-@media screen and (max-width: 1216px) {
-    .search-container{
-       
-    } 
-
-}
 
