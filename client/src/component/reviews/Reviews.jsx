@@ -37,7 +37,8 @@ function Reviews() {
 
     const getReviews = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/getAllComments');
+        const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL || '';
+        const response = await axios.get(`${backendUrl}/api/getAllComments`);
 
         const sortedReviews = response.data.comments.sort((a, b) => b.rating - a.rating);
         const filteredReviews = sortedReviews.filter(review => review.comment.length > 15);
